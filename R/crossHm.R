@@ -18,6 +18,8 @@
 #' @param show_column_names Logical; whether to show column names (default FALSE)
 #' @param acolors A vector of color for annotations.
 #' @param ... Any other parameter passed to each call of `Heatmap`.
+#'
+#' @export
 crossHm <- function( ses, genes, what="zscores", uniqueColorScale=FALSE, ctrlCondition="Homecage", assayName=c("logcpm","lognorm"),
                      do.sortRows=TRUE, only.common=TRUE, acolumns=c("Condition","TimePoint"),
                      spreadAnnotation=FALSE, cluster_columns=FALSE, cluster_rows=!do.sortRows,
@@ -28,7 +30,7 @@ crossHm <- function( ses, genes, what="zscores", uniqueColorScale=FALSE, ctrlCon
     library(circlize)
   })
   if(is(ses,"SummarizedExperiment")) ses <- list(ses)
-  if(is.null(acolors)) acolors <- annoColors()
+  if(is.null(acolors)) acolors <- list()
   if(only.common){
     tt <- table(unlist(lapply(ses,row.names)))
     genes <- intersect(genes, names(tt)[which(tt==length(ses))])
@@ -95,12 +97,12 @@ crossHm <- function( ses, genes, what="zscores", uniqueColorScale=FALSE, ctrlCon
 
   htlist <- NULL
   for(i in 1:length(ses)){
-    cd <- colData(ses[[i]])
+    cd <- as.data.frame(colData(ses[[i]]))
     cd <- cd[,intersect(colnames(cd), acolumns),drop=F]
     if(ncol(cd)==0){
       an <- NULL
     }else{
-      an <- HeatmapAnnotation(cd, col=acolors[which(names(acolors) %in% colnames(cd))])
+      an <- HeatmapAnnotation(df=cd, col=acolors[which(names(acolors) %in% colnames(cd))])
     }
     srn <- show_row_names
     if(srn=="once") srn <- i==length(ses)
