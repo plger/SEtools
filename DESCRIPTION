@@ -1,0 +1,13 @@
+Package: SEtools
+Type: Package
+Title: SEtools: tools for working with SummarizedExperiment
+Version: 0.1.0
+Authors@R: as.person("Pierre-Luc Germain <germain@hifo.uzh.ch> [aut, cre]")
+Maintainer@R: as.person("Pierre-Luc Germain <germain@hifo.uzh.ch> [aut, cre]")
+Description: This includes a set of tools for working with the SummarizedExperiment class, including handy merging and plotting functions.
+Imports: SummarizedExperiment, circlize, data.table, pheatmap, seriation
+Suggests: ComplexHeatmap
+License: GPL
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 6.1.1
