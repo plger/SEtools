@@ -51,12 +51,8 @@ crossHm <- function( ses, genes, what="zscores", uniqueColorScale=FALSE, ctrlCon
 
 
   dats <- lapply(names(ses), an=assayName, g=genes, FUN=function(x, g, an){
-    if(!is.null(an)) an <- intersect(an, assayNames(ses[[x]]))
-    if(is.null(an) || length(an)==0){
-      dat <- as.data.frame(assay(ses[[x]]))[g,,drop=FALSE]
-    }else{
-      dat <- as.data.frame(assays(ses[[x]])[[an[1]]])[g,,drop=FALSE]
-    }
+    dat <- .chooseAssay(ses[[x]], an)
+    dat <- as.data.frame(dat)[g,,drop=FALSE]
 
     if(what=="zscores"){
       dat <- t(apply(dat,1,FUN=function(x){

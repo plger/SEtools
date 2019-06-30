@@ -1,7 +1,7 @@
 Package: SEtools
 Type: Package
 Title: SEtools: tools for working with SummarizedExperiment
-Version: 0.1.0
+Version: 0.1.1
 Authors@R: as.person("Pierre-Luc Germain <germain@hifo.uzh.ch> [aut, cre]")
 Maintainer@R: as.person("Pierre-Luc Germain <germain@hifo.uzh.ch> [aut, cre]")
 Description: This includes a set of tools for working with the SummarizedExperiment class, including handy merging and plotting functions.

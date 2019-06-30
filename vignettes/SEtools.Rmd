@@ -16,11 +16,15 @@ vignette: |
 
 # Getting started
 
-The `r Rpackage("SEtools")` package is a set of convenience functions for the _Bioconductor_ class `r Biocpkg("SummarizedExperiment")`. It facilitates merging, melting, and plotting `SummarizedExperiment` objects. To showcase the main functions, we will use an example object which contains (a subset of) whole-hippocampus RNAseq  of mice after different stressors:
+The `r Rpackage("SEtools")` package is a set of convenience functions for the _Bioconductor_ class `r Biocpkg("SummarizedExperiment")`. It facilitates merging, melting, and plotting `SummarizedExperiment` objects.
+
+To showcase the main functions, we will use an example object which contains (a subset of) whole-hippocampus RNAseq of mice after different stressors:
 
 ```{r}
-library(SummarizedExperiment)
-library(SEtools)
+suppressPackageStartupMessages({
+  library(SummarizedExperiment)
+  library(SEtools)
+})
 data("SE")
 SE
 ```
@@ -45,7 +49,9 @@ These can also be used to create gaps:
 sehm(SE, genes=g, scale="row", anno_rows="meanTPM", gaps_at="Condition")
 ```
 
-Heatmaps from multiple SE can be created either by merging the objects, or using the `crossHm` function, which uses the `r CRANpkg("ComplexHeatmap")` pacakge:
+The specific assay to use for plotting can be specified with the `assayName` argument.
+
+Heatmaps from multiple SE can be created either by merging the objects (see below), or using the `crossHm` function, which uses the `r CRANpkg("ComplexHeatmap")` pacakge:
 
 ```{r}
 crossHm(list(se1=SE, se2=SE), g, acolors = list(Condition=c(Homecage="green", "Handling"="orange", "Restraint"="red", "Swim"="blue")))
@@ -61,13 +67,22 @@ se3 <- mergeSEs( list(se1=se1, se2=se2) )
 sehm(se3, genes=g)
 ```
 
+All assays were merged, along with rowData and colData slots.
+
 By default, row z-scores are calculated for each object when merging. This can be prevented with:
 ```{r}
-se3 <- mergeSEs( list(se1=se1, se2=se2), what="asis")
-sehm(se3, genes=g)
+se3 <- mergeSEs( list(se1=se1, se2=se2), do.scale=FALSE)
 ```
 
+If more than one assay is present, one can specify a different scaling behavior for each assay:
+```{r}
+se3 <- mergeSEs( list(se1=se1, se2=se2), use.assays=c("counts", "logcpm"), do.scale=c(FALSE, TRUE))
+```
+
+
 ## Melting SE
+
+To facilitate plotting features with `r CRANpkg("ggplot2")`, the `meltSE` function combines assay values along with colData
 
 ```{r, fig.cap="An example ggplot created from a melted SE."}
 d <- meltSE(SE, genes=g[1:4])

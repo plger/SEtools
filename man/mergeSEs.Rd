@@ -4,21 +4,23 @@
 \alias{mergeSEs}
 \title{mergeSEs}
 \usage{
-mergeSEs(ll, what = "zscores", commonOnly = TRUE,
-  assayName = c("logcpm", "lognorm"), colColumns = NULL,
-  defValues = list())
+mergeSEs(ll, use.assays = NULL, do.scale = TRUE, commonOnly = TRUE,
+  colColumns = NULL, addDatasetPrefix = TRUE, defValues = list())
 }
 \arguments{
 \item{ll}{A (named) list of SummarizedExperiments}
 
-\item{what}{Values to use, either "asis" (input values) or "zscores" (within-dataset row z-scores)}
+\item{use.assays}{Names (or indexes) of the assays to use. By default, all common assays are used.}
+
+\item{do.scale}{A logical vector indicating (globally or for each assay) whether to
+perform row unit-variance scaling on each dataset before merging (default TRUE).}
 
 \item{commonOnly}{Logical; whether to restrict to rows present in all datasets (default TRUE).}
 
-\item{assayName}{An optional vector of assayNames to use. The first available will be used, or the first assay if NULL.}
-
 \item{colColumns}{A character vector specifying `colData` columns to include (if available in at least one of the datasets).
 If NULL, everything is kept.}
+
+\item{addDatasetPrefix}{Logical; whether the name of the dataset should be appended to the sample names (default TRUE).}
 
 \item{defValues}{A list specifying the default values for `colColumns` when these are absent.}
 }
