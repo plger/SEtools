@@ -1,5 +1,7 @@
 #' crossHm
 #'
+#' Plot a multi-panel heatmap from a list of `SummarizedExperiment`
+#'
 #' @param ses A (named) list of `SummarizedExperiment` (SEs) objects.
 #' @param genes A vector of genes/row.names to plot.
 #' @param what What to plot; either "zscores" (within-SE z-scores, default), "asis" (the input data), or "log2FC".

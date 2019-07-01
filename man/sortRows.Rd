@@ -19,8 +19,8 @@ when sorting rows.}
 
 \item{method}{Seriation method; 'MDS_angle' (default) or 'R2E' recommended.}
 
-\item{toporder.meth}{Whether to perform higher-order sorting 'before' (default) or 'after' the lower-
-order sorting.}
+\item{toporder.meth}{Whether to perform higher-order sorting 'before' (default) or
+'after' the lower-order sorting.}
 }
 \value{
 A reordered matrix or data.frame.

@@ -25,13 +25,14 @@
 #'  when sorting rows.
 #' @param na.rm Wheter to remove missing values and invariant rows (default FALSE).
 #' @param method Seriation method; 'MDS_angle' (default) or 'R2E' recommended.
-#' @param toporder.meth Whether to perform higher-order sorting 'before' (default) or 'after' the lower-
-#' order sorting.
+#' @param toporder.meth Whether to perform higher-order sorting 'before' (default) or
+#' 'after' the lower-order sorting.
 #'
 #' @return A reordered matrix or data.frame.
+#'
+#' @importFrom seriation seriate get_order
 #' @export
 sortRows <- function(x, z=F, toporder=NULL, na.rm=F, method="MDS_angle", toporder.meth="before"){
-  library(seriation)
   toporder.meth <- match.arg(toporder.meth, c("before","after"))
   if(na.rm){
     w <- which( apply(x, 1, FUN = function(y){ !any(is.na(y)) }) |

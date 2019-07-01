@@ -47,5 +47,5 @@ Defaults to "logcpm", "lognorm".}
 \item{...}{Any other parameter passed to each call of `Heatmap`.}
 }
 \description{
-crossHm
+Plot a multi-panel heatmap from a list of `SummarizedExperiment`
 }

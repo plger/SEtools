@@ -28,5 +28,5 @@ If NULL, everything is kept.}
 An object of class `SummarizedExperiment`
 }
 \description{
-Merges a list of SummarizedExperiments.
+Merges a list of `SummarizedExperiment`.
 }

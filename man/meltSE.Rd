@@ -4,23 +4,26 @@
 \alias{meltSE}
 \title{meltSE}
 \usage{
-meltSE(x, genes = NULL, assayName = NULL, colDat.columns = NULL,
-  value.name = NULL)
+meltSE(x, genes, assayName = NULL, colDat.columns = NULL,
+  rowDat.columns = NA)
 }
 \arguments{
 \item{x}{An object of class `SummarizedExperiment`}
 
-\item{genes}{A vector of genes to include}
+\item{genes}{A vector of genes to include. Use `genes=NULL` to include all.}
 
-\item{assayName}{The name of the assay to use. If NULL, the first one will be used.}
+\item{assayName}{The name(s) of the assay(s) to use. If NULL and the assays are named,
+all of them will be included (if they are not named, the first one will be used).}
 
-\item{colDat.columns}{The data columns to include (defaults includes all)}
+\item{colDat.columns}{The colData columns to include (defaults includes all).
+Use `colDat.columns=NA` in order not to include any.}
 
-\item{value.name}{The name of the value column.}
+\item{rowlDat.columns}{The rowData columns to include (none included by default). Use
+`rowData=NULL` to include all.}
 }
 \value{
 A data.frame.
 }
 \description{
-Melts a SE object into a ggplot-compatible data.frame
+Melts a SE object into a ggplot-ready long data.frame.
 }

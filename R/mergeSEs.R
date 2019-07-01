@@ -1,6 +1,6 @@
 #' mergeSEs
 #'
-#' Merges a list of SummarizedExperiments.
+#' Merges a list of `SummarizedExperiment`.
 #'
 #' @param ll A (named) list of SummarizedExperiments
 #' @param use.assays Names (or indexes) of the assays to use. By default, all common assays are used.
@@ -14,13 +14,11 @@
 #'
 #' @return An object of class `SummarizedExperiment`
 #'
+#' @import SummarizedExperiment
+#' @import data.table
 #' @export
 mergeSEs <- function(ll, use.assays=NULL, do.scale=TRUE, commonOnly=TRUE, colColumns=NULL, addDatasetPrefix=TRUE, defValues=list()){
   if(!commonOnly && any(do.scale)) stop("For z-scores, `commonOnly` must be TRUE.")
-  suppressPackageStartupMessages({
-    library(SummarizedExperiment)
-    library(data.table)
-  })
 
   tt <- table(unlist(lapply(ll,row.names)))
   if(max(tt)==1) stop("No matching row.names!")

@@ -5,8 +5,8 @@ Version: 0.1.1
 Authors@R: as.person("Pierre-Luc Germain <germain@hifo.uzh.ch> [aut, cre]")
 Maintainer@R: as.person("Pierre-Luc Germain <germain@hifo.uzh.ch> [aut, cre]")
 Description: This includes a set of tools for working with the SummarizedExperiment class, including handy merging and plotting functions.
-Imports: SummarizedExperiment, circlize, data.table, pheatmap, seriation
-Suggests: ComplexHeatmap, BiocStyle, knitr, rmarkdown
+Imports: SummarizedExperiment, data.table, pheatmap, seriation
+Suggests: ComplexHeatmap, circlize, BiocStyle, knitr, rmarkdown
 VignetteBuilder: knitr
 License: GPL
 Encoding: UTF-8
