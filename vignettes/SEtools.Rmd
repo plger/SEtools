@@ -64,7 +64,7 @@ crossHm(list(se1=SE, se2=SE), g, acolors = list(Condition=c(Homecage="green", "H
 se1 <- SE[,1:10]
 se2 <- SE[,11:20]
 se3 <- mergeSEs( list(se1=se1, se2=se2) )
-sehm(se3, genes=g)
+se3
 ```
 
 All assays were merged, along with rowData and colData slots.
@@ -82,7 +82,7 @@ se3 <- mergeSEs( list(se1=se1, se2=se2), use.assays=c("counts", "logcpm"), do.sc
 
 ## Melting SE
 
-To facilitate plotting features with `r CRANpkg("ggplot2")`, the `meltSE` function combines assay values along with colData
+To facilitate plotting features with `r CRANpkg("ggplot2")`, the `meltSE` function combines assay values along with row/column data:
 
 ```{r, fig.cap="An example ggplot created from a melted SE."}
 d <- meltSE(SE, genes=g[1:4])

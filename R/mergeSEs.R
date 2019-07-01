@@ -15,7 +15,7 @@
 #' @return An object of class `SummarizedExperiment`
 #'
 #' @import SummarizedExperiment
-#' @import data.table
+#' @importFrom data.table data.table rbindlist
 #' @export
 mergeSEs <- function(ll, use.assays=NULL, do.scale=TRUE, commonOnly=TRUE, colColumns=NULL, addDatasetPrefix=TRUE, defValues=list()){
   if(!commonOnly && any(do.scale)) stop("For z-scores, `commonOnly` must be TRUE.")
