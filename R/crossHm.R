@@ -123,10 +123,10 @@ crossHm <- function( ses, genes, what="zscores", uniqueColorScale=FALSE, ctrlCon
       assayName <- NULL
     }
   }
-  if(!is.null(assayName) && !(assayName %in% assayNames(se))) stop("Assay '", assayName, "' not found!")
+  if(!is.null(assayName) && !any(assayName %in% assayNames(se))) stop("Assay '", assayName, "' not found!")
   if(is.null(assayName)){
     if(length(assays(se))>1) message("Assay unspecified, and multiple assays present - will use the first one.")
     return(assay(se))
   }
-  assays(se)[[assayName[1]]]
+  assays(se)[[intersect(assayName,assayNames(se))[1]]]
 }
