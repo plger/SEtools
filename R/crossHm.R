@@ -111,22 +111,3 @@ crossHm <- function( ses, genes, what="zscores", uniqueColorScale=FALSE, ctrlCon
   }
   htlist
 }
-
-
-.chooseAssay <- function(se, assayName=NULL){
-  if(is.null(assayName) && !is.null(assayNames(se))){
-    assayName <- intersect(assayNames(se), c("log2FC", "logFC", "corrected", "imputed", "logcpm", "lognorm"))
-    if(length(assayName)>0){
-      assayName <- assayName[1]
-      message("Using assay", assayName)
-    }else{
-      assayName <- NULL
-    }
-  }
-  if(!is.null(assayName) && !any(assayName %in% assayNames(se))) stop("Assay '", assayName, "' not found!")
-  if(is.null(assayName)){
-    if(length(assays(se))>1) message("Assay unspecified, and multiple assays present - will use the first one.")
-    return(assay(se))
-  }
-  assays(se)[[intersect(assayName,assayNames(se))[1]]]
-}

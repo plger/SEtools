@@ -27,7 +27,7 @@ sehm <- function( se, genes=NULL, do.scale=FALSE, assayName=NULL, sortRowsOn=1:n
                   hmcols=NULL, breaks=NULL, gaps_at=NULL, anno_rows=c(),
                   anno_columns=c("Batch","Dataset","Condition","Group","Genotype"),
                   anno_colors=list(), show_rownames=NULL, show_colnames=FALSE, ...){
-  x <- .chooseAssay(se, assayName)
+  x <- as.matrix(.chooseAssay(se, assayName))
 
   if(is.null(hmcols)) hmcols <- colorRampPalette(c("blue", "black", "yellow"))(29)
   if(!is.null(genes)) x <- x[intersect(genes,row.names(x)),]
