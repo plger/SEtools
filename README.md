@@ -12,7 +12,6 @@ To showcase the main functions, we will use an example object which contains (a 
 suppressPackageStartupMessages({
   library(SummarizedExperiment)
   library(SEtools)
-  library(BiocStyle)
 })
 data("SE")
 SE
