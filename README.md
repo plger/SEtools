@@ -70,7 +70,12 @@ Heatmaps from multiple SE can be created either by merging the objects (see belo
 
 
 ```r
-crossHm(list(se1=SE, se2=SE), g, acolors = list(Condition=c(Homecage="green", "Handling"="orange", "Restraint"="red", "Swim"="blue")))
+anno_colors <- list( Condition= c(Homecage="green",
+                                  Handling="orange",
+                                  Restraint="red",
+                                  Swim="blue")
+                   )
+crossHm( list(se1=SE, se2=SE), g, acolors=anno_colors ) 
 ```
 
 ![](README_files/figure-html/unnamed-chunk-6-1.png)<!-- -->
@@ -109,7 +114,10 @@ se3 <- mergeSEs( list(se1=se1, se2=se2), do.scale=FALSE)
 If more than one assay is present, one can specify a different scaling behavior for each assay:
 
 ```r
-se3 <- mergeSEs( list(se1=se1, se2=se2), use.assays=c("counts", "logcpm"), do.scale=c(FALSE, TRUE))
+se3 <- mergeSEs( list(se1=se1, se2=se2), 
+                 use.assays=c("counts", "logcpm"), 
+                 do.scale=c(FALSE, TRUE)
+               )
 ```
 
 
@@ -134,8 +142,9 @@ head(d)
 ```
 
 ```r
-suppressPackageStartupMessages(library(ggplot2))
-ggplot(d, aes(Condition, counts)) + geom_violin() + facet_wrap(~feature, scale="free")
+library(ggplot2)
+ggplot(d, aes(Condition, counts)) + geom_violin() + 
+  facet_wrap(~feature, scale="free")
 ```
 
 ![An example ggplot created from a melted SE.](README_files/figure-html/unnamed-chunk-10-1.png)
