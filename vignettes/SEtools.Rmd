@@ -7,7 +7,7 @@ package: SEtools
 output:
   BiocStyle::html_document
 abstract: |
-  Description of your vignette
+  Showcases the use of SEtools to merge objects of the SummarizedExperiment class, melt them, and plot annotated heatmaps from them.
 vignette: |
   %\VignetteIndexEntry{SEtools}
   %\VignetteEngine{knitr::rmarkdown}
@@ -29,12 +29,14 @@ data("SE")
 SE
 ```
 
+This is taken from [Floriou-Servou et al., Biol Psychiatry 2018](https://doi.org/10.1016/j.biopsych.2018.02.003).
+
 ## Heatmaps
 
 The `sehm` function simplifies the generation of heatmaps from `SummarizedExperiment`. It uses `r CRANpkg("pheatmap")`, so any argument supported by it can in principle be passed:
 
 ```{r}
-g <- c("Egr1", "Nr4a1", "Fos", "Egr2", "Sgk1", "Apold1", "Arc", "Dusp1", "Fosb", "Sik1")
+g <- c("Egr1", "Nr4a1", "Fos", "Egr2", "Sgk1", "Arc", "Dusp1", "Fosb", "Sik1")
 sehm(SE, genes=g)
 sehm(SE, genes=g, scale="row")
 ```
