@@ -1,11 +1,9 @@
----
-title: "SEtools"
-author:
-- name: Pierre-Luc Germain
-  affiliation: D-HEST Institute for Neurosciences, ETH Zürich & Laboratory of Statistical Bioinformatics, University Zürich
----
-
 # SEtools
+
+<div style="text-align: right">
+Pierre-Luc Germain<br/>
+<span style="font-size: 80%;">D-HEST Institute for Neurosciences, ETH Zürich &<br/>Laboratory of Statistical Bioinformatics, University Zürich</span>
+</div>
 
 The *SEtools* R package is a set of convenience functions for the _Bioconductor_ class *[SummarizedExperiment](https://bioconductor.org/packages/3.9/SummarizedExperiment)*. It facilitates merging, melting, and plotting `SummarizedExperiment` objects.
 
