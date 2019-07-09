@@ -33,6 +33,8 @@ This is taken from [Floriou-Servou et al., Biol Psychiatry 2018](https://doi.org
 
 ## Heatmaps
 
+### sehm
+
 The `sehm` function simplifies the generation of heatmaps from `SummarizedExperiment`. It uses `r CRANpkg("pheatmap")`, so any argument supported by it can in principle be passed:
 
 ```{r}
@@ -52,6 +54,8 @@ sehm(SE, genes=g, scale="row", anno_rows="meanTPM", gaps_at="Condition")
 ```
 
 The specific assay to use for plotting can be specified with the `assayName` argument.
+
+### crossHm
 
 Heatmaps from multiple SE can be created either by merging the objects (see below), or using the `crossHm` function, which uses the `r CRANpkg("ComplexHeatmap")` pacakge:
 
