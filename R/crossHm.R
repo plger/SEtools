@@ -21,16 +21,15 @@
 #' @param acolors A vector of color for annotations.
 #' @param ... Any other parameter passed to each call of `Heatmap`.
 #'
+#' @importFrom circlize colorRamp2
+#' @import SummarizedExperiment
+#' @import ComplexHeatmap
 #' @export
 crossHm <- function( ses, genes, what="zscores", uniqueColorScale=FALSE, ctrlCondition="Homecage", assayName=c("logcpm","lognorm"),
                      do.sortRows=TRUE, only.common=TRUE, acolumns=c("Condition","TimePoint"),
                      spreadAnnotation=FALSE, cluster_columns=FALSE, cluster_rows=!do.sortRows,
                      show_row_names=ifelse(length(genes)<80,"once",FALSE), show_column_names=FALSE, acolors=NULL, ...){
   what <- match.arg(what, c("asis", "zscores", "log2FC"))
-  suppressPackageStartupMessages({
-    library(ComplexHeatmap)
-    library(circlize)
-  })
   if(is(ses,"SummarizedExperiment")) ses <- list(ses)
   if(is.null(acolors)) acolors <- list()
   if(only.common){
