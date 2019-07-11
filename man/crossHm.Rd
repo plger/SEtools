@@ -6,7 +6,8 @@
 \usage{
 crossHm(ses, genes, do.scale = TRUE, uniqueColorScale = FALSE,
   assayName = c("logcpm", "lognorm"), do.sortRows = TRUE,
-  only.common = TRUE, anno_columns = c("Condition", "TimePoint"),
+  only.common = TRUE, anno_columns = c("Batch", "batch", "Condition",
+  "condition", "Group", "group", "Genotype", "genotype"),
   spreadAnnotation = FALSE, hmcols = NULL, cluster_columns = FALSE,
   cluster_rows = !do.sortRows, show_rownames = ifelse(length(genes) <
   80, "once", FALSE), show_colnames = FALSE, anno_colors = NULL, ...)

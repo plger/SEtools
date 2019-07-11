@@ -8,9 +8,9 @@ sehm(se, genes = NULL, do.scale = FALSE, assayName = NULL,
   sortRowsOn = 1:ncol(se), cluster_cols = FALSE,
   cluster_rows = is.null(sortRowsOn), toporder = NULL, hmcols = NULL,
   breaks = NULL, gaps_at = NULL, anno_rows = c(),
-  anno_columns = c("Batch", "Dataset", "Condition", "Group", "Genotype"),
-  anno_colors = list(), show_rownames = NULL, show_colnames = FALSE,
-  ...)
+  anno_columns = c("Batch", "batch", "Condition", "condition", "Group",
+  "group", "Genotype", "genotype", "Dataset"), anno_colors = list(),
+  show_rownames = NULL, show_colnames = FALSE, ...)
 }
 \arguments{
 \item{se}{A \code{\link[SummarizedExperiment]{SummarizedExperiment}}.}
