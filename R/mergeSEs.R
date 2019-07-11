@@ -1,8 +1,9 @@
 #' mergeSEs
 #'
-#' Merges a list of `SummarizedExperiment`.
+#' Merges a list of \code{\link[SummarizedExperiment]{SummarizedExperiment}}.
 #'
-#' @param ll A (named) list of SummarizedExperiments
+#' @param ll A (named) list of
+#' \code{\link[SummarizedExperiment]{SummarizedExperiment}}
 #' @param use.assays Names (or indexes) of the assays to use. By default, all
 #' common assays are used.
 #' @param do.scale A logical vector indicating (globally or for each assay)
@@ -17,7 +18,8 @@
 #' @param addDatasetPrefix Logical; whether the name of the dataset should be
 #' appended to the sample names (default TRUE).
 #'
-#' @return An object of class `SummarizedExperiment`
+#' @return An object of class
+#' \code{\link[SummarizedExperiment]{SummarizedExperiment}}
 #'
 #' @examples
 #' data("SE", package="SEtools")
@@ -85,13 +87,16 @@ mergeSEs <- function(ll, use.assays=NULL, do.scale=TRUE, commonOnly=TRUE,
   }
   if(length(use.assays)==0){
     if(is.null(names(ll))) names(ll) <- paste("object", 1:length(ll))
-    aa <- paste0(names(ll),":\n", sapply(ll, FUN=function(x) paste(assayNames(x), collapse=", ")), collapse="\n")
+    aa <- paste0(names(ll), ":\n",
+                 sapply(ll, FUN=function(x) paste(assayNames(x), collapse=", ")),
+                 collapse="\n" )
     stop("No assay to merge. Available assays:\n", aa, "\n",
          "To merge the first assay of each object, use `use.assays=1`.")
   }
   if(length(do.scale)==1) do.scale <- rep(do.scale, length(use.assays))
   if(length(do.scale)!=length(use.assays))
-    stop("`do.scale` should have a length either of 1 or equal to the number of assays used.")
+    stop( "`do.scale` should have a length either of 1 or equal to the number ",
+          "of assays used.")
 
   a <- lapply(1:length(use.assays), FUN=function(a){
     x <- lapply(ll, FUN=function(x){

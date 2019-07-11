@@ -8,7 +8,8 @@ mergeSEs(ll, use.assays = NULL, do.scale = TRUE, commonOnly = TRUE,
   colColumns = NULL, addDatasetPrefix = TRUE, defValues = list())
 }
 \arguments{
-\item{ll}{A (named) list of SummarizedExperiments}
+\item{ll}{A (named) list of
+\code{\link[SummarizedExperiment]{SummarizedExperiment}}}
 
 \item{use.assays}{Names (or indexes) of the assays to use. By default, all
 common assays are used.}
@@ -30,10 +31,11 @@ appended to the sample names (default TRUE).}
 these are absent.}
 }
 \value{
-An object of class `SummarizedExperiment`
+An object of class
+\code{\link[SummarizedExperiment]{SummarizedExperiment}}
 }
 \description{
-Merges a list of `SummarizedExperiment`.
+Merges a list of \code{\link[SummarizedExperiment]{SummarizedExperiment}}.
 }
 \examples{
 data("SE", package="SEtools")

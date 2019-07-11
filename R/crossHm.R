@@ -1,8 +1,10 @@
 #' crossHm
 #'
-#' Plot a multi-panel heatmap from a list of `SummarizedExperiment`
+#' Plot a multi-panel heatmap from a list of
+#' \code{\link[SummarizedExperiment]{SummarizedExperiment}}
 #'
-#' @param ses A (named) list of `SummarizedExperiment` (SEs) objects.
+#' @param ses A (named) list of
+#' \code{\link[SummarizedExperiment]{SummarizedExperiment}}.
 #' @param genes A vector of genes/row.names to plot.
 #' @param do.scale Logical; whether to scale rows in each SE (default TRUE).
 #' @param uniqueColorScale Logical; whether to force the same colorscale for
@@ -26,9 +28,10 @@
 #' `length(genes)<80`, FALSE otherwise).
 #' @param show_colnames Logical; whether to show column names (default FALSE)
 #' @param anno_colors A vector of color for annotations.
-#' @param ... Any other parameter passed to each call of `Heatmap`.
+#' @param ... Any other parameter passed to each call of
+#' \code{\link[ComplexHeatmap]{Heatmap}}.
 #'
-#' @return A `Heatmap-class`` object.
+#' @return A \code{\link[ComplexHeatmap]{Heatmap-class}} object.
 #'
 #' @examples
 #' data("SE", package="SEtools")

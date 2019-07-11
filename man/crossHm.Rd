@@ -12,7 +12,8 @@ crossHm(ses, genes, do.scale = TRUE, uniqueColorScale = FALSE,
   80, "once", FALSE), show_colnames = FALSE, anno_colors = NULL, ...)
 }
 \arguments{
-\item{ses}{A (named) list of `SummarizedExperiment` (SEs) objects.}
+\item{ses}{A (named) list of
+\code{\link[SummarizedExperiment]{SummarizedExperiment}}.}
 
 \item{genes}{A vector of genes/row.names to plot.}
 
@@ -51,13 +52,15 @@ annotation, default "Condition" and "TimePoint".}
 
 \item{anno_colors}{A vector of color for annotations.}
 
-\item{...}{Any other parameter passed to each call of `Heatmap`.}
+\item{...}{Any other parameter passed to each call of
+\code{\link[ComplexHeatmap]{Heatmap}}.}
 }
 \value{
-A `Heatmap-class`` object.
+A \code{\link[ComplexHeatmap]{Heatmap-class}} object.
 }
 \description{
-Plot a multi-panel heatmap from a list of `SummarizedExperiment`
+Plot a multi-panel heatmap from a list of
+\code{\link[SummarizedExperiment]{SummarizedExperiment}}
 }
 \examples{
 data("SE", package="SEtools")

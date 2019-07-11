@@ -1,8 +1,9 @@
 #' meltSE
 #'
-#' Melts a SE object into a ggplot-ready long data.frame.
+#' Melts a SE object into a \code{\link[ggplot2]{ggplot}}-ready long data.frame.
 #'
-#' @param x An object of class `SummarizedExperiment`
+#' @param x An object of class
+#' \code{\link[SummarizedExperiment]{SummarizedExperiment}}
 #' @param genes A vector of genes to include. Use `genes=NULL` to include all.
 #' @param assayName The name(s) of the assay(s) to use. If NULL and the assays are named,
 #' all of them will be included (if they are not named, the first one will be used).

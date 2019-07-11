@@ -2,7 +2,7 @@
 % Please edit documentation in R/sehm.R
 \name{sehm}
 \alias{sehm}
-\title{sehm - heatmap wrapper for SummarizedExperiment}
+\title{sehm}
 \usage{
 sehm(se, genes = NULL, do.scale = FALSE, assayName = NULL,
   sortRowsOn = 1:ncol(se), cluster_cols = FALSE,
@@ -13,7 +13,7 @@ sehm(se, genes = NULL, do.scale = FALSE, assayName = NULL,
   ...)
 }
 \arguments{
-\item{se}{A SummarizedExperiment}
+\item{se}{A \code{\link[SummarizedExperiment]{SummarizedExperiment}}.}
 
 \item{genes}{An optional vector of genes (i.e. row names of `se`)}
 
@@ -55,10 +55,10 @@ less).}
 \item{...}{Further arguments passed to `pheatmap`.}
 }
 \value{
-A heatmap (see `pheatmap::pheatmap`)
+A heatmap (see \code{\link[pheatmap]{pheatmap}}).
 }
 \description{
-sehm - heatmap wrapper for SummarizedExperiment
+Heatmap wrapper for \code{\link[SummarizedExperiment]{SummarizedExperiment}}.
 }
 \examples{
 data("SE", package="SEtools")

@@ -8,7 +8,8 @@ meltSE(x, genes, assayName = NULL, colDat.columns = NULL,
   rowDat.columns = NA)
 }
 \arguments{
-\item{x}{An object of class `SummarizedExperiment`}
+\item{x}{An object of class
+\code{\link[SummarizedExperiment]{SummarizedExperiment}}}
 
 \item{genes}{A vector of genes to include. Use `genes=NULL` to include all.}
 
@@ -25,7 +26,7 @@ Use `colDat.columns=NA` in order not to include any.}
 A data.frame.
 }
 \description{
-Melts a SE object into a ggplot-ready long data.frame.
+Melts a SE object into a \code{\link[ggplot2]{ggplot}}-ready long data.frame.
 }
 \examples{
 data("SE", package="SEtools")

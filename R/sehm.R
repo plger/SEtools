@@ -1,6 +1,8 @@
-#' sehm - heatmap wrapper for SummarizedExperiment
+#' sehm
 #'
-#' @param se A SummarizedExperiment
+#' Heatmap wrapper for \code{\link[SummarizedExperiment]{SummarizedExperiment}}.
+#'
+#' @param se A \code{\link[SummarizedExperiment]{SummarizedExperiment}}.
 #' @param genes An optional vector of genes (i.e. row names of `se`)
 #' @param do.scale Logical; whether to scale rows (default FALSE).
 #' @param assayName An optional vector of assayNames to use. The first available
@@ -25,7 +27,7 @@
 #' @param show_colnames Whether to show column names (default FALSE).
 #' @param ... Further arguments passed to `pheatmap`.
 #'
-#' @return A heatmap (see `pheatmap::pheatmap`)
+#' @return A heatmap (see \code{\link[pheatmap]{pheatmap}}).
 #'
 #' @examples
 #' data("SE", package="SEtools")
