@@ -51,7 +51,7 @@ mergeSEs <- function(ll, use.assays=NULL, do.scale=TRUE, commonOnly=TRUE,
     if(!is.null(cc)) x <- x[,intersect(cc,colnames(x)),drop=FALSE]
     x
   })
-  cd2 <- as.data.frame(data.table::rbindlist(cd, fill=T, idcol="Dataset"))
+  cd2 <- as.data.frame(rbindlist(cd, fill=TRUE, idcol="Dataset"))
   for(i in names(defValues)) cd2[[i]][which(is.na(cd2[[i]]))] <- defValues[[i]]
 
   se <- SummarizedExperiment( dat, colData=cd2, rowData=rd )
