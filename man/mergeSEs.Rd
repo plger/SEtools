@@ -10,23 +10,33 @@ mergeSEs(ll, use.assays = NULL, do.scale = TRUE, commonOnly = TRUE,
 \arguments{
 \item{ll}{A (named) list of SummarizedExperiments}
 
-\item{use.assays}{Names (or indexes) of the assays to use. By default, all common assays are used.}
+\item{use.assays}{Names (or indexes) of the assays to use. By default, all
+common assays are used.}
 
-\item{do.scale}{A logical vector indicating (globally or for each assay) whether to
-perform row unit-variance scaling on each dataset before merging (default TRUE).}
+\item{do.scale}{A logical vector indicating (globally or for each assay)
+whether to perform row unit-variance scaling on each dataset before merging
+(default TRUE).}
 
-\item{commonOnly}{Logical; whether to restrict to rows present in all datasets (default TRUE).}
+\item{commonOnly}{Logical; whether to restrict to rows present in all
+datasets (default TRUE).}
 
-\item{colColumns}{A character vector specifying `colData` columns to include (if available in at least one of the datasets).
-If NULL, everything is kept.}
+\item{colColumns}{A character vector specifying `colData` columns to include
+(if available in at least one of the datasets). If NULL, everything is kept.}
 
-\item{addDatasetPrefix}{Logical; whether the name of the dataset should be appended to the sample names (default TRUE).}
+\item{addDatasetPrefix}{Logical; whether the name of the dataset should be
+appended to the sample names (default TRUE).}
 
-\item{defValues}{A list specifying the default values for `colColumns` when these are absent.}
+\item{defValues}{A list specifying the default values for `colColumns` when
+these are absent.}
 }
 \value{
 An object of class `SummarizedExperiment`
 }
 \description{
 Merges a list of `SummarizedExperiment`.
+}
+\examples{
+data("SE", package="SEtools")
+mergeSEs( list( se1=SE[,1:10], se2=SE[,11:20] ) )
+
 }

@@ -4,48 +4,63 @@
 \alias{crossHm}
 \title{crossHm}
 \usage{
-crossHm(ses, genes, what = "zscores", uniqueColorScale = FALSE,
-  ctrlCondition = "Homecage", assayName = c("logcpm", "lognorm"),
-  do.sortRows = TRUE, only.common = TRUE, acolumns = c("Condition",
-  "TimePoint"), spreadAnnotation = FALSE, cluster_columns = FALSE,
-  cluster_rows = !do.sortRows, show_row_names = ifelse(length(genes) <
-  80, "once", FALSE), show_column_names = FALSE, acolors = NULL, ...)
+crossHm(ses, genes, do.scale = TRUE, uniqueColorScale = FALSE,
+  assayName = c("logcpm", "lognorm"), do.sortRows = TRUE,
+  only.common = TRUE, anno_columns = c("Condition", "TimePoint"),
+  spreadAnnotation = FALSE, hmcols = NULL, cluster_columns = FALSE,
+  cluster_rows = !do.sortRows, show_rownames = ifelse(length(genes) <
+  80, "once", FALSE), show_colnames = FALSE, anno_colors = NULL, ...)
 }
 \arguments{
 \item{ses}{A (named) list of `SummarizedExperiment` (SEs) objects.}
 
 \item{genes}{A vector of genes/row.names to plot.}
 
-\item{what}{What to plot; either "zscores" (within-SE z-scores, default), "asis" (the input data), or "log2FC".
-If "log2FC".}
+\item{do.scale}{Logical; whether to scale rows in each SE (default TRUE).}
 
-\item{uniqueColorScale}{Logical; whether to force the same colorscale for each heatmap (default FALSE; applicable only when what!='asis').}
+\item{uniqueColorScale}{Logical; whether to force the same colorscale for
+each heatmap (default FALSE; applicable only when what!='asis').}
 
-\item{ctrlCondition}{The condition to compare to if `what="log2FC"` (default "Homecage").}
+\item{assayName}{The name of the assay to use; if multiple names are given,
+the first available will be used. Defaults to "logcpm", "lognorm".}
 
-\item{assayName}{The name of the assay to use; if multiple names are given, the first available will be used.
-Defaults to "logcpm", "lognorm".}
+\item{do.sortRows}{Logical; whether to sort rows according to MDS
+(default TRUE).}
 
-\item{do.sortRows}{Logical; whether to sort rows according to MDS (default TRUE).}
+\item{only.common}{Logical; whether to plot only rows common to all SEs
+(default TRUE).}
 
-\item{only.common}{Logical; whether to plot only rows common to all SEs (default TRUE).}
+\item{anno_columns}{A vector of colData columns to use (if available) for
+annotation, default "Condition" and "TimePoint".}
 
-\item{acolumns}{A vector of colData columns to use (if available) for annotation, default "Condition" and "TimePoint".}
+\item{spreadAnnotation}{Logical; whether to spread annotation to all SEs
+(not yet supported)}
 
-\item{spreadAnnotation}{Logical; whether to spread annotation to all SEs (not yet supported)}
+\item{hmcols}{An optional color palette, such as produced by the
+`colorRampPalette` function.}
 
 \item{cluster_columns}{Logical; whether to cluster columns (default FALSE).}
 
-\item{cluster_rows}{Logical; whether to cluster rows (default TRUE if `do.sortRows=FALSE`, FALSE otherwise).}
+\item{cluster_rows}{Logical; whether to cluster rows (default TRUE if
+`do.sortRows=FALSE`, FALSE otherwise).}
 
-\item{show_row_names}{Logical; whether to show row names (default TRUE if `length(genes)<80`, FALSE otherwise).}
+\item{show_rownames}{Logical; whether to show row names (default TRUE if
+`length(genes)<80`, FALSE otherwise).}
 
-\item{show_column_names}{Logical; whether to show column names (default FALSE)}
+\item{show_colnames}{Logical; whether to show column names (default FALSE)}
 
-\item{acolors}{A vector of color for annotations.}
+\item{anno_colors}{A vector of color for annotations.}
 
 \item{...}{Any other parameter passed to each call of `Heatmap`.}
 }
+\value{
+A `Heatmap-class`` object.
+}
 \description{
 Plot a multi-panel heatmap from a list of `SummarizedExperiment`
+}
+\examples{
+data("SE", package="SEtools")
+crossHm(list(se1=SE[,1:10], se2=SE[,11:20]), head(row.names(SE)))
+
 }

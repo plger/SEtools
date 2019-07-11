@@ -4,7 +4,7 @@
 \alias{sortRows}
 \title{sortRows}
 \usage{
-sortRows(x, z = F, toporder = NULL, na.rm = F,
+sortRows(x, z = FALSE, toporder = NULL, na.rm = FALSE,
   method = "MDS_angle", toporder.meth = "before")
 }
 \arguments{
@@ -12,19 +12,27 @@ sortRows(x, z = F, toporder = NULL, na.rm = F,
 
 \item{z}{Whether to scale rows for the purpose of calculating order (default FALSE).}
 
-\item{toporder}{Optional verctor of categories (length=nrow(x)) on which to supra-order
-when sorting rows.}
+\item{toporder}{Optional verctor of categories (length=nrow(x)) on which to
+supra-order  when sorting rows.}
 
 \item{na.rm}{Wheter to remove missing values and invariant rows (default FALSE).}
 
 \item{method}{Seriation method; 'MDS_angle' (default) or 'R2E' recommended.}
 
-\item{toporder.meth}{Whether to perform higher-order sorting 'before' (default) or
-'after' the lower-order sorting.}
+\item{toporder.meth}{Whether to perform higher-order sorting 'before'
+(default) or 'after' the lower-order sorting.}
 }
 \value{
 A reordered matrix or data.frame.
 }
 \description{
 sortRows
+}
+\examples{
+# random data
+m <- matrix( round(rnorm(100,mean=10, sd=2)), nrow=10,
+             dimnames=list(LETTERS[1:10], letters[11:20]) )
+m
+sortRows(m)
+
 }

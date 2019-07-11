@@ -18,7 +18,7 @@ all of them will be included (if they are not named, the first one will be used)
 \item{colDat.columns}{The colData columns to include (defaults includes all).
 Use `colDat.columns=NA` in order not to include any.}
 
-\item{rowlDat.columns}{The rowData columns to include (none included by default). Use
+\item{rowDat.columns}{The rowData columns to include (none included by default). Use
 `rowData=NULL` to include all.}
 }
 \value{
@@ -26,4 +26,9 @@ A data.frame.
 }
 \description{
 Melts a SE object into a ggplot-ready long data.frame.
+}
+\examples{
+data("SE", package="SEtools")
+head(meltSE(SE,"Fos"))
+
 }

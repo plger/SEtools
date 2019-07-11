@@ -19,20 +19,25 @@ sehm(se, genes = NULL, do.scale = FALSE, assayName = NULL,
 
 \item{do.scale}{Logical; whether to scale rows (default FALSE).}
 
-\item{assayName}{An optional vector of assayNames to use. The first available will be used, or the first assay if NULL.}
+\item{assayName}{An optional vector of assayNames to use. The first available
+will be used, or the first assay if NULL.}
 
-\item{sortRowsOn}{Sort rows by MDS polar order using the specified columns (default all)}
+\item{sortRowsOn}{Sort rows by MDS polar order using the specified columns
+(default all)}
 
 \item{cluster_cols}{Whether to cluster columns (default F)}
 
-\item{cluster_rows}{Whether to cluster rows; default FALSE if `do.sortRows=TRUE`.}
+\item{cluster_rows}{Whether to cluster rows; default FALSE if
+`do.sortRows=TRUE`.}
 
-\item{toporder}{Optional verctor of categories on which to supra-order when sorting rows.}
+\item{toporder}{Optional verctor of categories on which to supra-order when
+sorting rows.}
 
 \item{hmcols}{Colors for the heatmap.}
 
-\item{breaks}{Breaks for the heatmap colors. Alternatively, if `breaks==TRUE`, a symmetrical
-scale with capped ends will be used (appropriate when plotting log2 foldchanges)}
+\item{breaks}{Breaks for the heatmap colors. Alternatively, if
+`breaks==TRUE`, a symmetrical scale with capped ends will be used
+(appropriate when plotting log2 foldchanges)}
 
 \item{gaps_at}{Columns of `colData` to use to establish gaps between columns.}
 
@@ -42,12 +47,21 @@ scale with capped ends will be used (appropriate when plotting log2 foldchanges)
 
 \item{anno_colors}{List of colors to use for annotation.}
 
-\item{show_rownames}{Whether to show row names (default TRUE if 50 rows or less).}
+\item{show_rownames}{Whether to show row names (default TRUE if 50 rows or
+less).}
 
 \item{show_colnames}{Whether to show column names (default FALSE).}
 
 \item{...}{Further arguments passed to `pheatmap`.}
 }
+\value{
+A heatmap (see `pheatmap::pheatmap`)
+}
 \description{
 sehm - heatmap wrapper for SummarizedExperiment
+}
+\examples{
+data("SE", package="SEtools")
+sehm(SE, do.scale=TRUE)
+
 }

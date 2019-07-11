@@ -2,22 +2,30 @@
 #'
 #' @param x A numeric matrix or data.frame.
 #' @param z Whether to scale rows for the purpose of calculating order (default FALSE).
-#' @param toporder Optional verctor of categories (length=nrow(x)) on which to supra-order
-#'  when sorting rows.
+#' @param toporder Optional verctor of categories (length=nrow(x)) on which to
+#' supra-order  when sorting rows.
 #' @param na.rm Wheter to remove missing values and invariant rows (default FALSE).
 #' @param method Seriation method; 'MDS_angle' (default) or 'R2E' recommended.
-#' @param toporder.meth Whether to perform higher-order sorting 'before' (default) or
-#' 'after' the lower-order sorting.
+#' @param toporder.meth Whether to perform higher-order sorting 'before'
+#' (default) or 'after' the lower-order sorting.
 #'
 #' @return A reordered matrix or data.frame.
 #'
+#' @examples
+#' # random data
+#' m <- matrix( round(rnorm(100,mean=10, sd=2)), nrow=10,
+#'              dimnames=list(LETTERS[1:10], letters[11:20]) )
+#' m
+#' sortRows(m)
+#'
 #' @importFrom seriation seriate get_order
 #' @export
-sortRows <- function(x, z=F, toporder=NULL, na.rm=F, method="MDS_angle", toporder.meth="before"){
+sortRows <- function(x, z=FALSE, toporder=NULL, na.rm=FALSE, method="MDS_angle",
+                     toporder.meth="before"){
   toporder.meth <- match.arg(toporder.meth, c("before","after"))
   if(na.rm){
     w <- which( apply(x, 1, FUN = function(y){ !any(is.na(y)) }) |
-                  !(apply(x, 1, na.rm=T, FUN=sd) > 0) )
+                  !(apply(x, 1, na.rm=TRUE, FUN=sd) > 0) )
     x <- x[w,]
     if(!is.null(toporder)) toporder <- toporder[w]
   }
@@ -25,11 +33,11 @@ sortRows <- function(x, z=F, toporder=NULL, na.rm=F, method="MDS_angle", toporde
   if(z) y <- t(scale(t(x)))
   if(!is.null(toporder)){
     if(toporder.meth=="before"){
-      ag <- aggregate(y, by=list(toporder), na.rm=T, FUN=median)
+      ag <- aggregate(y, by=list(toporder), na.rm=TRUE, FUN=median)
       row.names(ag) <- ag[,1]
-      ag <- sortRows(ag[,-1], z=F, na.rm=F, method=method)
+      ag <- sortRows(ag[,-1], z=FALSE, na.rm=FALSE, method=method)
       ll <- split(as.data.frame(y), toporder)
-      ll <- lapply(ll, z=F, na.rm=F, method=method, FUN=sortRows)
+      ll <- lapply(ll, z=FALSE, na.rm=FALSE, method=method, FUN=sortRows)
       y <- unlist(lapply(ll[row.names(ag)], FUN=row.names))
       return(x[y,])
     }else{
@@ -45,7 +53,6 @@ sortRows <- function(x, z=F, toporder=NULL, na.rm=F, method="MDS_angle", toporde
 }
 
 
-
 .chooseAssay <- function(se, assayName=NULL){
   if(is.null(assayName) && !is.null(assayNames(se))){
     assayName <- intersect(assayNames(se), c("log2FC", "logFC", "corrected", "imputed", "logcpm", "lognorm"))
@@ -55,7 +62,7 @@ sortRows <- function(x, z=F, toporder=NULL, na.rm=F, method="MDS_angle", toporde
     }else{
       assayName <- NULL
     }
-  } 
+  }
   if(!is.null(assayName) && !any(assayName %in% assayNames(se))) stop("Assay '", assayName, "' not found!")
   if(is.null(assayName)){
     if(length(assays(se))>1) message("Assay unspecified, and multiple assays present - will use the first one.")

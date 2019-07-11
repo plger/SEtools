@@ -3,21 +3,31 @@
 #' Merges a list of `SummarizedExperiment`.
 #'
 #' @param ll A (named) list of SummarizedExperiments
-#' @param use.assays Names (or indexes) of the assays to use. By default, all common assays are used.
-#' @param do.scale A logical vector indicating (globally or for each assay) whether to
-#' perform row unit-variance scaling on each dataset before merging (default TRUE).
-#' @param commonOnly Logical; whether to restrict to rows present in all datasets (default TRUE).
-#' @param colColumns A character vector specifying `colData` columns to include (if available in at least one of the datasets).
-#' If NULL, everything is kept.
-#' @param defValues A list specifying the default values for `colColumns` when these are absent.
-#' @param addDatasetPrefix Logical; whether the name of the dataset should be appended to the sample names (default TRUE).
+#' @param use.assays Names (or indexes) of the assays to use. By default, all
+#' common assays are used.
+#' @param do.scale A logical vector indicating (globally or for each assay)
+#' whether to perform row unit-variance scaling on each dataset before merging
+#' (default TRUE).
+#' @param commonOnly Logical; whether to restrict to rows present in all
+#' datasets (default TRUE).
+#' @param colColumns A character vector specifying `colData` columns to include
+#' (if available in at least one of the datasets). If NULL, everything is kept.
+#' @param defValues A list specifying the default values for `colColumns` when
+#' these are absent.
+#' @param addDatasetPrefix Logical; whether the name of the dataset should be
+#' appended to the sample names (default TRUE).
 #'
 #' @return An object of class `SummarizedExperiment`
+#'
+#' @examples
+#' data("SE", package="SEtools")
+#' mergeSEs( list( se1=SE[,1:10], se2=SE[,11:20] ) )
 #'
 #' @import SummarizedExperiment
 #' @importFrom data.table data.table rbindlist
 #' @export
-mergeSEs <- function(ll, use.assays=NULL, do.scale=TRUE, commonOnly=TRUE, colColumns=NULL, addDatasetPrefix=TRUE, defValues=list()){
+mergeSEs <- function(ll, use.assays=NULL, do.scale=TRUE, commonOnly=TRUE,
+                     colColumns=NULL, addDatasetPrefix=TRUE, defValues=list()){
   if(!commonOnly && any(do.scale)) stop("For z-scores, `commonOnly` must be TRUE.")
 
   tt <- table(unlist(lapply(ll,row.names)))
@@ -36,7 +46,7 @@ mergeSEs <- function(ll, use.assays=NULL, do.scale=TRUE, commonOnly=TRUE, colCol
   # colData
   cd <- lapply(ll, cc=colColumns, FUN=function(x,cc){
     x <- as.data.frame(colData(x))
-    if(!is.null(cc)) x <- x[,intersect(cc,colnames(x)),drop=F]
+    if(!is.null(cc)) x <- x[,intersect(cc,colnames(x)),drop=FALSE]
     x
   })
   cd2 <- as.data.frame(data.table::rbindlist(cd, fill=T, idcol="Dataset"))
@@ -80,13 +90,14 @@ mergeSEs <- function(ll, use.assays=NULL, do.scale=TRUE, commonOnly=TRUE, colCol
          "To merge the first assay of each object, use `use.assays=1`.")
   }
   if(length(do.scale)==1) do.scale <- rep(do.scale, length(use.assays))
-  if(length(do.scale)!=length(use.assays)) stop("`do.scale` should have a length either of 1 or equal to the number of assays used.")
+  if(length(do.scale)!=length(use.assays))
+    stop("`do.scale` should have a length either of 1 or equal to the number of assays used.")
 
   a <- lapply(1:length(use.assays), FUN=function(a){
     x <- lapply(ll, FUN=function(x){
       x <- assays(x)[[use.assays[[a]]]]
       if(all(rn %in% row.names(x))) return(x[rn,])
-      as.matrix(as.data.frame(x[rn,,drop=F]))
+      as.matrix(as.data.frame(x[rn,,drop=FALSE]))
     })
     if(do.scale[a]){
       if(any(sapply(x, FUN=function(x) any(is.infinite(x) | is.na(x))))){
