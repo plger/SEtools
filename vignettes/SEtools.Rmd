@@ -25,7 +25,7 @@ suppressPackageStartupMessages({
   library(SummarizedExperiment)
   library(SEtools)
 })
-data("SE")
+data("SE", package="SEtools")
 SE
 ```
 
@@ -60,7 +60,13 @@ The specific assay to use for plotting can be specified with the `assayName` arg
 Heatmaps from multiple SE can be created either by merging the objects (see below), or using the `crossHm` function, which uses the `r CRANpkg("ComplexHeatmap")` pacakge:
 
 ```{r}
-crossHm(list(se1=SE, se2=SE), g, acolors = list(Condition=c(Homecage="green", "Handling"="orange", "Restraint"="red", "Swim"="blue")))
+crossHm( list(se1=SE, se2=SE), g, 
+         anno_colors = list( Condition=c( Homecage="green",
+                                          Handling="orange",
+                                          Restraint="red",
+                                          Swim="blue")
+                            )
+        )
 ```
 
 

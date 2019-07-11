@@ -4,7 +4,17 @@ The *SEtools* R package is a set of convenience functions for the _Bioconductor_
 
 ***
 
-# Getting started
+## Getting started
+
+### Installing
+
+Install with:
+
+```{r}
+devtools::install_github("plger/SEtools")
+```
+
+### Example data
 
 To showcase the main functions, we will use an example object which contains (a subset of) whole-hippocampus RNAseq of mice after different stressors (taken from [Floriou-Servou et al., Biol Psychiatry 2018](https://doi.org/10.1016/j.biopsych.2018.02.003)) :
 
@@ -12,9 +22,8 @@ To showcase the main functions, we will use an example object which contains (a 
 suppressPackageStartupMessages({
   library(SummarizedExperiment)
   library(SEtools)
-  library(BiocStyle)
 })
-data("SE")
+data("SE", package="SEtools")
 SE
 ```
 
@@ -75,7 +84,7 @@ anno_colors <- list( Condition= c(Homecage="green",
                                   Restraint="red",
                                   Swim="blue")
                    )
-crossHm( list(se1=SE, se2=SE), g, acolors=anno_colors ) 
+crossHm( list(se1=SE, se2=SE), g, anno_colors=anno_colors ) 
 ```
 
 ![](README_files/figure-html/unnamed-chunk-6-1.png)<!-- -->
