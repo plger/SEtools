@@ -86,20 +86,13 @@ sortRows <- function(x, z=FALSE, toporder=NULL, na.rm=FALSE, method="MDS_angle",
   }else{
     xr <- ceiling(max(abs(xr)))
   }
-  if(xr>=4){
-    breaks <- c( -xr, -3.5, -3,
-                 seq(from=-2.5,to=2.5,length.out=n-7),
-                 3, 3.5, xr)
-  }else{
-    if(xr>=3){
-      breaks <- c(-xr, -2.5,
-                  seq(from=-2,to=2,length.out=n-5),
-                  2.5, xr)
-    }else{
-      breaks <- seq(from=-xr,to=xr,length.out=n-1)
-    }
-  }
-  breaks
+  if(xr>=4) return( c( -xr, -3.5, -3,
+                    seq(from=-2.5,to=2.5,length.out=n-7),
+                    3, 3.5, xr) )
+  if(xr>=3) return( c(-xr, -2.5,
+                      seq(from=-2,to=2,length.out=n-5),
+                      2.5, xr) )
+  seq(from=-xr,to=xr,length.out=n-1)
 }
 
 .getDef <- function(x){
