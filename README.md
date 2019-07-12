@@ -94,7 +94,6 @@ crossHm( list(se1=SE, se2=SE), g, anno_colors=anno_colors )
 For some arguments (for instance colors), if they are not specified in the function call, `SEtools` will try to see whether the corresponding global options have been set, before using default colors. This means that if, in the context of a given project, the same colors are repeatedly being used, they can be specified a single time, and all subsequent plots will be affected:
 
 ```
-# not run
 options("SEtools_def_hmcols"=c("white","grey","black"))
 ancols <- list( Condition=c( Homecage="green",
                              Handling="orange",
@@ -103,6 +102,8 @@ ancols <- list( Condition=c( Homecage="green",
 options("SEtools_def_anno_colors"=ancols)
 sehm(SE, g, do.scale = TRUE)
 ```
+
+![](README_files/figure-html/unnamed-chunk-7-1.png)<!-- -->
 
 At the moment, the following arguments can be set as global options:
 `assayName`, `hmcols`, `anno_columns`, `anno_rows`, `anno_colors`, `gaps_at`, `breaks`.

@@ -5,7 +5,8 @@ author:
   affiliation: D-HEST Institute for Neurosciences, ETH Zürich & Laboratory of Statistical Bioinformatics, University Zürich
 package: SEtools
 output:
-  BiocStyle::html_document
+  BiocStyle::html_document:
+        fig_height: 3.5
 abstract: |
   Showcases the use of SEtools to merge objects of the SummarizedExperiment class, melt them, and plot annotated heatmaps from them.
 vignette: |
@@ -13,6 +14,10 @@ vignette: |
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
+
+```{r, include=FALSE}
+library(BiocStyle)
+```
 
 # Getting started
 
@@ -116,7 +121,7 @@ se3 <- mergeSEs( list(se1=se1, se2=se2), use.assays=c("counts", "logcpm"), do.sc
 
 To facilitate plotting features with `r CRANpkg("ggplot2")`, the `meltSE` function combines assay values along with row/column data:
 
-```{r, fig.cap="An example ggplot created from a melted SE."}
+```{r, fig.cap="An example ggplot created from a melted SE.", fig.height=5}
 d <- meltSE(SE, genes=g[1:4])
 head(d)
 suppressPackageStartupMessages(library(ggplot2))
