@@ -3,6 +3,7 @@
 export(crossHm)
 export(meltSE)
 export(mergeSEs)
+export(resetAllSEtoolsOptions)
 export(sehm)
 export(sortRows)
 import(ComplexHeatmap)

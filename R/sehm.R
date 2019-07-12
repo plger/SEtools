@@ -36,19 +36,17 @@
 #' @importFrom pheatmap pheatmap
 #' @import SummarizedExperiment
 #' @export
-sehm <- function( se, genes=NULL, do.scale=FALSE, assayName=NULL,
+sehm <- function( se, genes=NULL, do.scale=FALSE, assayName=.getDef("assayName"),
                   sortRowsOn=1:ncol(se), cluster_cols=FALSE,
                   cluster_rows=is.null(sortRowsOn), toporder=NULL, hmcols=NULL,
-                  breaks=NULL, gaps_at=NULL, anno_rows=c(),
-                  anno_columns=c( "Batch", "batch", "Condition","condition",
-                                  "Group","group", "Genotype", "genotype",
-                                  "Dataset"),
-                  anno_colors=list(), show_rownames=NULL, show_colnames=FALSE,
-                  ...){
+                  breaks=.getDef("breaks"), gaps_at=.getDef("gaps_at"),
+                  anno_rows=.getDef("anno_rows"),
+                  anno_columns=.getDef("anno_columns"),
+                  anno_colors=.getDef("anno_colors"), show_rownames=NULL,
+                  show_colnames=FALSE, ...){
 
   x <- as.matrix(.chooseAssay(se, assayName))
 
-  if(is.null(hmcols)) hmcols <- colorRampPalette(c("blue", "black", "yellow"))(29)
   if(!is.null(genes)) x <- x[intersect(genes,row.names(x)),]
   if(do.scale){
     x <- x[apply(x,1,FUN=sd)>0,]
@@ -64,27 +62,10 @@ sehm <- function( se, genes=NULL, do.scale=FALSE, assayName=NULL,
     x <- x[row.names(x2),]
     rm(x2)
   }
-  xr <- range(x, na.rm=TRUE)
-  if(!is.null(breaks) && length(breaks)==1 && breaks==TRUE){
-     if(ceiling(max(abs(xr)))==1){
-        xr <- ceiling(max(abs(xr*10)))/10
-    }else{
-        xr <- ceiling(max(abs(xr)))
-    }
-    if(xr>=4){
-      breaks <- c( -xr, -3.5, -3,
-                   seq(from=-2.5,to=2.5,length.out=length(hmcols)-7),
-                   3, 3.5, xr)
-    }else{
-      if(xr>=3){
-        breaks <- c(-xr, -2.5,
-                    seq(from=-2,to=2,length.out=length(hmcols)-5),
-                    2.5, xr)
-      }else{
-        breaks <- seq(from=-xr,to=xr,length.out=length(hmcols)-1)
-      }
-    }
-  }
+
+  hmcols <- .getHMcols(hmcols)
+  if(!is.null(breaks) && length(breaks)==1 && breaks==TRUE)
+    breaks <- .getBreaks(x, length(hmcols))
 
   anr <- as.data.frame(rowData(se))
   anr <- anr[,intersect(colnames(anr), anno_rows),drop=FALSE]
@@ -101,17 +82,14 @@ sehm <- function( se, genes=NULL, do.scale=FALSE, assayName=NULL,
           anno_colors[[i]] <- c("FALSE"="white", "TRUE"="darkblue")
         }
       }else{
-        if(is.factor(an[[i]])){
-          an[[i]] <- factor( as.character(an[[i]]),
-                             levels=intersect(levels(an[[i]]),unique(an[[i]])) )
-        }
+        if(is.factor(an[[i]])) an[[i]] <- droplevels(an[[i]])
       }
     }
   }
 
 
   if(!is.null(gaps_at)){
-    gaps_at <- match.arg(gaps_at, colnames(colData(se)), several.ok=TRUE)
+    gaps_at <- intersect(gaps_at, colnames(colData(se)))
     ga <- apply( as.data.frame(colData(se))[,gaps_at,drop=FALSE], 1,
                  collapse=" ", FUN=paste)
     ga <- factor(ga, levels=unique(ga))

@@ -4,13 +4,14 @@
 \alias{sehm}
 \title{sehm}
 \usage{
-sehm(se, genes = NULL, do.scale = FALSE, assayName = NULL,
-  sortRowsOn = 1:ncol(se), cluster_cols = FALSE,
-  cluster_rows = is.null(sortRowsOn), toporder = NULL, hmcols = NULL,
-  breaks = NULL, gaps_at = NULL, anno_rows = c(),
-  anno_columns = c("Batch", "batch", "Condition", "condition", "Group",
-  "group", "Genotype", "genotype", "Dataset"), anno_colors = list(),
-  show_rownames = NULL, show_colnames = FALSE, ...)
+sehm(se, genes = NULL, do.scale = FALSE,
+  assayName = .getDef("assayName"), sortRowsOn = 1:ncol(se),
+  cluster_cols = FALSE, cluster_rows = is.null(sortRowsOn),
+  toporder = NULL, hmcols = NULL, breaks = .getDef("breaks"),
+  gaps_at = .getDef("gaps_at"), anno_rows = .getDef("anno_rows"),
+  anno_columns = .getDef("anno_columns"),
+  anno_colors = .getDef("anno_colors"), show_rownames = NULL,
+  show_colnames = FALSE, ...)
 }
 \arguments{
 \item{se}{A \code{\link[SummarizedExperiment]{SummarizedExperiment}}.}

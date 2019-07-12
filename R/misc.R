@@ -71,4 +71,67 @@ sortRows <- function(x, z=FALSE, toporder=NULL, na.rm=FALSE, method="MDS_angle",
   assays(se)[[intersect(assayName,assayNames(se))[1]]]
 }
 
+.getHMcols <- function(cols=NULL, n=29){
+  if(is.null(cols)) cols <- .getDef("hmcols")
+  if(is.function(cols)) return(cols)
+  if(length(cols) %in% 2:3)  cols <- colorRampPalette(cols)(n)
+  cols
+}
+
+.getBreaks <- function(x, n){
+  if(!is.list(x)) x <- list(x)
+  xr <- range(sapply(x, na.rm=TRUE, FUN=range), na.rm=TRUE)
+  if(ceiling(max(abs(xr)))<=2){
+    xr <- ceiling(max(abs(xr*10)))/10
+  }else{
+    xr <- ceiling(max(abs(xr)))
+  }
+  if(xr>=4){
+    breaks <- c( -xr, -3.5, -3,
+                 seq(from=-2.5,to=2.5,length.out=n-7),
+                 3, 3.5, xr)
+  }else{
+    if(xr>=3){
+      breaks <- c(-xr, -2.5,
+                  seq(from=-2,to=2,length.out=n-5),
+                  2.5, xr)
+    }else{
+      breaks <- seq(from=-xr,to=xr,length.out=n-1)
+    }
+  }
+  breaks
+}
+
+.getDef <- function(x){
+  a <- c( "Batch", "batch", "Condition","condition", "Group","group",
+          "Genotype", "genotype", "Dataset")
+  switch(x,
+         assay=getOption("SEtools_def_assayName",
+                         default=c("logFC", "logcpm", "lognorm")),
+         anno_colors=getOption("SEtools_def_anno_colors", default=list()),
+         hmcols=getOption("SEtools_def_hmcols",
+                          default=c("blue", "black", "yellow")),
+         anno_columns=getOption("SEtools_def_anno_columns", default=a),
+         anno_rows=getOption("SEtools_def_anno_rows", default=c()),
+         gaps_at=getOption("SEtools_def_gaps_at", default="Dataset"),
+         breaks=getOption("SEtools_def_breaks", default=NULL)
+        )
+}
+
+
+#' resetAllSEtoolsOptions
+#'
+#' Resents all global options relative to SEtools.
+#'
+#' @return NULL
+#'
+#' @examples
+#' resetAllSEtoolsOptions()
+#'
+#' @export
+resetAllSEtoolsOptions <- function(){
+  for(o in grep("^SEtools_",names(options()), value=TRUE)){
+    eval(parse(text=paste0('options("',o,'"=NULL)')))
+  }
+}
 

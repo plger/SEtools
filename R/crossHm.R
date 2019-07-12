@@ -43,10 +43,8 @@
 #' @import ComplexHeatmap
 #' @export
 crossHm <- function( ses, genes, do.scale=TRUE, uniqueColorScale=FALSE,
-                     assayName=c("logcpm","lognorm"),
-                     do.sortRows=TRUE, only.common=TRUE,
-                     anno_columns=c( "Batch", "batch", "Condition","condition",
-                                     "Group","group", "Genotype", "genotype"),
+                     assayName=.getDef("assayName"), do.sortRows=TRUE,
+                     only.common=TRUE, anno_columns=.getDef("anno_columns"),
                      spreadAnnotation=FALSE, hmcols=NULL,
                      cluster_columns=FALSE, cluster_rows=!do.sortRows,
                      show_rownames=ifelse(length(genes)<80,"once",FALSE),
@@ -84,20 +82,9 @@ crossHm <- function( ses, genes, do.scale=TRUE, uniqueColorScale=FALSE,
     dat
   })
 
-  if(is.null(hmcols)){
-      if(!do.scale || !uniqueColorScale){
-        hmcols <- colorRampPalette(c("blue", "black", "yellow"))(29)
-      }else{
-        vr <- range(unlist(lapply(dats, range)))
-        if(max(abs(vr))>3){
-          vr <- c(max(abs(vr)), 3, 2.5, 1.5, 1, 0.5)
-        }else{
-          vr <- c(3, 2.5, 1.5, 1, 0.5)
-        }
-        vr <- c(-1*vr, 0, rev(vr))
-        hmcols <- colorRampPalette(c("blue", "black", "yellow"))(length(vr))
-        hmcols <- colorRamp2(vr, hmcols)
-      }
+  hmcols <- .getHMcols(hmcols)
+  if(do.scale && uniqueColorScale && !is.function(hmcols)){
+    hmcols <- colorRamp2(.getBreaks(dats, length(hmcols)), hmcols)
   }
 
   if(do.sortRows){
