@@ -68,6 +68,13 @@ mergeSEs <- function(ll, use.assays=NULL, do.scale=TRUE, commonOnly=TRUE,
 
 .prepAssays <- function(ll, use.assays=NULL, do.scale=FALSE, rn=NULL){
   if(is.null(rn)) rn <- unique(unlist(sapply(ll, FUN=row.names)))
+  if(!is.numeric(use.assays) && any(sapply(lapply(ll,assayNames),is.null)))
+      warning("Some objects have no assay names - arbitrary names are given.")
+  ll <- lapply(ll, FUN=function(x){
+      if(is.null(assayNames(x)))
+          assayNames(x) <- paste0("assay",1:length(assays(x)))
+      x
+  })
   an <- table(unlist(lapply(ll, FUN=assayNames)))
   if(is.null(use.assays)){
     use.assays <- names(an)[which(an==length(ll))]
