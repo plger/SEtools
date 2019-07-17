@@ -116,7 +116,7 @@ sortRows <- function(x, z=FALSE, toporder=NULL, na.rm=FALSE, method="MDS_angle",
 #'
 #' Resents all global options relative to SEtools.
 #'
-#' @return NULL
+#' @return None
 #'
 #' @examples
 #' resetAllSEtoolsOptions()

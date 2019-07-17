@@ -6,6 +6,9 @@
 \usage{
 resetAllSEtoolsOptions()
 }
+\value{
+None
+}
 \description{
 Resents all global options relative to SEtools.
 }
