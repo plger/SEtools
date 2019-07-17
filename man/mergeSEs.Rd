@@ -9,7 +9,7 @@ mergeSEs(ll, use.assays = NULL, do.scale = TRUE, commonOnly = TRUE,
 }
 \arguments{
 \item{ll}{A (named) list of
-\code{\link[SummarizedExperiment]{SummarizedExperiment}}}
+\code{\link[SummarizedExperiment]{SummarizedExperiment-class}}}
 
 \item{use.assays}{Names (or indexes) of the assays to use. By default, all
 common assays are used.}
@@ -32,10 +32,10 @@ these are absent.}
 }
 \value{
 An object of class
-\code{\link[SummarizedExperiment]{SummarizedExperiment}}
+\code{\link[SummarizedExperiment]{SummarizedExperiment-class}}
 }
 \description{
-Merges a list of \code{\link[SummarizedExperiment]{SummarizedExperiment}}.
+Merges a list of \code{\link[SummarizedExperiment]{SummarizedExperiment-class}}.
 }
 \examples{
 data("SE", package="SEtools")

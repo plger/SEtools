@@ -13,7 +13,7 @@ crossHm(ses, genes, do.scale = TRUE, uniqueColorScale = FALSE,
 }
 \arguments{
 \item{ses}{A (named) list of
-\code{\link[SummarizedExperiment]{SummarizedExperiment}}.}
+\code{\link[SummarizedExperiment]{SummarizedExperiment-class}}.}
 
 \item{genes}{A vector of genes/row.names to plot.}
 
@@ -60,7 +60,7 @@ A \code{\link[ComplexHeatmap]{Heatmap-class}} object.
 }
 \description{
 Plot a multi-panel heatmap from a list of
-\code{\link[SummarizedExperiment]{SummarizedExperiment}}
+\code{\link[SummarizedExperiment]{SummarizedExperiment-class}}
 }
 \examples{
 data("SE", package="SEtools")

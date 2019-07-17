@@ -1,8 +1,8 @@
 #' sehm
 #'
-#' Heatmap wrapper for \code{\link[SummarizedExperiment]{SummarizedExperiment}}.
+#' Heatmap wrapper for \code{\link[SummarizedExperiment]{SummarizedExperiment-class}}.
 #'
-#' @param se A \code{\link[SummarizedExperiment]{SummarizedExperiment}}.
+#' @param se A \code{\link[SummarizedExperiment]{SummarizedExperiment-class}}.
 #' @param genes An optional vector of genes (i.e. row names of `se`)
 #' @param do.scale Logical; whether to scale rows (default FALSE).
 #' @param assayName An optional vector of assayNames to use. The first available

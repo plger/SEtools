@@ -1,10 +1,10 @@
 #' crossHm
 #'
 #' Plot a multi-panel heatmap from a list of
-#' \code{\link[SummarizedExperiment]{SummarizedExperiment}}
+#' \code{\link[SummarizedExperiment]{SummarizedExperiment-class}}
 #'
 #' @param ses A (named) list of
-#' \code{\link[SummarizedExperiment]{SummarizedExperiment}}.
+#' \code{\link[SummarizedExperiment]{SummarizedExperiment-class}}.
 #' @param genes A vector of genes/row.names to plot.
 #' @param do.scale Logical; whether to scale rows in each SE (default TRUE).
 #' @param uniqueColorScale Logical; whether to force the same colorscale for

@@ -9,7 +9,7 @@ meltSE(x, genes, assayName = NULL, colDat.columns = NULL,
 }
 \arguments{
 \item{x}{An object of class
-\code{\link[SummarizedExperiment]{SummarizedExperiment}}}
+\code{\link[SummarizedExperiment]{SummarizedExperiment-class}}}
 
 \item{genes}{A vector of genes to include. Use `genes=NULL` to include all.}
 

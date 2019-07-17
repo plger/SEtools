@@ -14,7 +14,7 @@ sehm(se, genes = NULL, do.scale = FALSE,
   show_colnames = FALSE, ...)
 }
 \arguments{
-\item{se}{A \code{\link[SummarizedExperiment]{SummarizedExperiment}}.}
+\item{se}{A \code{\link[SummarizedExperiment]{SummarizedExperiment-class}}.}
 
 \item{genes}{An optional vector of genes (i.e. row names of `se`)}
 
@@ -59,7 +59,7 @@ less).}
 A heatmap (see \code{\link[pheatmap]{pheatmap}}).
 }
 \description{
-Heatmap wrapper for \code{\link[SummarizedExperiment]{SummarizedExperiment}}.
+Heatmap wrapper for \code{\link[SummarizedExperiment]{SummarizedExperiment-class}}.
 }
 \examples{
 data("SE", package="SEtools")

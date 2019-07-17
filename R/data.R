@@ -5,10 +5,10 @@
 #' @title Example dataset
 #'
 #' @description
-#' A \code{\link[SummarizedExperiment]{SummarizedExperiment}} containing (a
+#' A \code{\link[SummarizedExperiment]{SummarizedExperiment-class}} containing (a
 #' subset of) whole-hippocampus RNAseq of mice after different stressors.
 #'
-#' @return a \code{\link[SummarizedExperiment]{SummarizedExperiment}}.
+#' @return a \code{\link[SummarizedExperiment]{SummarizedExperiment-class}}.
 #'
 #' @references
 #' Floriou-Servou et al. (2018).

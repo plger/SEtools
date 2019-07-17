@@ -1,9 +1,9 @@
 #' mergeSEs
 #'
-#' Merges a list of \code{\link[SummarizedExperiment]{SummarizedExperiment}}.
+#' Merges a list of \code{\link[SummarizedExperiment]{SummarizedExperiment-class}}.
 #'
 #' @param ll A (named) list of
-#' \code{\link[SummarizedExperiment]{SummarizedExperiment}}
+#' \code{\link[SummarizedExperiment]{SummarizedExperiment-class}}
 #' @param use.assays Names (or indexes) of the assays to use. By default, all
 #' common assays are used.
 #' @param do.scale A logical vector indicating (globally or for each assay)
@@ -19,7 +19,7 @@
 #' appended to the sample names (default TRUE).
 #'
 #' @return An object of class
-#' \code{\link[SummarizedExperiment]{SummarizedExperiment}}
+#' \code{\link[SummarizedExperiment]{SummarizedExperiment-class}}
 #'
 #' @examples
 #' data("SE", package="SEtools")

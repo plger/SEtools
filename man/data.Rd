@@ -5,10 +5,10 @@
 \alias{SE}
 \title{Example dataset}
 \value{
-a \code{\link[SummarizedExperiment]{SummarizedExperiment}}.
+a \code{\link[SummarizedExperiment]{SummarizedExperiment-class}}.
 }
 \description{
-A \code{\link[SummarizedExperiment]{SummarizedExperiment}} containing (a
+A \code{\link[SummarizedExperiment]{SummarizedExperiment-class}} containing (a
 subset of) whole-hippocampus RNAseq of mice after different stressors.
 }
 \references{
