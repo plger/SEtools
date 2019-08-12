@@ -78,9 +78,14 @@ sortRows <- function(x, z=FALSE, toporder=NULL, na.rm=FALSE, method="MDS_angle",
   cols
 }
 
-.getBreaks <- function(x, n){
+.getBreaks <- function(x, n, trim=0.01){
   if(!is.list(x)) x <- list(x)
-  xr <- range(sapply(x, na.rm=TRUE, FUN=range), na.rm=TRUE)
+  if(trim){
+      xr <- unlist(lapply(x,as.numeric))
+      xr <- quantile(xr,probs=c(trim,1-trim))
+  }else{
+    xr <- range(sapply(x, na.rm=TRUE, FUN=range), na.rm=TRUE)
+  }
   if(ceiling(max(abs(xr)))<=2){
     xr <- ceiling(max(abs(xr*10)))/10
   }else{
