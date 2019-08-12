@@ -48,7 +48,7 @@ crossHm <- function( ses, genes, do.scale=TRUE, uniqueColorScale=FALSE,
                      spreadAnnotation=FALSE, hmcols=NULL,
                      cluster_columns=FALSE, cluster_rows=!do.sortRows,
                      show_rownames=ifelse(length(genes)<80,"once",FALSE),
-                     show_colnames=FALSE, anno_colors=NULL, ...){
+                     show_colnames=FALSE, anno_colors=.getDef("anno_colors"), ...){
   if(is(ses,"SummarizedExperiment")) ses <- list(ses)
   if(is.null(anno_colors)) anno_colors <- list()
   if(only.common){
