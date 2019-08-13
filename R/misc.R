@@ -82,7 +82,7 @@ sortRows <- function(x, z=FALSE, toporder=NULL, na.rm=FALSE, method="MDS_angle",
   if(!is.list(x)) x <- list(x)
   if(trim){
       xr <- unlist(lapply(x,as.numeric))
-      xr <- quantile(xr,probs=c(trim,1-trim))
+      xr <- quantile(xr,probs=c(trim,1-trim),na.rm=TRUE)
   }else{
     xr <- range(sapply(x, na.rm=TRUE, FUN=range), na.rm=TRUE)
   }

@@ -79,12 +79,12 @@ crossHm <- function( ses, genes, do.scale=TRUE, uniqueColorScale=FALSE,
       }))
     }
     row.names(dat) <- genes
-    dat
+    as.matrix(dat)
   })
 
   hmcols <- .getHMcols(hmcols)
-  if(do.scale && uniqueColorScale && !is.function(hmcols)){
-    hmcols <- colorRamp2(.getBreaks(dats, length(hmcols)), hmcols)
+  if(any(dats[[1]]<0) && uniqueColorScale && !is.function(hmcols)){
+    hmcols <- colorRamp2(.getBreaks(dats, length(hmcols)+1), hmcols)
   }
 
   if(do.sortRows){
@@ -111,12 +111,20 @@ crossHm <- function( ses, genes, do.scale=TRUE, uniqueColorScale=FALSE,
     }
     srn <- show_rownames
     if(srn=="once") srn <- i==length(ses)
-    htlist <- htlist + Heatmap(dats[[i]], col=hmcols, na_col="white",
+    if(!is.function(hmcols)){
+        tcols <- colorRamp2(.getBreaks(dats[[i]]),hmcols)
+    }else{
+        tcols <- hmcols
+    }
+    legtitle <- ifelse(uniqueColorScale | length(ses)==1, assayName[1], names(ses)[[i]])
+    htlist <- htlist + Heatmap(dats[[i]], col=tcols, na_col="white",
                                name=names(ses)[[i]],
                                column_title=names(ses)[[i]], top_annotation=an,
                                cluster_rows=cluster_rows,
                                cluster_columns=cluster_columns,
                                show_row_names=srn,
+                               show_heatmap_legend=!(i>1 & uniqueColorScale),
+                               heatmap_legend_param=list(title=legtitle),
                                show_column_names=show_colnames,
                                ...)
   }
