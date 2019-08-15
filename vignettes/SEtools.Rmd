@@ -27,14 +27,14 @@ The `r Rpackage("SEtools")` package is a set of convenience functions for the _B
 
 ## Package installation
 
-```{r}
+```{r, eval=FALSE}
 if (!requireNamespace("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
 BiocManager::install("SEtools")
 ```
 
 Or, until the new bioconductor release:
-```{r}
+```{r, eval=FALSE}
 devtools::install_github("plger/SEtools")
 ```
 
