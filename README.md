@@ -1,18 +1,4 @@
----
-title: "SEtools"
-author: "Pierre-Luc Germain"
-output: 
-  html_document:
-    toc: true
-    keep_md: true
-    toc_float: false
-    theme: 'cerulean'
-    highlight: 'tango'
-    code_folding: none
----
-
-
-
+# SEtools
 
 ## Getting started
 
