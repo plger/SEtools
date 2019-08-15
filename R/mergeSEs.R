@@ -72,7 +72,7 @@ mergeSEs <- function(ll, use.assays=NULL, do.scale=TRUE, commonOnly=TRUE,
       warning("Some objects have no assay names - arbitrary names are given.")
   ll <- lapply(ll, FUN=function(x){
       if(is.null(assayNames(x)))
-          assayNames(x) <- paste0("assay",1:length(assays(x)))
+          assayNames(x) <- paste0("assay", seq_len(length(assays(x))))
       x
   })
   an <- table(unlist(lapply(ll, FUN=assayNames)))
@@ -93,7 +93,7 @@ mergeSEs <- function(ll, use.assays=NULL, do.scale=TRUE, commonOnly=TRUE,
     }
   }
   if(length(use.assays)==0){
-    if(is.null(names(ll))) names(ll) <- paste("object", 1:length(ll))
+    if(is.null(names(ll))) names(ll) <- paste("object", seq_len(length(ll)))
     aa <- paste0(names(ll), ":\n",
                  sapply(ll, FUN=function(x) paste(assayNames(x), collapse=", ")),
                  collapse="\n" )
@@ -105,7 +105,7 @@ mergeSEs <- function(ll, use.assays=NULL, do.scale=TRUE, commonOnly=TRUE,
     stop( "`do.scale` should have a length either of 1 or equal to the number ",
           "of assays used.")
 
-  a <- lapply(1:length(use.assays), FUN=function(a){
+  a <- lapply(seq_len(length(use.assays)), FUN=function(a){
     x <- lapply(ll, FUN=function(x){
       x <- assays(x)[[use.assays[[a]]]]
       if(all(rn %in% row.names(x))) return(x[rn,])
@@ -135,7 +135,7 @@ mergeSEs <- function(ll, use.assays=NULL, do.scale=TRUE, commonOnly=TRUE,
   rd <- lapply(ll, FUN=function(x){
     as.data.frame(rowData(x))[g,,drop=FALSE]
   })
-  if(is.null(names(rd))) names(rd) <- paste0("D",1:length(rd))
+  if(is.null(names(rd))) names(rd) <- paste0("D",seq_len(length(rd)))
   cn <- unique(unlist(lapply(rd, FUN=colnames)))
   rd <- lapply(cn, FUN=function(n){ # for each unique rowData column name
     x <- lapply(rd, FUN=function(y){
@@ -152,8 +152,8 @@ mergeSEs <- function(ll, use.assays=NULL, do.scale=TRUE, commonOnly=TRUE,
 
     # the column occurs in more than one dataset
     # we first remove identical columns
-    w <- which(sapply(2:length(x), FUN=function(i){
-      any(sapply(1:(i-1), FUN=function(j,i){
+    w <- which(sapply(seq_along(x), FUN=function(i){
+      any(sapply(seq_len(i-1), FUN=function(j,i){
         all(x[[i]]==x[[j]])
       }))
     }))

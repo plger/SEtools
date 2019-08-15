@@ -37,7 +37,7 @@
 #' @import SummarizedExperiment
 #' @export
 sehm <- function( se, genes=NULL, do.scale=FALSE, assayName=.getDef("assayName"),
-                  sortRowsOn=1:ncol(se), cluster_cols=FALSE,
+                  sortRowsOn=seq_len(ncol(se)), cluster_cols=FALSE,
                   cluster_rows=is.null(sortRowsOn), toporder=NULL, hmcols=NULL,
                   breaks=.getDef("breaks"), gaps_at=.getDef("gaps_at"),
                   anno_rows=.getDef("anno_rows"),

@@ -95,7 +95,7 @@ crossHm <- function( ses, genes, do.scale=TRUE, uniqueColorScale=FALSE,
   }
 
   htlist <- NULL
-  for(i in 1:length(ses)){
+  for(i in seq_along(ses)){
     cd <- as.data.frame(colData(ses[[i]]))
     cd <- cd[,intersect(colnames(cd), anno_columns),drop=FALSE]
     if(ncol(cd)==0){
