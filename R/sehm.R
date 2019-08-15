@@ -13,12 +13,14 @@
 #' @param cluster_rows Whether to cluster rows; default FALSE if
 #' `do.sortRows=TRUE`.
 #' @param toporder Optional verctor of categories on which to supra-order when
-#' sorting rows.
+#' sorting rows, or name of a `rowData` column to use for this purpose.
 #' @param hmcols Colors for the heatmap.
 #' @param breaks Breaks for the heatmap colors. Alternatively, if
 #' `breaks==TRUE`, a symmetrical scale with capped ends will be used
 #' (appropriate when plotting log2 foldchanges)
 #' @param gaps_at Columns of `colData` to use to establish gaps between columns.
+#' @param gaps_row Passed to \code{\link[pheatmap]{pheatmap}}; if missing, will
+#' be set automatically according to toporder.
 #' @param anno_rows Columns of `rowData` to use for annotation.
 #' @param anno_columns Columns of `colData` to use for annotation.
 #' @param anno_colors List of colors to use for annotation.
@@ -40,7 +42,7 @@ sehm <- function( se, genes=NULL, do.scale=FALSE, assayName=.getDef("assayName")
                   sortRowsOn=seq_len(ncol(se)), cluster_cols=FALSE,
                   cluster_rows=is.null(sortRowsOn), toporder=NULL, hmcols=NULL,
                   breaks=.getDef("breaks"), gaps_at=.getDef("gaps_at"),
-                  anno_rows=.getDef("anno_rows"),
+                  gaps_row=NULL, anno_rows=.getDef("anno_rows"),
                   anno_columns=.getDef("anno_columns"),
                   anno_colors=.getDef("anno_colors"), show_rownames=NULL,
                   show_colnames=FALSE, ...){
@@ -54,8 +56,17 @@ sehm <- function( se, genes=NULL, do.scale=FALSE, assayName=.getDef("assayName")
   }
   if(!is.null(sortRowsOn)){
     if(!is.null(toporder)){
+      if(length(toporder)==1 && is.character(toporder)){
+          if(toporder %in% colnames(rowData(se))){
+              toporder <- rowData(se)[[toporder]]
+          }else{
+              stop("Could not interpret `toporder`.")
+          }
+      }
       if(!is.null(names(toporder))){
         toporder <- toporder[row.names(x)]
+      }else{
+        names(toporder) <- row.names(x)
       }
     }
     x2 <- sortRows(x[,sortRowsOn], toporder=toporder, na.rm=TRUE)
@@ -101,10 +112,16 @@ sehm <- function( se, genes=NULL, do.scale=FALSE, assayName=.getDef("assayName")
   }else{
     gaps <- NULL
   }
+  if(!is.null(toporder) && is.null(gaps_row)){
+      toporder <- toporder[row.names(x)]
+      gaps_row <- (which(!duplicated(toporder))-1)[-1]
+  }else{
+      if(length(gaps_row)==1 && is.na(gaps_row)) gaps_row <- NULL
+  }
 
   if(is.null(show_rownames)) show_rownames <- nrow(x) <= 50
-  pheatmap(x, color=hmcols, border_color=NA, gaps_col=gaps, breaks=breaks,
-           cluster_cols=cluster_cols, cluster_rows=cluster_rows,
+  pheatmap(x, color=hmcols, border_color=NA, gaps_col=gaps, gaps_row=gaps_row,
+           breaks=breaks, cluster_cols=cluster_cols, cluster_rows=cluster_rows,
            annotation_col=an, annotation_row=anr, annotation_colors=anno_colors,
            show_rownames=show_rownames, show_colnames=show_colnames, ...)
 }

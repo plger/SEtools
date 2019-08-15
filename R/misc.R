@@ -23,6 +23,7 @@
 sortRows <- function(x, z=FALSE, toporder=NULL, na.rm=FALSE, method="MDS_angle",
                      toporder.meth="before"){
   toporder.meth <- match.arg(toporder.meth, c("before","after"))
+  if(is.numeric(toporder)) toporder <- as.character(toporder)
   if(na.rm){
     w <- which( apply(x, 1, FUN = function(y){ !any(is.na(y)) }) |
                   !(apply(x, 1, na.rm=TRUE, FUN=sd) > 0) )
@@ -35,9 +36,15 @@ sortRows <- function(x, z=FALSE, toporder=NULL, na.rm=FALSE, method="MDS_angle",
     if(toporder.meth=="before"){
       ag <- aggregate(y, by=list(toporder), na.rm=TRUE, FUN=median)
       row.names(ag) <- ag[,1]
-      ag <- sortRows(ag[,-1], z=FALSE, na.rm=FALSE, method=method)
+      ag <- ag[,-1]
+      if(nrow(ag)>2){
+        try( ag <- sortRows(ag, z=FALSE, na.rm=FALSE, method=method),
+             silent=TRUE)
+      }
       ll <- split(as.data.frame(y), toporder)
-      ll <- lapply(ll, z=FALSE, na.rm=FALSE, method=method, FUN=sortRows)
+      ll <- lapply(ll, FUN=function(x){
+          tryCatch(sortRows(x,method=method), error=function(e) return(x))
+      })
       y <- unlist(lapply(ll[row.names(ag)], FUN=row.names))
       return(x[y,])
     }else{
