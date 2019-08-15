@@ -112,7 +112,7 @@ crossHm <- function( ses, genes, do.scale=TRUE, uniqueColorScale=FALSE,
     srn <- show_rownames
     if(srn=="once") srn <- i==length(ses)
     if(!is.function(hmcols)){
-        tcols <- colorRamp2(.getBreaks(dats[[i]]),hmcols)
+        tcols <- colorRamp2(.getBreaks(dats[[i]], length(hmcols)+1),hmcols)
     }else{
         tcols <- hmcols
     }
