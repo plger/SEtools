@@ -5,10 +5,11 @@
 \title{sehm}
 \usage{
 sehm(se, genes = NULL, do.scale = FALSE,
-  assayName = .getDef("assayName"), sortRowsOn = 1:ncol(se),
+  assayName = .getDef("assayName"), sortRowsOn = seq_len(ncol(se)),
   cluster_cols = FALSE, cluster_rows = is.null(sortRowsOn),
   toporder = NULL, hmcols = NULL, breaks = .getDef("breaks"),
-  gaps_at = .getDef("gaps_at"), anno_rows = .getDef("anno_rows"),
+  gaps_at = .getDef("gaps_at"), gaps_row = NULL,
+  anno_rows = .getDef("anno_rows"),
   anno_columns = .getDef("anno_columns"),
   anno_colors = .getDef("anno_colors"), show_rownames = NULL,
   show_colnames = FALSE, ...)
@@ -32,7 +33,7 @@ will be used, or the first assay if NULL.}
 `do.sortRows=TRUE`.}
 
 \item{toporder}{Optional verctor of categories on which to supra-order when
-sorting rows.}
+sorting rows, or name of a `rowData` column to use for this purpose.}
 
 \item{hmcols}{Colors for the heatmap.}
 
@@ -41,6 +42,9 @@ sorting rows.}
 (appropriate when plotting log2 foldchanges)}
 
 \item{gaps_at}{Columns of `colData` to use to establish gaps between columns.}
+
+\item{gaps_row}{Passed to \code{\link[pheatmap]{pheatmap}}; if missing, will
+be set automatically according to toporder.}
 
 \item{anno_rows}{Columns of `rowData` to use for annotation.}
 

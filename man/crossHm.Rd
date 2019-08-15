@@ -9,7 +9,8 @@ crossHm(ses, genes, do.scale = TRUE, uniqueColorScale = FALSE,
   only.common = TRUE, anno_columns = .getDef("anno_columns"),
   spreadAnnotation = FALSE, hmcols = NULL, cluster_columns = FALSE,
   cluster_rows = !do.sortRows, show_rownames = ifelse(length(genes) <
-  80, "once", FALSE), show_colnames = FALSE, anno_colors = NULL, ...)
+  80, "once", FALSE), show_colnames = FALSE,
+  anno_colors = .getDef("anno_colors"), ...)
 }
 \arguments{
 \item{ses}{A (named) list of

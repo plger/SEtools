@@ -2,7 +2,9 @@
 title: "SEtools"
 author:
 - name: Pierre-Luc Germain
-  affiliation: D-HEST Institute for Neurosciences, ETH Zürich & Laboratory of Statistical Bioinformatics, University Zürich
+  affiliation:
+  - D-HEST Institute for Neurosciences, ETH Zürich
+  - Laboratory of Statistical Bioinformatics, University Zürich
 package: SEtools
 output:
   BiocStyle::html_document:
@@ -22,6 +24,21 @@ library(BiocStyle)
 # Getting started
 
 The `r Rpackage("SEtools")` package is a set of convenience functions for the _Bioconductor_ class `r Biocpkg("SummarizedExperiment")`. It facilitates merging, melting, and plotting `SummarizedExperiment` objects.
+
+## Package installation
+
+```{r}
+if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+BiocManager::install("SEtools")
+```
+
+Or, until the new bioconductor release:
+```{r}
+devtools::install_github("plger/SEtools")
+```
+
+## Example data
 
 To showcase the main functions, we will use an example object which contains (a subset of) whole-hippocampus RNAseq of mice after different stressors:
 
@@ -59,6 +76,18 @@ sehm(SE, genes=g, scale="row", anno_rows="meanTPM", gaps_at="Condition")
 ```
 
 The specific assay to use for plotting can be specified with the `assayName` argument.
+
+#### Row/column ordering
+
+By default, rows are sorted not with hierarchical clustering, but from the angle on a MDS plot, which tends to give nicer results than bottom-up hierarchical clustering. This can be disabled using `sortRowsOn=NULL` or `cluster_rows=TRUE` (to avoid any row reordering and use the order given, use `sortRowsOn=NULL, cluster_rows=FALSE`). Column clustering is disabled by default, but this can be changed with `cluster_cols=TRUE`.
+
+It is common to cluster features into groups, and such a clustering can be used simultaneously with row sorting using the `toporder` argument. For instance:
+
+```{r}
+lfcs <- assays(SE)$logcpm-rowMeans(assays(SE)$logcpm[,which(SE$Condition=="Homecage")])
+rowData(SE)$cluster <- as.character(kmeans(lfcs,4)$cluster)
+sehm(SE, scale="row", anno_rows="cluster", toporder="cluster", gaps_at="Condition")
+```
 
 ### crossHm
 
