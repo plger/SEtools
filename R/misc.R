@@ -85,26 +85,33 @@ sortRows <- function(x, z=FALSE, toporder=NULL, na.rm=FALSE, method="MDS_angle",
   cols
 }
 
-.getBreaks <- function(x, n, trim=0.01){
-  if(!is.list(x)) x <- list(x)
-  if(trim){
-      xr <- unlist(lapply(x,as.numeric))
-      xr <- quantile(xr,probs=c(trim,1-trim),na.rm=TRUE)
-  }else{
-    xr <- range(sapply(x, na.rm=TRUE, FUN=range), na.rm=TRUE)
-  }
-  if(ceiling(max(abs(xr)))<=2){
-    xr <- ceiling(max(abs(xr*10)))/10
-  }else{
-    xr <- ceiling(max(abs(xr)))
-  }
-  if(xr>=4) return( c( -xr, -3.5, -3,
-                    seq(from=-2.5,to=2.5,length.out=n-7),
-                    3, 3.5, xr) )
-  if(xr>=3) return( c(-xr, -2.5,
-                      seq(from=-2,to=2,length.out=n-5),
-                      2.5, xr) )
-  seq(from=-xr,to=xr,length.out=n-1)
+#' getBreaks
+#'
+#' Produces symmetrical breaks for a color scale, with the scale steps
+#' increasing for large values, which is useful to avoid outliers influencing
+#' too much the color scale.
+#'
+#' @param x A matrix of log2FC (or any numerical values centered around 0)
+#' @param n The desired number of breaks.
+#' @param split.prop The proportion of the data points to plot on a linear
+#' scale; the remaining will be plotted on a scale with regular frequency per
+#' step (quantile).
+#'
+#' @return A vector of breaks of length = `n`
+#' @export
+#'
+#' @examples
+#' dat <- rnorm(100,sd = 10)
+#' getBreaks(dat, 10)
+getBreaks <- function(x, n, split.prop=0.96){
+    x <- abs(x)
+    n2 <- floor(n/2)+1
+    q <- as.numeric(quantile(x,split.prop))
+    xr <- seq(from=0, to=q, length.out=floor(split.prop*n2))
+    n2 <- n2-length(xr)
+    q <- quantile(as.numeric(x)[which(x>q)],(1:n2)/n2)
+    xr <- c(xr,as.numeric(q))
+    c(-rev(xr[-1]), xr)
 }
 
 .getDef <- function(x){

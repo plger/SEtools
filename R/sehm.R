@@ -15,7 +15,12 @@
 #' @param toporder Optional verctor of categories on which to supra-order when
 #' sorting rows, or name of a `rowData` column to use for this purpose.
 #' @param hmcols Colors for the heatmap.
-#' @param breaks Breaks for the heatmap colors. Alternatively, if
+#' @param breaks Breaks for the heatmap colors. Alternatively, symmetrical
+#' breaks can be generated automatically by setting `breaks` to a numerical
+#' value between 0 and 1. The value is passed as the `split.prop` argument to
+#' the \code{\link{getBreaks}} function, and indicates the proportion of the
+#' points to map to a linear scale, while the more extreme values will be
+#' plotted on a quantile scale.
 #' `breaks==TRUE`, a symmetrical scale with capped ends will be used
 #' (appropriate when plotting log2 foldchanges)
 #' @param gaps_at Columns of `colData` to use to establish gaps between columns.
@@ -59,6 +64,7 @@ sehm <- function( se, genes=NULL, do.scale=FALSE, assayName=.getDef("assayName")
       if(length(toporder)==1 && is.character(toporder)){
           if(toporder %in% colnames(rowData(se))){
               toporder <- rowData(se)[[toporder]]
+              names(toporder) <- row.names(se)
           }else{
               stop("Could not interpret `toporder`.")
           }
@@ -75,8 +81,10 @@ sehm <- function( se, genes=NULL, do.scale=FALSE, assayName=.getDef("assayName")
   }
 
   hmcols <- .getHMcols(hmcols)
-  if(!is.null(breaks) && length(breaks)==1 && breaks==TRUE)
-    breaks <- .getBreaks(x, length(hmcols))
+  if(!is.null(breaks) && !is.na(breaks) && length(breaks)==1){
+      if(is.logical(breaks)) breaks <- 0.96
+      breaks <- getBreaks(x, length(hmcols)+1, split.prop=breaks)
+  }
 
   anr <- as.data.frame(rowData(se))
   anr <- anr[,intersect(colnames(anr), anno_rows),drop=FALSE]
@@ -87,13 +95,21 @@ sehm <- function( se, genes=NULL, do.scale=FALSE, assayName=.getDef("assayName")
     an <- NULL
   }else{
     for(i in colnames(an)){
+      if(is.factor(an[[i]])) an[[i]] <- droplevels(an[[i]])
       if(is.logical(an[[i]])){
         an[[i]] <- factor(as.character(an[[i]]),levels=c("FALSE","TRUE"))
         if(!(i %in% names(anno_colors))){
           anno_colors[[i]] <- c("FALSE"="white", "TRUE"="darkblue")
         }
       }else{
-        if(is.factor(an[[i]])) an[[i]] <- droplevels(an[[i]])
+        if(i %in% names(anno_colors)){
+          w <- intersect(names(anno_colors[[i]]),unique(an[[i]]))
+          if(length(w)==0){
+            anno_colors[[i]] <- NULL
+          }else{
+            anno_colors[[i]] <- anno_colors[[i]][w]
+          }
+        }
       }
     }
   }
