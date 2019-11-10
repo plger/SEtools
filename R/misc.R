@@ -30,6 +30,7 @@ sortRows <- function(x, z=FALSE, toporder=NULL, na.rm=FALSE, method="MDS_angle",
     x <- x[w,]
     if(!is.null(toporder)) toporder <- toporder[w]
   }
+  if(is.factor(toporder)) toporder <- droplevels(toporder)
   y <- x
   if(z) y <- t(scale(t(x)))
   if(!is.null(toporder)){
@@ -60,7 +61,7 @@ sortRows <- function(x, z=FALSE, toporder=NULL, na.rm=FALSE, method="MDS_angle",
 }
 
 
-.chooseAssay <- function(se, assayName=NULL){
+.chooseAssay <- function(se, assayName=NULL, returnName=FALSE){
   if(is.null(assayName) && !is.null(assayNames(se))){
     assayName <- intersect(assayNames(se), c("log2FC", "logFC", "corrected", "imputed", "logcpm", "lognorm"))
     if(length(assayName)>0){
@@ -75,7 +76,9 @@ sortRows <- function(x, z=FALSE, toporder=NULL, na.rm=FALSE, method="MDS_angle",
     if(length(assays(se))>1) message("Assay unspecified, and multiple assays present - will use the first one.")
     return(assay(se))
   }
-  assays(se)[[intersect(assayName,assayNames(se))[1]]]
+  assayName <- intersect(assayName,assayNames(se))[1]
+  if(returnName) return(assayName)
+  assays(se)[[assayName]]
 }
 
 .getHMcols <- function(cols=NULL, n=29){
@@ -106,10 +109,10 @@ sortRows <- function(x, z=FALSE, toporder=NULL, na.rm=FALSE, method="MDS_angle",
 getBreaks <- function(x, n, split.prop=0.96){
     x <- abs(x)
     n2 <- floor(n/2)+1
-    q <- as.numeric(quantile(x,split.prop))
+    q <- as.numeric(quantile(x,split.prop,na.rm=TRUE))
     xr <- seq(from=0, to=q, length.out=floor(split.prop*n2))
     n2 <- n2-length(xr)
-    q <- quantile(as.numeric(x)[which(x>q)],(1:n2)/n2)
+    q <- quantile(as.numeric(x)[which(x>q)],(1:n2)/n2, na.rm=TRUE)
     xr <- c(xr,as.numeric(q))
     c(-rev(xr[-1]), xr)
 }
@@ -160,6 +163,7 @@ resetAllSEtoolsOptions <- function(){
 #' will be averaged to calculate per-group foldchanges.
 #' @param isLog Logical; whether the data is log-transformed. If NULL, will
 #' attempt to figure it out from the data and/or assay name
+#' @param agFun Aggregation function for the baseline (default rowMeans)
 #'
 #' @return An object of same class as `x`; if a `SummarizedExperiment`, will
 #' have the additional assay `log2FC`.
@@ -169,7 +173,7 @@ resetAllSEtoolsOptions <- function(){
 #'
 #' @import SummarizedExperiment
 #' @export
-log2FC <- function(x, fromAssay=NULL, controls, by=NULL, isLog=NULL){
+log2FC <- function(x, fromAssay=NULL, controls, by=NULL, isLog=NULL, agFun=rowMeans){
     if(is.null(colnames(x))) colnames(x) <- paste0("S",seq_len(ncol(x)))
     if(is(x, "SummarizedExperiment")){
         if(is.null(fromAssay))
@@ -181,6 +185,8 @@ log2FC <- function(x, fromAssay=NULL, controls, by=NULL, isLog=NULL){
             by <- colData(x)[[by]]
         a <- assays(x)[[fromAssay]]
     }else{
+	if(!is.matrix(x)) 
+	  stop("`x` should either be a SummarizedExperiment or a numeric matrix.")
         a <- x
     }
     if(is.null(isLog)){
@@ -190,7 +196,7 @@ log2FC <- function(x, fromAssay=NULL, controls, by=NULL, isLog=NULL){
             isLog <- any(a<0)
         }
     }
-    if(!isLog) a <- log1p(a)
+    if(!isLog) a <- log2(a+1)
     if(is.logical(controls)) controls <- which(controls)
     if(!all(controls %in% seq_len(ncol(a))))
         stop("Some control indexes are out of range.")
@@ -199,7 +205,7 @@ log2FC <- function(x, fromAssay=NULL, controls, by=NULL, isLog=NULL){
     lfc <- do.call(cbind, lapply(i, FUN=function(x){
         c2 <- intersect(x,controls)
         if(length(c2)==0) stop("Some groups of `by` have no controls.")
-        a[,x,drop=FALSE]-rowMeans(a[,c2,drop=FALSE])
+        a[,x,drop=FALSE]-agFun(a[,c2,drop=FALSE],na.rm=TRUE)
     }))
     lfc <- lfc[,colnames(x)]
     if(is(x, "SummarizedExperiment")){
