@@ -4,7 +4,7 @@
 \alias{getBreaks}
 \title{getBreaks}
 \usage{
-getBreaks(x, n, split.prop = 0.96)
+getBreaks(x, n, split.prop = 0.98)
 }
 \arguments{
 \item{x}{A matrix of log2FC (or any numerical values centered around 0)}

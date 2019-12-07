@@ -62,8 +62,9 @@ sortRows <- function(x, z=FALSE, toporder=NULL, na.rm=FALSE, method="MDS_angle",
 
 
 .chooseAssay <- function(se, assayName=NULL, returnName=FALSE){
+  a <- .getDef("assay")
   if(is.null(assayName) && !is.null(assayNames(se))){
-    assayName <- intersect(assayNames(se), c("log2FC", "logFC", "corrected", "imputed", "logcpm", "lognorm"))
+    assayName <- intersect(assayNames(se), a)
     if(length(assayName)>0){
       assayName <- assayName[1]
       message("Using assay ", assayName)
@@ -81,7 +82,7 @@ sortRows <- function(x, z=FALSE, toporder=NULL, na.rm=FALSE, method="MDS_angle",
   assays(se)[[assayName]]
 }
 
-.getHMcols <- function(cols=NULL, n=29){
+.getHMcols <- function(cols=NULL, n=100){
   if(is.null(cols)) cols <- .getDef("hmcols")
   if(is.function(cols)) return(cols)
   if(length(cols) %in% 2:3)  cols <- colorRampPalette(cols)(n)
@@ -106,7 +107,7 @@ sortRows <- function(x, z=FALSE, toporder=NULL, na.rm=FALSE, method="MDS_angle",
 #' @examples
 #' dat <- rnorm(100,sd = 10)
 #' getBreaks(dat, 10)
-getBreaks <- function(x, n, split.prop=0.96){
+getBreaks <- function(x, n, split.prop=0.98){
     x <- abs(x)
     n2 <- floor(n/2)+1
     q <- as.numeric(quantile(x,split.prop,na.rm=TRUE))
@@ -118,17 +119,18 @@ getBreaks <- function(x, n, split.prop=0.96){
 }
 
 .getDef <- function(x){
-  a <- c( "Batch", "batch", "Condition","condition", "Group","group",
-          "Genotype", "genotype", "Dataset")
+  a <- c( "Batch", "batch", "Condition","condition", "Group", "group", "Dataset",
+          "Genotype", "genotype", "cluster_id", "group_id", "celltype")
   switch(x,
          assay=getOption("SEtools_def_assayName",
-                         default=c("logFC", "logcpm", "lognorm")),
+                         default=c("logFC", "log2FC", "logcpm", "lognorm")),
          anno_colors=getOption("SEtools_def_anno_colors", default=list()),
          hmcols=getOption("SEtools_def_hmcols",
                           default=c("blue", "black", "yellow")),
          anno_columns=getOption("SEtools_def_anno_columns", default=a),
          anno_rows=getOption("SEtools_def_anno_rows", default=c()),
-         gaps_at=getOption("SEtools_def_gaps_at", default="Dataset"),
+         gaps_at=getOption("SEtools_def_gaps_at",
+                           default=c("Dataset","cluster_id")),
          breaks=getOption("SEtools_def_breaks", default=NULL)
         )
 }
@@ -164,16 +166,18 @@ resetAllSEtoolsOptions <- function(){
 #' @param isLog Logical; whether the data is log-transformed. If NULL, will
 #' attempt to figure it out from the data and/or assay name
 #' @param agFun Aggregation function for the baseline (default rowMeans)
+#' @param toAssay The name of the assay in which to save the output.
 #'
 #' @return An object of same class as `x`; if a `SummarizedExperiment`, will
-#' have the additional assay `log2FC`.
+#' have the additional assay named from `toAssay`.
 #'
 #' @examples
 #' log2FC( matrix(rnorm(40), ncol=4), controls=1:2 )
 #'
 #' @import SummarizedExperiment
 #' @export
-log2FC <- function(x, fromAssay=NULL, controls, by=NULL, isLog=NULL, agFun=rowMeans){
+log2FC <- function(x, fromAssay=NULL, controls, by=NULL, isLog=NULL,
+                   agFun=rowMeans, toAssay="log2FC"){
     if(is.null(colnames(x))) colnames(x) <- paste0("S",seq_len(ncol(x)))
     if(is(x, "SummarizedExperiment")){
         if(is.null(fromAssay))
@@ -185,7 +189,7 @@ log2FC <- function(x, fromAssay=NULL, controls, by=NULL, isLog=NULL, agFun=rowMe
             by <- colData(x)[[by]]
         a <- assays(x)[[fromAssay]]
     }else{
-	if(!is.matrix(x)) 
+	if(!is.matrix(x))
 	  stop("`x` should either be a SummarizedExperiment or a numeric matrix.")
         a <- x
     }
@@ -209,8 +213,58 @@ log2FC <- function(x, fromAssay=NULL, controls, by=NULL, isLog=NULL, agFun=rowMe
     }))
     lfc <- lfc[,colnames(x)]
     if(is(x, "SummarizedExperiment")){
-        assays(x)$log2FC <- lfc
+        assays(x)[[toAssay]] <- lfc
         return(x)
     }
     lfc
+}
+
+#' flattenPB
+#'
+#' Flattens a pseudo-bulk SummarizedExperiment as produced by
+#' `muscat::aggregateData` so that all cell types are represented in a single
+#' assay. Optionally normalizes the data and calculates per-sample logFCs.
+#'
+#' @param pb a pseudo-bulk SummarizedExperiment as produced by
+#' `muscat::aggregateData`, with different celltypes/clusters are assays.
+#' @param getLFC Logical; whether to compute `logcpm` and `log2FC` assays.
+#'
+#' @return A SummarizedExperiment
+#' @importFrom edgeR cpm calcNormFactors DGEList
+#' @import SummarizedExperiment
+#' @export
+flattenPB <- function(pb, getLFC=TRUE){
+    a <- do.call(cbind, assays(pb))
+    colnames(a) <- paste( rep(colnames(pb),length(assays(pb))),
+                          rep(assayNames(pb),each=ncol(pb)), sep=".")
+    cd <- do.call(rbind, lapply(seq_along(assays(pb)),
+                                FUN=function(x) colData(pb)) )
+    row.names(cd) <- colnames(a)
+    cd$cluster_id <- rep(assayNames(pb),each=ncol(pb))
+    se <- SummarizedExperiment( list(counts=a), colData=cd, rowData=rowData(pb))
+    se$metadata <- pb$metadata
+    if(!getLFC) return(se)
+    assays(se)$logcpm <- log2(edgeR::cpm(calcNormFactors(DGEList(assay(se))))+1)
+    log2FC(se, "logcpm", se$group_id==levels(se$group_id)[1],
+                 by=se$cluster_id)
+}
+
+
+#' se2xlsx
+#'
+#' Writes a SummarizedExperiment to an excel/xlsx file. Requires the `openxlsx`
+#' package.
+#'
+#' @param se The `SummarizedExperiment`
+#' @param filename 	xlsx file name
+#' @param addSheets An optional list of additional tables to save as sheets.
+#'
+#' @return Saves to file.
+#' @export
+se2xls <- function(se, filename, addSheets=NULL){
+    library(openxlsx)
+    a <- list( sample_annotation=as.data.frame(colData(se)) )
+    if(ncol(rowData(se))>0) a$feature_annotation=as.data.frame(rowData(se))
+    a <- c(a, as.list(assays(se)), addSheets)
+    write.xlsx(a, file=filename, row.names=TRUE, col.names=TRUE)
 }

@@ -5,7 +5,7 @@
 \title{log2FC}
 \usage{
 log2FC(x, fromAssay = NULL, controls, by = NULL, isLog = NULL,
-  agFun = rowMeans)
+  agFun = rowMeans, toAssay = "log2FC")
 }
 \arguments{
 \item{x}{A numeric matrix, or a `SummarizedExperiment` object}
@@ -22,10 +22,12 @@ will be averaged to calculate per-group foldchanges.}
 attempt to figure it out from the data and/or assay name}
 
 \item{agFun}{Aggregation function for the baseline (default rowMeans)}
+
+\item{toAssay}{The name of the assay in which to save the output.}
 }
 \value{
 An object of same class as `x`; if a `SummarizedExperiment`, will
-have the additional assay `log2FC`.
+have the additional assay named from `toAssay`.
 }
 \description{
 Generates log2(foldchange) matrix/assay, eventually on a per-batch fashion.
