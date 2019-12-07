@@ -81,9 +81,13 @@ sehm <- function( se, genes=NULL, do.scale=FALSE, assayName=.getDef("assayName")
   }
 
   hmcols <- .getHMcols(hmcols)
+  if(is.null(breaks) && !is.null(assayName) && grepl("^log[2]?FC$",assayName))
+      breaks <- TRUE
   if(!is.null(breaks) && !is.na(breaks) && length(breaks)==1){
-      if(is.logical(breaks)) breaks <- 0.96
-      breaks <- getBreaks(x, length(hmcols)+1, split.prop=breaks)
+      if(is.logical(breaks) && breaks) breaks <- ifelse(breaks,0.98,1)
+      if(!is.logical(breaks) || breaks){
+          breaks <- getBreaks(x, length(hmcols)+1, split.prop=breaks)
+      }
   }
 
   anr <- as.data.frame(rowData(se))
