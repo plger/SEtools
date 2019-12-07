@@ -4,7 +4,7 @@
 \alias{aggSE}
 \title{aggSE}
 \usage{
-aggSE(x, by, assayFun = NULL, rowDatFun = .aggRowDat)
+aggSE(x, by, assayFun = NULL, rowDatFuns = list())
 }
 \arguments{
 \item{x}{An object of class `SummarizedExperiment`}
@@ -16,9 +16,11 @@ aggSE(x, by, assayFun = NULL, rowDatFun = .aggRowDat)
 will attempt to use an appropriate function (and notify the functions used),
 typically the mean.}
 
-\item{rowDatFun}{Function by which to aggregate the rowData; by default,
-logical are transformed into a proportion, numerics are aggregated by median,
-and unique factors/characters are pasted together.}
+\item{rowDatFuns}{A named list providing functions by which to aggregate each
+rowData columns. If a given column has no specified function, the default
+will be used, i.e. logical are transformed into a proportion, numerics are
+aggregated by median, and unique factors/characters are pasted together. Use
+`rowDataFuns=NULL` to discard rowData.}
 }
 \value{
 An object of class `SummarizedExperiment`
