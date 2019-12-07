@@ -13,10 +13,10 @@ if (!requireNamespace("BiocManager", quietly = TRUE))
 BiocManager::install("SEtools")
 ```
 
-Or, until the new bioconductor release:
+Or, to install the latest development version:
 
 ```r
-devtools::install_github("plger/SEtools")
+BiocManager::install("plger/SEtools")
 ```
 
 ### Example data
