@@ -4,7 +4,7 @@
 \alias{flattenPB}
 \title{flattenPB}
 \usage{
-flattenPB(pb, getLFC = TRUE)
+flattenPB(pb, norm = TRUE, lfc_group = "group_id")
 }
 \arguments{
 \item{pb}{a pseudo-bulk SummarizedExperiment as produced by

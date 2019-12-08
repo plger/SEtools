@@ -231,10 +231,10 @@ log2FC <- function(x, fromAssay=NULL, controls, by=NULL, isLog=NULL,
 #'
 #' @return A SummarizedExperiment
 #' @importFrom edgeR cpm calcNormFactors DGEList
-#' @import SummarizedExperiment
+#' @import SummarizedExperiment S4Vectors
 #' @export
-flattenPB <- function(pb, getLFC=TRUE){
-    a <- do.call(cbind, assays(pb))
+flattenPB <- function(pb, norm=TRUE, lfc_group="group_id"){
+    a <- do.call(cbind, as.list(assays(pb)))
     colnames(a) <- paste( rep(colnames(pb),length(assays(pb))),
                           rep(assayNames(pb),each=ncol(pb)), sep=".")
     cd <- do.call(rbind, lapply(seq_along(assays(pb)),
@@ -243,9 +243,19 @@ flattenPB <- function(pb, getLFC=TRUE){
     cd$cluster_id <- rep(assayNames(pb),each=ncol(pb))
     se <- SummarizedExperiment( list(counts=a), colData=cd, rowData=rowData(pb))
     se$metadata <- pb$metadata
-    if(!getLFC) return(se)
-    assays(se)$logcpm <- log2(edgeR::cpm(calcNormFactors(DGEList(assay(se))))+1)
-    log2FC(se, "logcpm", se$group_id==levels(se$group_id)[1],
+    if(norm) assays(se)$logcpm <-
+        log2(edgeR::cpm(calcNormFactors(DGEList(assay(se))))+1)
+    if(is.null(lfc_group) || is.na(lfc_group)) return(se)
+    if(is.null(se[[lfc_group]])){
+        warning("Could not find '",lfc_group,"', and did not compute log2FC assay.")
+        return(se)
+    }
+    if(!is.factor(se[[lfc_group]])){
+        se[[lfc_group]] <- factor(se[[lfc_group]])
+        message("Using '", levels(se[[lfc_group]])[1],
+                "' as baseline condition")
+    }
+    log2FC(se, "logcpm", se$group_id==levels(se[[lfc_group]])[1],
                  by=se$cluster_id)
 }
 
