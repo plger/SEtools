@@ -84,7 +84,6 @@ sehm <- function( se, genes=NULL, do.scale=FALSE, assayName=.getDef("assayName")
   if(is.null(breaks) && !is.null(assayName) && grepl("^log[2]?FC$",assayName))
       breaks <- TRUE
   if(!is.null(breaks) && !is.na(breaks) && length(breaks)==1){
-      if(is.logical(breaks) && breaks) breaks <- ifelse(breaks,0.98,1)
       if(!is.logical(breaks) || breaks){
           breaks <- getBreaks(x, length(hmcols)+1, split.prop=breaks)
       }

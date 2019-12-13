@@ -108,13 +108,16 @@ sortRows <- function(x, z=FALSE, toporder=NULL, na.rm=FALSE, method="MDS_angle",
 #' dat <- rnorm(100,sd = 10)
 #' getBreaks(dat, 10)
 getBreaks <- function(x, n, split.prop=0.98){
+    if(is.logical(split.prop)) split.prop <- ifelse(split.prop,0.98,1)
     x <- abs(x)
     n2 <- floor(n/2)+1
     q <- as.numeric(quantile(x,split.prop,na.rm=TRUE))
     xr <- seq(from=0, to=q, length.out=floor(split.prop*n2))
     n2 <- n2-length(xr)
-    q <- quantile(as.numeric(x)[which(x>q)],(1:n2)/n2, na.rm=TRUE)
-    xr <- c(xr,as.numeric(q))
+    if(n2>0){
+        q <- quantile(as.numeric(x)[which(x>q)],(1:n2)/n2, na.rm=TRUE)
+        xr <- c(xr,as.numeric(q))
+    }
     c(-rev(xr[-1]), xr)
 }
 
@@ -255,14 +258,22 @@ log2FC <- function(x, fromAssay=NULL, controls, by=NULL, isLog=NULL,
 #' @export
 flattenPB <- function(pb, norm=TRUE, lfc_group="group_id"){
     a <- do.call(cbind, as.list(assays(pb)))
-    colnames(a) <- paste( rep(colnames(pb),length(assays(pb))),
-                          rep(assayNames(pb),each=ncol(pb)), sep=".")
+    v.samples <- rep(colnames(pb),length(assays(pb)))
+    v.clusters <- rep(assayNames(pb),each=ncol(pb))
+    colnames(a) <- paste( v.samples, v.clusters, sep="." )
     cd <- do.call(rbind, lapply(seq_along(assays(pb)),
                                 FUN=function(x) colData(pb)) )
     row.names(cd) <- colnames(a)
-    cd$cluster_id <- rep(assayNames(pb),each=ncol(pb))
+    cd$cluster_id <- v.clusters
     se <- SummarizedExperiment( list(counts=a), colData=cd, rowData=rowData(pb))
     se$metadata <- pb$metadata
+    if(!is.null(metadata(pb)$n_cells)){
+        n_cells <- tryCatch({
+            mapply( as.character(v.clusters), as.character(v.samples),
+                    FUN=function(x,y) metadata(pb)$n_cells[x,y] )
+        }, error=function(e){ warning(e); NULL} )
+        if(!is.null(n_cells)) se$n_cells <- as.numeric(n_cells)
+    }
     if(norm) assays(se)$logcpm <-
         log2(edgeR::cpm(calcNormFactors(DGEList(assay(se))))+1)
     if(is.null(lfc_group) || is.na(lfc_group)) return(se)
