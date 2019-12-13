@@ -153,8 +153,10 @@ getBreaks <- function(x, n, split.prop=0.98, symmetric=TRUE){
 
 # non recursive, latest values win
 .mergelists <- function(ll){
-    lapply(split(l1,names(l1)), FUN=function(x){
-        names(x) <- NULL
+    names(ll) <- NULL
+    names(nn) <- nn <- unique(unlist(lapply(ll,names)))
+    lapply(nn, FUN=function(x){
+        x <- lapply(ll, function(y) y[[x]])
         x <- do.call(c,x)
         x[!duplicated(names(x))]
     })
