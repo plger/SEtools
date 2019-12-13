@@ -4,7 +4,7 @@
 \alias{getBreaks}
 \title{getBreaks}
 \usage{
-getBreaks(x, n, split.prop = 0.98)
+getBreaks(x, n, split.prop = 0.98, symmetric = TRUE)
 }
 \arguments{
 \item{x}{A matrix of log2FC (or any numerical values centered around 0)}
@@ -14,6 +14,9 @@ getBreaks(x, n, split.prop = 0.98)
 \item{split.prop}{The proportion of the data points to plot on a linear
 scale; the remaining will be plotted on a scale with regular frequency per
 step (quantile).}
+
+\item{symmetric}{Logical; whether breaks should be symmetric around 0
+(default TRUE)}
 }
 \value{
 A vector of breaks of length = `n`

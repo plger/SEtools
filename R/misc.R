@@ -100,6 +100,8 @@ sortRows <- function(x, z=FALSE, toporder=NULL, na.rm=FALSE, method="MDS_angle",
 #' @param split.prop The proportion of the data points to plot on a linear
 #' scale; the remaining will be plotted on a scale with regular frequency per
 #' step (quantile).
+#' @param symmetric Logical; whether breaks should be symmetric around 0
+#'  (default TRUE)
 #'
 #' @return A vector of breaks of length = `n`
 #' @export
@@ -107,10 +109,14 @@ sortRows <- function(x, z=FALSE, toporder=NULL, na.rm=FALSE, method="MDS_angle",
 #' @examples
 #' dat <- rnorm(100,sd = 10)
 #' getBreaks(dat, 10)
-getBreaks <- function(x, n, split.prop=0.98){
+getBreaks <- function(x, n, split.prop=0.98, symmetric=TRUE){
     if(is.logical(split.prop)) split.prop <- ifelse(split.prop,0.98,1)
-    x <- abs(x)
-    n2 <- floor(n/2)+1
+    if(symmetric){
+        x <- abs(x)
+        n2 <- floor(n/2)+1
+    }else{
+        n2 <- n
+    }
     q <- as.numeric(quantile(x,split.prop,na.rm=TRUE))
     xr <- seq(from=0, to=q, length.out=floor(split.prop*n2))
     n2 <- n2-length(xr)
@@ -118,7 +124,8 @@ getBreaks <- function(x, n, split.prop=0.98){
         q <- quantile(as.numeric(x)[which(x>q)],(1:n2)/n2, na.rm=TRUE)
         xr <- c(xr,as.numeric(q))
     }
-    c(-rev(xr[-1]), xr)
+    if(symmetric) xr <- c(-rev(xr[-1]), xr)
+    xr
 }
 
 .getDef <- function(x, se){
