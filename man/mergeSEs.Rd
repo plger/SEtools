@@ -5,7 +5,9 @@
 \title{mergeSEs}
 \usage{
 mergeSEs(ll, use.assays = NULL, do.scale = TRUE, commonOnly = TRUE,
-  colColumns = NULL, addDatasetPrefix = TRUE, defValues = list())
+  colColumns = NULL, mergeBy = NULL, aggFun = NULL,
+  addDatasetPrefix = TRUE, defValues = list(),
+  BPPARAM = SerialParam())
 }
 \arguments{
 \item{ll}{A (named) list of
@@ -24,18 +26,34 @@ datasets (default TRUE).}
 \item{colColumns}{A character vector specifying `colData` columns to include
 (if available in at least one of the datasets). If NULL, everything is kept.}
 
+\item{mergeBy}{The `rowData` column to merge with. If NULL, row.names are
+used.}
+
+\item{aggFun}{The aggregation function to use when multiple rows have the
+same `mergeBy` value. If merging multiple assays, a different function per
+assay can be passed as a named list (see \code{\link[SEtools]{aggSE}}). If
+NULL (default), entries will be reused to have each combination.}
+
 \item{addDatasetPrefix}{Logical; whether the name of the dataset should be
 appended to the sample names (default TRUE).}
 
 \item{defValues}{A list specifying the default values for `colColumns` when
 these are absent.}
+
+\item{defValues}{An optional named list of default `colData` values when some
+columns are missing from some SEs.}
 }
 \value{
 An object of class
 \code{\link[SummarizedExperiment]{SummarizedExperiment-class}}
 }
 \description{
-Merges a list of \code{\link[SummarizedExperiment]{SummarizedExperiment-class}}.
+Merges a list of
+\code{\link[SummarizedExperiment]{SummarizedExperiment-class}}, either by
+row.names or through specified rowData fields. In cases of many-to-many 
+(or one-to-many) mappings, `aggFun` determines whether the records are 
+aggregated by linking ID (if an aggregation method is given) or all 
+combinations are returned (if `aggFun=NULL` - default).
 }
 \examples{
 data("SE", package="SEtools")

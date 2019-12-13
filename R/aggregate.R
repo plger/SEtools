@@ -31,6 +31,10 @@ aggSE <- function(x, by, assayFun=NULL, rowDatFuns=list()){
             stop(paste0("`",by,"` not found in rowData!"))
         by <- rowData(x)[[by]]
     }
+    if(!any(duplicated(by))){
+        row.names(x) <- by
+        return(x)
+    }
     if(is.null(assayFun)){
         if(is.null(assayNames(x))){
             message("`assayFun` undefined and no assayNames in object: will aggregate using means.")

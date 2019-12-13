@@ -118,7 +118,7 @@ getBreaks <- function(x, n, split.prop=0.98){
     c(-rev(xr[-1]), xr)
 }
 
-.getDef <- function(x){
+.getDef <- function(x, se){
   a <- c( "Batch", "batch", "Condition","condition", "Group", "group", "Dataset",
           "Genotype", "genotype", "cluster_id", "group_id", "celltype")
   switch(x,
@@ -135,6 +135,26 @@ getBreaks <- function(x, n, split.prop=0.98){
         )
 }
 
+.getAnnoCols <- function(se){
+    an1 <- .getDef("anno_colors")
+    if(is.null(metadata(se)$anno_colors)) return(an1)
+    .mergelists(list(an1, metadata(se)$anno_colors))
+}
+
+# non recursive, latest values win
+.mergelists <- function(ll){
+    lapply(split(l1,names(l1)), FUN=function(x){
+        names(x) <- NULL
+        x <- do.call(c,x)
+        x[!duplicated(names(x))]
+    })
+}
+
+.has_nan <- function(x){
+    if(is(x,"SummarizedExperiment"))
+        return(any( sapply(assays(x), .has_nan) ))
+    any(is.infinite(x) | is.na(x))
+}
 
 #' resetAllSEtoolsOptions
 #'

@@ -49,7 +49,7 @@ sehm <- function( se, genes=NULL, do.scale=FALSE, assayName=.getDef("assayName")
                   breaks=.getDef("breaks"), gaps_at=.getDef("gaps_at"),
                   gaps_row=NULL, anno_rows=.getDef("anno_rows"),
                   anno_columns=.getDef("anno_columns"),
-                  anno_colors=.getDef("anno_colors"), show_rownames=NULL,
+                  anno_colors=.getAnnoCols(se), show_rownames=NULL,
                   show_colnames=FALSE, ...){
 
   x <- as.matrix(.chooseAssay(se, assayName))
