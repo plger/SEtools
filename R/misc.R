@@ -275,7 +275,7 @@ flattenPB <- function(pb, norm=TRUE, lfc_group="group_id"){
         message("Using '", levels(se[[lfc_group]])[1],
                 "' as baseline condition")
     }
-    log2FC(se, "logcpm", se$group_id==levels(se[[lfc_group]])[1],
+    log2FC(se, "logcpm", se[[lfc_group]]==levels(se[[lfc_group]])[1],
                  by=se$cluster_id)
 }
 
