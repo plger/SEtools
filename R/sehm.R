@@ -90,10 +90,10 @@ sehm <- function( se, genes=NULL, do.scale=FALSE, assayName=.getDef("assayName")
           breaks <- getBreaks(x, length(hmcols)+1, 1, FALSE)
 
   anr <- as.data.frame(rowData(se))
-  anr <- anr[,intersect(colnames(anr), anno_rows),drop=FALSE]
+  anr <- anr[,intersect(anno_rows, colnames(anr)),drop=FALSE]
   if(ncol(anr)==0) anr <- NULL
   an <- as.data.frame(colData(se))
-  an <- an[,intersect(colnames(an), anno_columns),drop=FALSE]
+  an <- an[,intersect(anno_columns, colnames(an)),drop=FALSE]
   if(ncol(an)==0){
     an <- NULL
   }else{
