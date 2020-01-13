@@ -72,12 +72,16 @@ sortRows <- function(x, z=FALSE, toporder=NULL, na.rm=FALSE, method="MDS_angle",
       assayName <- NULL
     }
   }
-  if(!is.null(assayName) && !any(assayName %in% assayNames(se))) stop("Assay '", assayName, "' not found!")
+  if(!is.null(assayName) && !is.numeric(assayName) &&
+     !any(assayName %in% assayNames(se)))
+      stop("Assay '", assayName, "' not found!")
   if(is.null(assayName)){
-    if(length(assays(se))>1) message("Assay unspecified, and multiple assays present - will use the first one.")
-    return(assay(se))
+    if(length(assays(se))>1) message("Assay unspecified, and multiple assays",
+                                        " present - will use the first one.")
+    assayName <- 1
+  }else{
+    assayName <- intersect(assayName,assayNames(se))[1]
   }
-  assayName <- intersect(assayName,assayNames(se))[1]
   if(returnName) return(assayName)
   assays(se)[[assayName]]
 }
@@ -145,11 +149,36 @@ getBreaks <- function(x, n, split.prop=0.98, symmetric=TRUE){
         )
 }
 
-.getAnnoCols <- function(se){
-    an1 <- .getDef("anno_colors")
-    if(is.null(metadata(se)$anno_colors)) return(an1)
-    .mergelists(list(an1, metadata(se)$anno_colors))
+.getAnnoCols <- function(se, given=list(), do.assign=FALSE){
+    ll <- list( default=.getDef("anno_colors") )
+    if(!is.null(metadata(se)$anno_colors)) ll$object <- metadata(se)$anno_colors
+    ll$given <- given
+    ac <- .mergelists(ll)
+    if(do.assign) ac <- .assignAnnoColors(se, ac)
+    lapply(ac, unlist)
 }
+
+#' @importFrom randomcoloR distinctColorPalette
+#' @importFrom SummarizedExperiment colData rowData
+.assignAnnoColors <- function(x, anno_colors){
+    fn <- function(x){
+        if(is.factor(x)) return(levels(x))
+        if(is.character(x)) return(unique(x))
+        return(NULL)
+    }
+    if(is(x, "SummarizedExperiment")){
+        df <- c( lapply(colData(x), fn), lapply(rowData(x), fn) )
+    }else{
+        df <- lapply( x, fn)
+    }
+    for(f in names(df)){
+        if(!(f %in% names(anno_colors))) anno_colors[[f]] <- list()
+        x <- setdiff(df[[f]], anno_colors[[f]])
+        if(length(x)>0) anno_colors[[f]][x] <- distinctColorPalette(length(x))
+    }
+    anno_colors
+}
+
 
 # non recursive, latest values win
 .mergelists <- function(ll){
@@ -317,4 +346,109 @@ se2xls <- function(se, filename, addSheets=NULL){
     if(ncol(rowData(se))>0) a$feature_annotation=as.data.frame(rowData(se))
     a <- c(a, as.list(assays(se)), addSheets)
     write.xlsx(a, file=filename, row.names=TRUE, col.names=TRUE)
+}
+
+
+.prepareAnnoDF <- function(an, anno_colors, fields, whichComplex=NULL,
+                           show_legend=TRUE, show_annotation_name=TRUE,
+                           dropEmptyLevels=TRUE){
+    if(!is.null(whichComplex))
+        whichComplex <- match.arg(whichComplex, c("row","column"))
+    an <- as.data.frame(an)
+    an <- an[,intersect(fields, colnames(an)),drop=FALSE]
+    if(ncol(an)==0){
+        an <- NULL
+    }else{
+        for(i in colnames(an)){
+            if(is.factor(an[[i]])){
+                if(dropEmptyLevels) an[[i]] <- droplevels(an[[i]])
+            }
+            if(is.logical(an[[i]])){
+                an[[i]] <- factor(as.character(an[[i]]),levels=c("FALSE","TRUE"))
+                if(!(i %in% names(anno_colors))){
+                    anno_colors[[i]] <- c("FALSE"="white", "TRUE"="darkblue")
+                }
+            }else{
+                if(i %in% names(anno_colors)){
+                    w <- intersect(names(anno_colors[[i]]),unique(an[[i]]))
+                    if(length(w)==0){
+                        anno_colors[[i]] <- NULL
+                    }else{
+                        anno_colors[[i]] <- anno_colors[[i]][w]
+                    }
+                }
+            }
+        }
+    }
+    if(is.null(whichComplex)) return(list(an=an, anno_colors=anno_colors))
+    if(is.null(an)) return(NULL)
+
+    anno_colors <- anno_colors[intersect(names(anno_colors),colnames(an))]
+
+    if(length(anno_colors)==0){
+        an <- HeatmapAnnotation(df=an, show_legend=show_legend, na_col="white",
+                                which=whichComplex,
+                                show_annotation_name=show_annotation_name )
+    }else{
+        an <- HeatmapAnnotation(df=an, show_legend=show_legend, na_col="white",
+                                which=whichComplex, col=anno_colors,
+                                show_annotation_name=show_annotation_name )
+    }
+    an
+}
+
+.prepData <- function( se, genes=NULL, do.scale=FALSE,
+                       assayName=.getDef("assayName"), includeMissing=FALSE ){
+    genes <- unique(genes)
+    x <- as.matrix(.chooseAssay(se, assayName))
+    if(!is.null(genes)) x <- x[intersect(genes,row.names(x)),]
+    if(do.scale){
+        x <- x[apply(x,1,FUN=sd)>0,]
+        x <- t(scale(t(x)))
+    }
+    if(includeMissing && length(missg <- setdiff(genes, row.names(x)))>0){
+        x2 <- matrix( NA_real_, ncol=ncol(x), nrow=length(missg),
+                      dimnames=list(missg, colnames(x)) )
+        x <- rbind(x,x2)[genes,]
+    }
+    as.matrix(x)
+}
+
+.parseToporder <- function(x, toporder=NULL){
+    if(is(x, "SummarizedExperiment")) x <- rowData(x)
+    if(is.null(toporder)) return(NULL)
+    if(length(toporder)==1 && is.character(toporder)){
+        if(toporder %in% colnames(x)){
+            toporder <- x[[toporder]]
+            names(toporder) <- row.names(x)
+        }else{
+            stop("Could not interpret `toporder`.")
+        }
+    }
+    if(!is.null(names(toporder))){
+        toporder <- toporder[row.names(x)]
+    }else{
+        names(toporder) <- row.names(x)
+    }
+    return(toporder)
+}
+
+.prepScale <- function(x, hmcols=NULL, breaks=.getDef("breaks")){
+    hmcols <- .getHMcols(hmcols)
+    if(!is.null(breaks) && !is.na(breaks) && length(breaks)==1 &&
+       (!is.logical(breaks) || breaks))
+        breaks <- getBreaks(x, length(hmcols)+1, split.prop=breaks)
+    if(is.null(breaks) || is.na(breaks) || (is.logical(breaks) && !breaks))
+        breaks <- getBreaks(x, length(hmcols)+1, 1, FALSE)
+    list(breaks=breaks, hmcols=hmcols)
+}
+
+.rbind_all <- function(dfs){
+    aac <- unique(unlist(lapply(dfs,colnames)))
+    dfs <- lapply(dfs, FUN=function(x){
+        x <- as.data.frame(x)
+        for(f in setdiff(aac, colnames(x))) x[[f]] <- NA
+        x[,aac,drop=FALSE]
+    })
+    do.call(rbind, dfs)
 }

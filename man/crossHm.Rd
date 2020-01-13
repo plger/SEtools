@@ -4,13 +4,15 @@
 \alias{crossHm}
 \title{crossHm}
 \usage{
-crossHm(ses, genes, do.scale = TRUE, uniqueColorScale = FALSE,
-  assayName = .getDef("assayName"), do.sortRows = TRUE,
-  only.common = TRUE, anno_columns = .getDef("anno_columns"),
-  spreadAnnotation = FALSE, hmcols = NULL, cluster_columns = FALSE,
-  cluster_rows = !do.sortRows, show_rownames = ifelse(length(genes) <
-  80, "once", FALSE), show_colnames = FALSE,
-  anno_colors = .getDef("anno_colors"), ...)
+crossHm(ses, genes, do.scale = TRUE, uniqueScale = FALSE,
+  assayName = .getDef("assayName"), sortBy = seq_along(ses),
+  only.common = TRUE, cluster_cols = FALSE,
+  cluster_rows = is.null(sortBy), toporder = NULL, hmcols = NULL,
+  breaks = .getDef("breaks"), gaps_at = .getDef("gaps_at"),
+  gaps_row = NULL, anno_rows = .getDef("anno_rows"),
+  anno_columns = .getDef("anno_columns"), name = NULL,
+  anno_colors = list(), show_rownames = NULL, show_colnames = FALSE,
+  ...)
 }
 \arguments{
 \item{ses}{A (named) list of
@@ -20,51 +22,57 @@ crossHm(ses, genes, do.scale = TRUE, uniqueColorScale = FALSE,
 
 \item{do.scale}{Logical; whether to scale rows in each SE (default TRUE).}
 
-\item{uniqueColorScale}{Logical; whether to force the same colorscale for
-each heatmap (default FALSE; applicable only when what!='asis').}
+\item{uniqueScale}{Logical; whether to force the same colorscale for
+each heatmap.}
 
 \item{assayName}{The name of the assay to use; if multiple names are given,
 the first available will be used. Defaults to "logcpm", "lognorm".}
 
-\item{do.sortRows}{Logical; whether to sort rows according to MDS
-(default TRUE).}
+\item{sortBy}{Names or indexes of `ses` to use for sorting rows (default all)}
 
 \item{only.common}{Logical; whether to plot only rows common to all SEs
 (default TRUE).}
 
-\item{anno_columns}{A vector of colData columns to use (if available) for
-annotation, default "Condition" and "TimePoint".}
-
-\item{spreadAnnotation}{Logical; whether to spread annotation to all SEs
-(not yet supported)}
-
-\item{hmcols}{An optional color palette, such as produced by the
-`colorRampPalette` function.}
-
-\item{cluster_columns}{Logical; whether to cluster columns (default FALSE).}
+\item{cluster_cols}{Logical; whether to cluster columns (default FALSE).}
 
 \item{cluster_rows}{Logical; whether to cluster rows (default TRUE if
 `do.sortRows=FALSE`, FALSE otherwise).}
 
-\item{show_rownames}{Logical; whether to show row names (default TRUE if
-`length(genes)<80`, FALSE otherwise).}
+\item{toporder}{Optional verctor of categories on which to supra-order when
+sorting rows, or name of a `rowData` column to use for this purpose.}
 
-\item{show_colnames}{Logical; whether to show column names (default FALSE)}
+\item{hmcols}{Colors for the heatmap.}
 
-\item{anno_colors}{A vector of color for annotations.}
+\item{breaks}{Breaks for the heatmap colors. Alternatively, symmetrical
+breaks can be generated automatically by setting `breaks` to a numerical
+value between 0 and 1. The value is passed as the `split.prop` argument to
+the \code{\link{getBreaks}} function, and indicates the proportion of the
+points to map to a linear scale, while the more extreme values will be
+plotted on a quantile scale.
+`breaks==TRUE`, a symmetrical scale with capped ends will be used
+(appropriate when plotting log2 foldchanges)}
+
+\item{gaps_at}{Columns of `colData` to use to establish gaps between columns.}
+
+\item{gaps_row}{A named vector according to which rows will be split.}
+
+\item{anno_rows}{Columns of `rowData` to use for annotation.}
+
+\item{anno_columns}{Columns of `colData` to use for annotation.}
+
+\item{name}{The title of the heatmap key.}
+
+\item{anno_colors}{List of colors to use for annotation.}
+
+\item{show_rownames}{Whether to show row names (default TRUE if 50 rows or
+less).}
+
+\item{show_colnames}{Whether to show column names (default FALSE).}
 
 \item{...}{Any other parameter passed to each call of
 \code{\link[ComplexHeatmap]{Heatmap}}.}
 }
-\value{
-A \code{\link[ComplexHeatmap]{Heatmap-class}} object.
-}
 \description{
 Plot a multi-panel heatmap from a list of
-\code{\link[SummarizedExperiment]{SummarizedExperiment-class}}
-}
-\examples{
-data("SE", package="SEtools")
-crossHm(list(se1=SE[,1:10], se2=SE[,11:20]), head(row.names(SE)))
-
+\code{\link[SummarizedExperiment]{SummarizedExperiment-class}}.
 }

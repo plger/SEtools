@@ -1,47 +1,7 @@
-#' sehm
-#'
-#' Heatmap wrapper for \code{\link[SummarizedExperiment]{SummarizedExperiment-class}}.
-#'
-#' @param se A \code{\link[SummarizedExperiment]{SummarizedExperiment-class}}.
-#' @param genes An optional vector of genes (i.e. row names of `se`)
-#' @param do.scale Logical; whether to scale rows (default FALSE).
-#' @param assayName An optional vector of assayNames to use. The first available
-#'  will be used, or the first assay if NULL.
-#' @param sortRowsOn Sort rows by MDS polar order using the specified columns
-#' (default all)
-#' @param cluster_cols Whether to cluster columns (default F)
-#' @param cluster_rows Whether to cluster rows; default FALSE if
-#' `do.sortRows=TRUE`.
-#' @param toporder Optional verctor of categories on which to supra-order when
-#' sorting rows, or name of a `rowData` column to use for this purpose.
-#' @param hmcols Colors for the heatmap.
-#' @param breaks Breaks for the heatmap colors. Alternatively, symmetrical
-#' breaks can be generated automatically by setting `breaks` to a numerical
-#' value between 0 and 1. The value is passed as the `split.prop` argument to
-#' the \code{\link{getBreaks}} function, and indicates the proportion of the
-#' points to map to a linear scale, while the more extreme values will be
-#' plotted on a quantile scale.
-#' `breaks==TRUE`, a symmetrical scale with capped ends will be used
-#' (appropriate when plotting log2 foldchanges)
-#' @param gaps_at Columns of `colData` to use to establish gaps between columns.
-#' @param gaps_row Passed to \code{\link[pheatmap]{pheatmap}}; if missing, will
-#' be set automatically according to toporder.
-#' @param anno_rows Columns of `rowData` to use for annotation.
-#' @param anno_columns Columns of `colData` to use for annotation.
-#' @param anno_colors List of colors to use for annotation.
-#' @param show_rownames Whether to show row names (default TRUE if 50 rows or
-#' less).
-#' @param show_colnames Whether to show column names (default FALSE).
-#' @param ... Further arguments passed to `pheatmap`.
-#'
-#' @return A heatmap (see \code{\link[pheatmap]{pheatmap}}).
-#'
-#' @examples
-#' data("SE", package="SEtools")
-#' sehm(SE, do.scale=TRUE)
-#'
+#' @rdname SE-heatmap
 #' @importFrom pheatmap pheatmap
 #' @import SummarizedExperiment
+#' @importFrom pheatmap pheatmap
 #' @export
 sehm <- function( se, genes=NULL, do.scale=FALSE, assayName=.getDef("assayName"),
                   sortRowsOn=seq_len(ncol(se)), cluster_cols=FALSE,
@@ -51,85 +11,39 @@ sehm <- function( se, genes=NULL, do.scale=FALSE, assayName=.getDef("assayName")
                   anno_columns=.getDef("anno_columns"),
                   anno_colors=.getAnnoCols(se), show_rownames=NULL,
                   show_colnames=FALSE, ...){
+  ## see sechm.R for a definition of the arguments
+  x <- .prepData(se, genes=genes, do.scale=do.scale, assayName=assayName)
 
-  x <- as.matrix(.chooseAssay(se, assayName))
+  toporder <- .parseToporder(rowData(se)[row.names(x),], toporder)
+  if(!is.null(sortRowsOn) || length(sortRowsOn)==0)
+      x <- x[row.names(sortRows(x[,sortRowsOn],toporder=toporder,na.rm=TRUE)),]
 
-  if(!is.null(genes)) x <- x[intersect(genes,row.names(x)),]
-  if(do.scale){
-    x <- x[apply(x,1,FUN=sd)>0,]
-    x <- t(scale(t(x)))
-  }
-  if(!is.null(sortRowsOn)){
-    if(!is.null(toporder)){
-      if(length(toporder)==1 && is.character(toporder)){
-          if(toporder %in% colnames(rowData(se))){
-              toporder <- rowData(se)[[toporder]]
-              names(toporder) <- row.names(se)
-          }else{
-              stop("Could not interpret `toporder`.")
-          }
-      }
-      if(!is.null(names(toporder))){
-        toporder <- toporder[row.names(x)]
-      }else{
-        names(toporder) <- row.names(x)
-      }
-    }
-    x2 <- sortRows(x[,sortRowsOn], toporder=toporder, na.rm=TRUE)
-    x <- x[row.names(x2),]
-    rm(x2)
-  }
-
-  hmcols <- .getHMcols(hmcols)
   if(is.null(breaks) && !is.null(assayName) && grepl("^log[2]?FC$",assayName))
       breaks <- TRUE
-  if(!is.null(breaks) && !is.na(breaks) && length(breaks)==1 &&
-      (!is.logical(breaks) || breaks))
-          breaks <- getBreaks(x, length(hmcols)+1, split.prop=breaks)
-  if(is.null(breaks) || is.na(breaks) || (is.logical(breaks) && !breaks))
-          breaks <- getBreaks(x, length(hmcols)+1, 1, FALSE)
+  cscale <- .prepScale(x, hmcols=hmcols, breaks=breaks)
+  breaks <- cscale$breaks
+  hmcols <- cscale$hmcols
 
-  anr <- as.data.frame(rowData(se))
-  anr <- anr[,intersect(anno_rows, colnames(anr)),drop=FALSE]
-  if(ncol(anr)==0) anr <- NULL
-  an <- as.data.frame(colData(se))
-  an <- an[,intersect(anno_columns, colnames(an)),drop=FALSE]
-  if(ncol(an)==0){
-    an <- NULL
-  }else{
-    for(i in colnames(an)){
-      if(is.factor(an[[i]])) an[[i]] <- droplevels(an[[i]])
-      if(is.logical(an[[i]])){
-        an[[i]] <- factor(as.character(an[[i]]),levels=c("FALSE","TRUE"))
-        if(!(i %in% names(anno_colors))){
-          anno_colors[[i]] <- c("FALSE"="white", "TRUE"="darkblue")
-        }
-      }else{
-        if(i %in% names(anno_colors)){
-          w <- intersect(names(anno_colors[[i]]),unique(an[[i]]))
-          if(length(w)==0){
-            anno_colors[[i]] <- NULL
-          }else{
-            anno_colors[[i]] <- anno_colors[[i]][w]
-          }
-        }
-      }
-    }
-  }
+  anr <- .prepareAnnoDF( rowData(se)[row.names(x),], anno_colors, anno_rows )
+  anno_colors <- anr$anno_colors
+  anr <- anr$an
 
+  an <- .prepareAnnoDF( colData(se), anno_colors, anno_columns )
+  anno_colors <- an$anno_colors
+  an <- an$an
 
   if(!is.null(gaps_at)){
-    gaps_at <- intersect(gaps_at, colnames(colData(se)))
-    ga <- apply( as.data.frame(colData(se))[,gaps_at,drop=FALSE], 1,
-                 collapse=" ", FUN=paste)
-    ga <- factor(ga, levels=unique(ga))
-    o <- order(ga)
-    x <- x[,o]
-    an <- an[o,,drop=FALSE]
-    ga <- ga[o]
-    gaps <- (which(!duplicated(ga))-1)[-1]
+      gaps_at <- intersect(gaps_at, colnames(colData(se)))
+      ga <- apply( as.data.frame(colData(se))[,gaps_at,drop=FALSE], 1,
+                   collapse=" ", FUN=paste)
+      ga <- factor(ga, levels=unique(ga))
+      o <- order(ga)
+      x <- x[,o]
+      an <- an[o,,drop=FALSE]
+      ga <- ga[o]
+      gaps <- (which(!duplicated(ga))-1)[-1]
   }else{
-    gaps <- NULL
+      gaps <- NULL
   }
   if(!is.null(toporder) && is.null(gaps_row)){
       toporder <- toporder[row.names(x)]
@@ -139,6 +53,7 @@ sehm <- function( se, genes=NULL, do.scale=FALSE, assayName=.getDef("assayName")
   }
 
   if(is.null(show_rownames)) show_rownames <- nrow(x) <= 50
+
   pheatmap(x, color=hmcols, border_color=NA, gaps_col=gaps, gaps_row=gaps_row,
            breaks=breaks, cluster_cols=cluster_cols, cluster_rows=cluster_rows,
            annotation_col=an, annotation_row=anr, annotation_colors=anno_colors,
