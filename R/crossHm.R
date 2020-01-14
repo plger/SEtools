@@ -25,9 +25,9 @@
 #' value between 0 and 1. The value is passed as the `split.prop` argument to
 #' the \code{\link{getBreaks}} function, and indicates the proportion of the
 #' points to map to a linear scale, while the more extreme values will be
-#' plotted on a quantile scale.
-#' `breaks==TRUE`, a symmetrical scale with capped ends will be used
-#' (appropriate when plotting log2 foldchanges)
+#' plotted on a quantile scale. `breaks=FALSE` will disable symmetrical scale
+#' and quantile capping, while retaining automatic breaks. `breaks=1` will
+#' produce a symmetrical scale without quantile capping.
 #' @param gaps_at Columns of `colData` to use to establish gaps between columns.
 #' @param gaps_row A named vector according to which rows will be split.
 #' @param anno_rows Columns of `rowData` to use for annotation.
