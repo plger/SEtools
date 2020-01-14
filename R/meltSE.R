@@ -22,7 +22,7 @@
 #' @export
 meltSE <- function(x, genes, assayName=NULL, colDat.columns=NULL,
                    rowDat.columns=NA){
-  if(is.null(genes)) genes <- row.names(x)
+  genes <- intersect(genes, row.names(x))
   if(is.null(colDat.columns)) colDat.columns <- colnames(colData(x))
   if(all(is.na(colDat.columns))) colDat.columns <- c()
   colDat.columns <- intersect(colDat.columns, colnames(colData(x)))
