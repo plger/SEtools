@@ -12,3 +12,5 @@ rsconnect/
 .RData
 .Rhistory
 .Rapp.history
+README.Rmd
+README.html
