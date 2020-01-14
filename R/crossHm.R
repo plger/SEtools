@@ -39,6 +39,14 @@
 #' @param show_colnames Whether to show column names (default FALSE).
 #' @param ... Any other parameter passed to each call of
 #' \code{\link[ComplexHeatmap]{Heatmap}}.
+#'
+#' @return A Heatmap list.
+#'
+#' @importFrom circlize colorRamp2
+#' @importFrom methods is
+#' @import SummarizedExperiment
+#' @import ComplexHeatmap
+#' @export
 crossHm <- function(ses, genes, do.scale=TRUE, uniqueScale=FALSE,
                     assayName=.getDef("assayName"), sortBy=seq_along(ses),
                     only.common=TRUE, cluster_cols=FALSE,
@@ -86,6 +94,7 @@ crossHm <- function(ses, genes, do.scale=TRUE, uniqueScale=FALSE,
 
     if(uniqueScale){
         if(is.null(x)) x <- do.call(cbind, dats)
+        if(is.null(breaks)) breaks <- 0.995
         cscale <- .prepScale(x, hmcols=.getHMcols(hmcols), breaks=breaks)
         breaks <- cscale$breaks
         hmcols <- cscale$hmcols

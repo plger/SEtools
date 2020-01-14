@@ -89,8 +89,14 @@ sortRows <- function(x, z=FALSE, toporder=NULL, na.rm=FALSE, method="MDS_angle",
 .getHMcols <- function(cols=NULL, n=100){
   if(is.null(cols)) cols <- .getDef("hmcols")
   if(is.function(cols)) return(cols)
-  if(length(cols) %in% 2:3)  cols <- colorRampPalette(cols)(n)
+  if(length(cols) %in% 2:3)  return(colorRampPalette(cols)(n))
   cols
+}
+
+.getBaseHMcols <- function(se, cols){
+    if(!is.null(cols)) return(cols)
+    if(!is.null(se) && !is.null(cols <- metadata(se)$hmcols)) return(cols)
+    .getDef("hmcols")
 }
 
 #' getBreaks
@@ -434,7 +440,7 @@ se2xls <- function(se, filename, addSheets=NULL){
 }
 
 .prepScale <- function(x, hmcols=NULL, breaks=.getDef("breaks")){
-    hmcols <- .getHMcols(hmcols)
+    hmcols <- .getHMcols(cols=hmcols)
     if(!is.null(breaks) && !is.na(breaks) && length(breaks)==1 &&
        (!is.logical(breaks) || breaks))
         breaks <- getBreaks(x, length(hmcols)+1, split.prop=breaks)

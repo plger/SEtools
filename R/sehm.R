@@ -18,8 +18,11 @@ sehm <- function( se, genes=NULL, do.scale=FALSE, assayName=.getDef("assayName")
   if(!is.null(sortRowsOn) || length(sortRowsOn)==0)
       x <- x[row.names(sortRows(x[,sortRowsOn],toporder=toporder,na.rm=TRUE)),]
 
-  if(is.null(breaks) && !is.null(assayName) && grepl("^log[2]?FC$",assayName))
-      breaks <- TRUE
+  if( is.null(breaks) ){
+      if( (!is.null(assayName) && grepl("^log[2]?FC$",assayName)) || do.scale)
+          breaks <- 0.995
+  }
+  hmcols <- .getBaseHMcols(se, hmcols)
   cscale <- .prepScale(x, hmcols=hmcols, breaks=breaks)
   breaks <- cscale$breaks
   hmcols <- cscale$hmcols

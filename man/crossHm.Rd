@@ -72,6 +72,9 @@ less).}
 \item{...}{Any other parameter passed to each call of
 \code{\link[ComplexHeatmap]{Heatmap}}.}
 }
+\value{
+A Heatmap list.
+}
 \description{
 Plot a multi-panel heatmap from a list of
 \code{\link[SummarizedExperiment]{SummarizedExperiment-class}}.

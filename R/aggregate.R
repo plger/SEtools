@@ -62,7 +62,8 @@ aggSE <- function(x, by, assayFun=NULL, rowDatFuns=list()){
     assayFun <- assayFun[assayNames(x)]
     a <- lapply(assayNames(x), FUN=function(y){
         agf <- assayFun[[y]]
-        if(agf=="expsum") agf <- function(x) log(sum(exp(x)))
+        if(is.character(agf) && agf=="expsum")
+            agf <- function(x) log(sum(exp(x)))
         y <- assays(x)[[y]]
         y <- aggregate(y, by=list(by), FUN=agf)
         row.names(y) <- y[,1]

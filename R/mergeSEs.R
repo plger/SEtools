@@ -2,9 +2,9 @@
 #'
 #' Merges a list of
 #' \code{\link[SummarizedExperiment]{SummarizedExperiment-class}}, either by
-#' row.names or through specified rowData fields. In cases of many-to-many 
-#' (or one-to-many) mappings, `aggFun` determines whether the records are 
-#' aggregated by linking ID (if an aggregation method is given) or all 
+#' row.names or through specified rowData fields. In cases of many-to-many
+#' (or one-to-many) mappings, `aggFun` determines whether the records are
+#' aggregated by linking ID (if an aggregation method is given) or all
 #' combinations are returned (if `aggFun=NULL` - default).
 #'
 #' @param ll A (named) list of
