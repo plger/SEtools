@@ -98,7 +98,7 @@ It is common to cluster features into groups, and such a clustering can be used 
 ```{r}
 lfcs <- assays(SE)$logcpm-rowMeans(assays(SE)$logcpm[,which(SE$Condition=="Homecage")])
 rowData(SE)$cluster <- as.character(kmeans(lfcs,4)$cluster)
-sehm(SE, scale="row", anno_rows="cluster", toporder="cluster", gaps_at="Condition")
+sehm(SE, do.scale=TRUE, anno_rows="cluster", toporder="cluster", gaps_at="Condition")
 ```
 
 #### Default arguments

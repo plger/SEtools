@@ -94,14 +94,17 @@ crossHm <- function(ses, genes, do.scale=TRUE, uniqueScale=FALSE,
 
     if(uniqueScale){
         if(is.null(x)) x <- do.call(cbind, dats)
-        if(is.null(breaks)) breaks <- 0.995
+        if(is.null(breaks) && do.scale) breaks <- 0.995
         cscale <- .prepScale(x, hmcols=.getHMcols(hmcols), breaks=breaks)
         breaks <- cscale$breaks
         hmcols <- cscale$hmcols
     }
 
     if(!is.null(sortBy) && length(sortBy)>0){
-        xs <- do.call(cbind, dats[sortBy])
+        xs <- dats
+        if(do.scale && !uniqueScale)
+            xs <- lapply(xs, FUN=function(x){ t(scale(t(x))) })
+        xs <- do.call(cbind, xs[sortBy])
         genes <- row.names(sortRows(xs,toporder=toporder))
         dats <- lapply(dats, FUN=function(x) x[genes,,drop=FALSE])
     }
@@ -124,11 +127,12 @@ crossHm <- function(ses, genes, do.scale=TRUE, uniqueScale=FALSE,
     if(is.null(show_rownames)) show_rownames <- length(genes)<50
 
     hlp <- list()
-    if(uniqueScale && !is.null(assayName) && length(assayName)==1){
-        if(is.numeric(assayName)){
-            hlp$title <- ifelse(do.scale, "z-scores", "assay")
-        }else{
+    if(uniqueScale){
+        if(!is.null(assayName) && length(assayName)==1 &&
+           !is.numeric(assayName)){
             hlp$title <- ifelse(do.scale, paste0("scaled\n",assayName), assayName)
+        }else{
+            hlp$title <- ifelse(do.scale, "z-scores", "")
         }
     }
 
@@ -140,6 +144,7 @@ crossHm <- function(ses, genes, do.scale=TRUE, uniqueScale=FALSE,
               cluster_rows=FALSE, cluster_cols=cluster_cols, sortRowsOn=NULL,
               show_rownames=(show_rownames && i==length(ses)),
               show_colnames=show_colnames, isMult=i!=length(ses),
+              show_heatmap_legend=(!uniqueScale || i==length(ses)),
               heatmap_legend_param=hlp, column_title=names(ses)[i], ...)
     })
 
