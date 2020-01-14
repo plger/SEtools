@@ -33,9 +33,11 @@ if (!requireNamespace("BiocManager", quietly = TRUE))
 BiocManager::install("SEtools")
 ```
 
-Or, until the new bioconductor release:
+
+Or, to install the latest development version:
+
 ```{r, eval=FALSE}
-devtools::install_github("plger/SEtools")
+BiocManager::install("plger/SEtools")
 ```
 
 ## Example data
@@ -55,6 +57,13 @@ This is taken from [Floriou-Servou et al., Biol Psychiatry 2018](https://doi.org
 
 ## Heatmaps
 
+There are two main wrappers for plotting heatmaps from `SummarizedExperiment` objects: 
+
+* the `sehm` function uses the *[pheatmap](https://CRAN.R-project.org/package=pheatmap)* engine
+* the `sechm` function uses the *[ComplexHeatmap](https://jokergoo.github.io/ComplexHeatmap-reference/book/)* engine
+
+Both functions were made to function very similarly, but the `sechm` function is especially useful to combine heatmaps (for instance, from different `SummarizedExperiment` objects). We'll showcase `sehm` (the main functionalities being replicable with `sechm`), and will then provide examples of multiple heatmaps.
+
 ### sehm
 
 The `sehm` function simplifies the generation of heatmaps from `SummarizedExperiment`. It uses `r CRANpkg("pheatmap")`, so any argument supported by it can in principle be passed:
@@ -62,17 +71,20 @@ The `sehm` function simplifies the generation of heatmaps from `SummarizedExperi
 ```{r}
 g <- c("Egr1", "Nr4a1", "Fos", "Egr2", "Sgk1", "Arc", "Dusp1", "Fosb", "Sik1")
 sehm(SE, genes=g)
-sehm(SE, genes=g, scale="row")
+sehm(SE, genes=g, do.scale=TRUE)
 ```
+
+When scaling data, the function will automatically center the colour scale around zero, and handle the extreme values (0.5\% percentile on each side) in a non-linear fashion to retain a useful visualization.
+This behavior can be manually controlled via the `breaks` parameter (either setting it to FALSE, to a percentile until which the scale should be linear, of manually inputting breaks).
 
 Annotation from the object's `rowData` and `colData` can be plotted simply by specifying the column name (some will be shown by default if found):
 ```{r}
-sehm(SE, genes=g, scale="row", anno_rows="meanTPM")
+sehm(SE, genes=g, do.scale=TRUE, anno_rows="meanTPM")
 ```
 
 These can also be used to create gaps:
 ```{r}
-sehm(SE, genes=g, scale="row", anno_rows="meanTPM", gaps_at="Condition")
+sehm(SE, genes=g, do.scale=TRUE, anno_rows="meanTPM", gaps_at="Condition")
 ```
 
 The specific assay to use for plotting can be specified with the `assayName` argument.
@@ -89,30 +101,25 @@ rowData(SE)$cluster <- as.character(kmeans(lfcs,4)$cluster)
 sehm(SE, scale="row", anno_rows="cluster", toporder="cluster", gaps_at="Condition")
 ```
 
-### crossHm
+#### Default arguments
 
-Heatmaps from multiple SE can be created either by merging the objects (see below), or using the `crossHm` function, which uses the `r CRANpkg("ComplexHeatmap")` pacakge:
+For some arguments (for instance colors), if they are not specified in the function call, `SEtools` will try to see whether the object itself contains it, or whether the corresponding global options have been set, before using default colors. This means that if, in the context of a given project, the same colors are repeatedly being used, they can be specified a single time, and all subsequent plots will be affected.
 
-```{r}
-crossHm( list(se1=SE, se2=SE), g, 
-         anno_colors = list( Condition=c( Homecage="green",
-                                          Handling="orange",
-                                          Restraint="red",
-                                          Swim="blue")
-                            )
-        )
+Storing colors in the object:
+```{r colors_in_object}
+metadata(SE)$hmcols <- c("purple","white","gold")
+ancols <- list( Condition=c( Homecage="#DB918B",
+                             Handling="#B86FD3",
+                             Restraint="#A9CED5",
+                             Swim="#B5DF7C" ) )
+metadata(SE)$anno_colors <- ancols
+sehm(SE, g, do.scale = TRUE)
 ```
 
-### Default arguments
 
-For some arguments (for instance colors), if they are not specified in the function call, `SEtools` will try to see whether the corresponding global options have been set, before using default colors. This means that if, in the context of a given project, the same colors are repeatedly being used, they can be specified a single time, and all subsequent plots will be affected:
-
-```{r}
+Using the global options:
+```{r colors_in_options}
 options("SEtools_def_hmcols"=c("white","grey","black"))
-ancols <- list( Condition=c( Homecage="green",
-                             Handling="orange",
-                             Restraint="red",
-                             Swim="blue" ) )
 options("SEtools_def_anno_colors"=ancols)
 sehm(SE, g, do.scale = TRUE)
 ```
@@ -120,11 +127,44 @@ sehm(SE, g, do.scale = TRUE)
 At the moment, the following arguments can be set as global options:
 `assayName`, `hmcols`, `anno_columns`, `anno_rows`, `anno_colors`, `gaps_at`, `breaks`.
 Options must be set with the prefix `SEtools_def_`, followed by the name of the argument.
-You may use `resetAllSEtoolsOptions()` to remove all global options relative to the package.
+
+To remove the predefined colors:
+
+```{r}
+resetAllSEtoolsOptions()
+metadata(SE)$hmcols <- NULL
+metadata(SE)$anno_colors <- NULL
+```
+
+In order of priority, the arguments in the function call trump the object's metadata, which trumps the global options.
+
+### sechm and crossHm
+
+The `sechm` function works like the `sehm` function, but the fact that it outputs a `Heatmap` object from [ComplexHeatmap](https://jokergoo.github.io/ComplexHeatmap-reference/book/) means that these can be easily combined:
+
+```{r two_heatmaps}
+sechm(SE, g, do.scale = TRUE) + sechm(SE, g, do.scale = FALSE)
+```
+
+However, doing so involves manual work to ensure that the labels and colors are nice and coherent, and that the rows names match. As a convenience, we provide the `crossHm` function to handle these issues. `crossHm` works with a list of `SummarizedExperiment` objects:
+
+```{r crossHm}
+# we build another SE object:
+SE2 <- SE
+assays(SE2)$logcpm <- jitter(assays(SE2)$logcpm, factor=1000)
+crossHm(list(SE1=SE, SE2=SE2), g, do.scale = TRUE)
+```
+
+A unique color scale can be enforced:
+
+```{r crosshm2}
+crossHm(list(SE1=SE, SE2=SE2), g, do.scale = TRUE, uniqueScale = TRUE)
+```
+
 
 ***
 
-## Merging SEs
+## Merging and aggregating SEs
 
 ```{r}
 se1 <- SE[,1:10]
@@ -145,6 +185,33 @@ If more than one assay is present, one can specify a different scaling behavior 
 se3 <- mergeSEs( list(se1=se1, se2=se2), use.assays=c("counts", "logcpm"), do.scale=c(FALSE, TRUE))
 ```
 
+### Merging by rowData columns
+
+It is also possible to merge by rowData columns, which are specified through the `mergeBy` argument. 
+In this case, one can have one-to-many and many-to-many mappings, in which case two behaviors are possible:
+
+* By default, all combinations will be reported, which means that the same feature of one object might appear multiple times in the output because it matches multiple features of another object.
+* If a function is passed through `aggFun`, the features of each object will by aggregated by `mergeBy` using this function before merging.
+
+```{r merging}
+rowData(se1)$metafeature <- sample(LETTERS,nrow(se1),replace = TRUE)
+rowData(se2)$metafeature <- sample(LETTERS,nrow(se2),replace = TRUE)
+se3 <- mergeSEs( list(se1=se1, se2=se2), do.scale=FALSE, mergeBy="metafeature", aggFun=median)
+sehm(se3)
+```
+
+### Aggregating a SE
+
+A single SE can also be aggregated by using the `aggSE` function:
+
+```{r aggregating}
+se1b <- aggSE(se1, by = "metafeature")
+se1b
+```
+
+If the aggregation function(s) are not specified, `aggSE` will try to guess decent aggregation functions from the assay names.
+
+***
 
 ## Melting SE
 
@@ -154,7 +221,8 @@ To facilitate plotting features with `r CRANpkg("ggplot2")`, the `meltSE` functi
 d <- meltSE(SE, genes=g[1:4])
 head(d)
 suppressPackageStartupMessages(library(ggplot2))
-ggplot(d, aes(Condition, counts)) + geom_violin() + facet_wrap(~feature, scale="free")
+ggplot(d, aes(Condition, counts, fill=Condition)) + geom_violin() + 
+    facet_wrap(~feature, scale="free")
 ```
 
 
