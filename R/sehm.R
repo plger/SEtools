@@ -15,9 +15,10 @@ sehm <- function( se, genes=NULL, do.scale=FALSE, assayName=.getDef("assayName")
   x <- .prepData(se, genes=genes, do.scale=do.scale, assayName=assayName)
 
   toporder <- .parseToporder(rowData(se)[row.names(x),], toporder)
-  if(!is.null(sortRowsOn) || length(sortRowsOn)==0)
-      x <- x[row.names(sortRows(x[,sortRowsOn],toporder=toporder,na.rm=TRUE)),]
-
+  if(!is.null(sortRowsOn) && length(sortRowsOn)>0){
+      x2 <- sortRows(x[,sortRowsOn,drop=FALSE],toporder=toporder,na.rm=TRUE)
+      x <- x[row.names(x2),]
+  }
   if( is.null(breaks) ){
       if( (!is.null(assayName) && grepl("^log[2]?FC$",assayName)) || do.scale)
           breaks <- 0.995
