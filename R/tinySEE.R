@@ -98,7 +98,8 @@ tinySEE <- function(se=NULL, ...){
                     column(4, selectizeInput('hm_anno', "Column annotation",
                                              choices=c(), multiple=TRUE),
                            selectizeInput('hm_gaps', "Gaps at", choices=c(),
-                                          multiple=T)
+                                          multiple=T),
+                           checkboxInput('hm_colnames', 'Show column names')
                     ),
                     column(4, selectizeInput('hm_order', "Column ordering",
                                              choices=c(), multiple=TRUE),
@@ -268,7 +269,8 @@ tinySEE <- function(se=NULL, ...){
             sehm(se, g, input$hm_scale, assayName=input$assay_input2,
                  sortRowsOn=srow, anno_columns=input$hm_anno,
                  gaps_at=input$hm_gaps, cluster_cols=input$hm_clusterCol,
-                 cluster_rows=FALSE, breaks=input$hm_breaks)
+                 show_colnames = input$hm_colnames, cluster_rows=FALSE,
+                 breaks=input$hm_breaks)
 
         }, height=reactive(input$hm_height))
 
