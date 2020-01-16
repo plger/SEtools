@@ -135,6 +135,11 @@ getBreaks <- function(x, n, split.prop=0.98, symmetric=TRUE){
         xr <- c(xr,as.numeric(q))
     }
     if(symmetric) xr <- c(-rev(xr[-1]), xr)
+    if(any(duplicated(xr))){
+        ## duplicated breaks, probably because we have to few datapoints;
+        ## we fall back onto a linear scale
+        xr <- getBreaks(x, n, 1, symmetric=symmetric)
+    }
     xr
 }
 
