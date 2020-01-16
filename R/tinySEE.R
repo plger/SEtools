@@ -20,7 +20,7 @@ tinySEE <- function(se=NULL, ...){
     shiny::shinyApp(ui=.tinySEE_ui(), server=.tinySEE_server(se), ...)
 }
 
-#' @import shiny shinydashboard shinycssloaders   
+#' @import shiny shinydashboard shinycssloaders
 #' @importFrom DT datatable renderDT DTOutput
 .tinySEE_ui <- function(){
     shinyUI( dashboardPage(
@@ -51,16 +51,20 @@ tinySEE <- function(se=NULL, ...){
           tabItem("tab_gene", box( width=12,collapsible = T,
                column(6, selectizeInput("gene_input", "Select Gene", choices=c(), multiple=FALSE),
                       selectInput("assay_input", "Assay", choices=c(), multiple=FALSE) ),
-               column(3, selectInput("plottype_input", "Type of Plot", choices=c("violin plot","box plot"), multiple=FALSE),
+               column(3, selectInput("plottype_input", "Type of Plot",
+                                     choices=c("violin plot","box plot"),
+                                     multiple=FALSE),
                       checkboxInput('select_plotpoints','Plot Points', value=TRUE),
-                      checkboxInput('select_logaxis','Logarithmic Axis', value=FALSE)),
+                      checkboxInput('select_logaxis','Logarithmic Axis', value=FALSE),
+                      numericInput("gp_height", "Plot height", 400, min=100, max=1000, step=50)),
                column(3, selectInput("select_groupvar", "Group by", choices=c(), multiple=FALSE),
                       checkboxInput('asfactor','As factor', value=TRUE),
                       selectInput("select_colorvar", "Color by", choices=c(), multiple=FALSE),
-                      selectizeInput("select_gridvars", "Grid by", choices=c(), options = list(maxItems = 2), multiple=TRUE),
+                      selectizeInput("select_gridvars", "Grid by", choices=c(),
+                                     options = list(maxItems = 2), multiple=TRUE),
                       checkboxInput('select_freeaxis','Free Axis', value=TRUE))
             ),
-            box(width=12, withSpinner(plotOutput("gene_plot", height=700)),collapsible = T)
+            box(width=12, withSpinner(plotOutput("gene_plot", height="auto")),collapsible = T)
           ),
           tabItem("tab_heatmap",
                box( width=12, title="Genes", collapsible=TRUE,
@@ -77,17 +81,18 @@ tinySEE <- function(se=NULL, ...){
                     ),
                     column(4, selectizeInput('hm_order', "Column ordering", choices=c(), multiple=T),
                            checkboxInput('hm_clusterCol','Cluster columns', value=F),
-                           checkboxInput('hm_clusterRow','Sort rows', value=T)
+                           checkboxInput('hm_clusterRow','Sort rows', value=T),
+                           numericInput("hm_height", "Plot height", 400, min=100, max=2000, step=50)
                     )
                ),
-               box(width=12, title="Heatmap", withSpinner(plotOutput("heatmap", height=700)), collapsible = T)
+               box(width=12, title="Heatmap", withSpinner(plotOutput("heatmap", height="auto")), collapsible = T)
           )
       )
     )))
 }
 
 
-#' @import shiny shinydashboard shinycssloaders   
+#' @import shiny shinydashboard shinycssloaders
 #' @importFrom DT datatable renderDT DTOutput
 .tinySEE_server <- function(se=NULL, maxSize=50*1024^2){
     library(shiny)
@@ -222,9 +227,9 @@ tinySEE <- function(se=NULL, ...){
             for(f in rev(o)) se <- se[,order(colData(se)[[f]])]
 
             sehm(se, g, input$hm_scale, assayName=input$assay_input2, sortRowsOn=srow, anno_columns=input$hm_anno, gaps_at=input$hm_gaps,
-                 cluster_cols=input$hm_clusterCol, cluster_rows=FALSE, breaks=ifelse(input$hm_breaks,0.98,1))
+                 cluster_cols=input$hm_clusterCol, cluster_rows=FALSE, breaks=input$hm_breaks)
 
-        })
+        }, height=reactive(input$hm_height))
 
         ### END HEATMAP
         ############
@@ -265,7 +270,7 @@ tinySEE <- function(se=NULL, ...){
                 }
             }
             p
-        })
+        }, height=reactive(input$gp_height))
 
         ### END GENE TAB
         ############
