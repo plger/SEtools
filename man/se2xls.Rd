@@ -20,3 +20,9 @@ Saves to file.
 Writes a SummarizedExperiment to an excel/xlsx file. Requires the `openxlsx`
 package.
 }
+\examples{
+data("SE", package="SEtools")
+# not run
+# se2xls(SE, filename="SE.xlsx")
+
+}

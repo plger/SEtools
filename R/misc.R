@@ -350,6 +350,12 @@ flattenPB <- function(pb, norm=TRUE, lfc_group="group_id"){
 #' @param addSheets An optional list of additional tables to save as sheets.
 #'
 #' @return Saves to file.
+#'
+#' @examples
+#' data("SE", package="SEtools")
+#' # not run
+#' # se2xls(SE, filename="SE.xlsx")
+#'
 #' @export
 se2xls <- function(se, filename, addSheets=NULL){
     library(openxlsx)

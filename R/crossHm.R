@@ -42,6 +42,12 @@
 #'
 #' @return A Heatmap list.
 #'
+#' @examples
+#' data("SE", package="SEtools")
+#' se1 <- SE[,1:10]
+#' se2 <- SE[,11:20]
+#' se3 <- mergeSEs( list(se1=se1, se2=se2) )
+#'
 #' @importFrom circlize colorRamp2
 #' @importFrom methods is
 #' @import SummarizedExperiment
