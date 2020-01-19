@@ -32,6 +32,8 @@
 #' @param anno_rows Columns of `rowData` to use for annotation.
 #' @param anno_columns Columns of `colData` to use for annotation.
 #' @param anno_colors List of colors to use for annotation.
+#' @param name The name of the heatmap, eventually appearing as title of the 
+#' color scale.
 #' @param show_rownames Whether to show row names (default TRUE if 50 rows or
 #' less).
 #' @param show_colnames Whether to show column names (default FALSE).

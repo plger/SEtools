@@ -68,6 +68,9 @@ be set automatically according to toporder.}
 
 \item{anno_columns}{Columns of `colData` to use for annotation.}
 
+\item{name}{The name of the heatmap, eventually appearing as title of the 
+color scale.}
+
 \item{anno_colors}{List of colors to use for annotation.}
 
 \item{show_rownames}{Whether to show row names (default TRUE if 50 rows or

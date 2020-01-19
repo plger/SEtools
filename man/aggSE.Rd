@@ -29,6 +29,7 @@ An object of class `SummarizedExperiment`
 Aggregates the rows of a `SummarizedExperiment`.
 }
 \examples{
+library(SummarizedExperiment)
 data("SE", package="SEtools")
 # arbitrary IDs for example aggregation:
 rowData(SE)$otherID <- rep(LETTERS[1:10],each=10)

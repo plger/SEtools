@@ -18,8 +18,6 @@
 #' datasets (default TRUE).
 #' @param colColumns A character vector specifying `colData` columns to include
 #' (if available in at least one of the datasets). If NULL, everything is kept.
-#' @param defValues A list specifying the default values for `colColumns` when
-#' these are absent.
 #' @param mergeBy The `rowData` column to merge with. If NULL, row.names are
 #' used.
 #' @param aggFun The aggregation function to use when multiple rows have the
@@ -30,6 +28,7 @@
 #' appended to the sample names (default TRUE).
 #' @param defValues An optional named list of default `colData` values when some
 #'  columns are missing from some SEs.
+#' @param BPPARAM For multithreading the aggregation step.
 #'
 #' @return An object of class
 #' \code{\link[SummarizedExperiment]{SummarizedExperiment-class}}

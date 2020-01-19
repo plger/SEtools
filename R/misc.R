@@ -299,13 +299,15 @@ log2FC <- function(x, fromAssay=NULL, controls, by=NULL, isLog=NULL,
 #'
 #' @param pb a pseudo-bulk SummarizedExperiment as produced by
 #' `muscat::aggregateData`, with different celltypes/clusters are assays.
-#' @param getLFC Logical; whether to compute `logcpm` and `log2FC` assays.
+#' @param norm Logical; whether to calculate logcpm (TMM normalization).
+#' @param lfc_group; the colData column to use to calculate foldchange. If 
+#' NULL (default), no foldchange assay will be computed.
 #'
 #' @return A SummarizedExperiment
 #' @importFrom edgeR cpm calcNormFactors DGEList
 #' @import SummarizedExperiment S4Vectors
 #' @export
-flattenPB <- function(pb, norm=TRUE, lfc_group="group_id"){
+flattenPB <- function(pb, norm=TRUE, lfc_group=NULL){
     a <- do.call(cbind, as.list(assays(pb)))
     v.samples <- rep(colnames(pb),length(assays(pb)))
     v.clusters <- rep(assayNames(pb),each=ncol(pb))
@@ -346,7 +348,7 @@ flattenPB <- function(pb, norm=TRUE, lfc_group="group_id"){
 #' package.
 #'
 #' @param se The `SummarizedExperiment`
-#' @param filename 	xlsx file name
+#' @param filename xlsx file name
 #' @param addSheets An optional list of additional tables to save as sheets.
 #'
 #' @return Saves to file.

@@ -4,13 +4,16 @@
 \alias{flattenPB}
 \title{flattenPB}
 \usage{
-flattenPB(pb, norm = TRUE, lfc_group = "group_id")
+flattenPB(pb, norm = TRUE, lfc_group = NULL)
 }
 \arguments{
 \item{pb}{a pseudo-bulk SummarizedExperiment as produced by
 `muscat::aggregateData`, with different celltypes/clusters are assays.}
 
-\item{getLFC}{Logical; whether to compute `logcpm` and `log2FC` assays.}
+\item{norm}{Logical; whether to calculate logcpm (TMM normalization).}
+
+\item{lfc_group;}{the colData column to use to calculate foldchange. If 
+NULL (default), no foldchange assay will be computed.}
 }
 \value{
 A SummarizedExperiment

@@ -37,11 +37,10 @@ NULL (default), entries will be reused to have each combination.}
 \item{addDatasetPrefix}{Logical; whether the name of the dataset should be
 appended to the sample names (default TRUE).}
 
-\item{defValues}{A list specifying the default values for `colColumns` when
-these are absent.}
-
 \item{defValues}{An optional named list of default `colData` values when some
 columns are missing from some SEs.}
+
+\item{BPPARAM}{For multithreading the aggregation step.}
 }
 \value{
 An object of class
