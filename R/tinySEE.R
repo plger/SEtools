@@ -98,7 +98,7 @@ tinySEE <- function(se=NULL, ...){
                     column(4, selectizeInput('hm_anno', "Column annotation",
                                              choices=c(), multiple=TRUE),
                            selectizeInput('hm_gaps', "Gaps at", choices=c(),
-                                          multiple=T),
+                                          multiple=TRUE),
                            checkboxInput('hm_colnames', 'Show column names')
                     ),
                     column(4, selectizeInput('hm_order', "Column ordering",
@@ -119,16 +119,11 @@ tinySEE <- function(se=NULL, ...){
 }
 
 
-#' @import shiny shinydashboard shinycssloaders
+#' @import shiny shinydashboard shinycssloaders ggplot2 SummarizedExperiment
 #' @importFrom DT datatable renderDT DTOutput
+#' @importFrom cowplot theme_cowplot
 .tinySEE_server <- function(se=NULL, maxSize=50*1024^2){
-    library(shiny)
-    library(DT)
-    library(ggplot2)
-    library(cowplot)
     theme_set(theme_cowplot())
-    library(shinycssloaders)
-    library(SummarizedExperiment)
 
     options(shiny.maxRequestSize=maxSize)
 

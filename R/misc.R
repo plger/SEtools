@@ -300,7 +300,7 @@ log2FC <- function(x, fromAssay=NULL, controls, by=NULL, isLog=NULL,
 #' @param pb a pseudo-bulk SummarizedExperiment as produced by
 #' `muscat::aggregateData`, with different celltypes/clusters are assays.
 #' @param norm Logical; whether to calculate logcpm (TMM normalization).
-#' @param lfc_group; the colData column to use to calculate foldchange. If 
+#' @param lfc_group; the colData column to use to calculate foldchange. If
 #' NULL (default), no foldchange assay will be computed.
 #'
 #' @return A SummarizedExperiment
@@ -358,9 +358,9 @@ flattenPB <- function(pb, norm=TRUE, lfc_group=NULL){
 #' # not run
 #' # se2xls(SE, filename="SE.xlsx")
 #'
+#' @importFrom openxlsx write.xlsx
 #' @export
 se2xls <- function(se, filename, addSheets=NULL){
-    library(openxlsx)
     a <- list( sample_annotation=as.data.frame(colData(se)) )
     if(ncol(rowData(se))>0) a$feature_annotation=as.data.frame(rowData(se))
     a <- c(a, as.list(assays(se)), addSheets)
