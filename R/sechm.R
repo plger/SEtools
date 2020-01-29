@@ -56,7 +56,7 @@
 #' @import SummarizedExperiment
 #' @import ComplexHeatmap
 #' @export
-sechm <- function(se, genes=NULL, do.scale=FALSE, assayName=.getDef("assayName"),
+sechm <- function(se, genes, do.scale=FALSE, assayName=.getDef("assayName"),
                   sortRowsOn=seq_len(ncol(se)), cluster_cols=FALSE,
                   cluster_rows=is.null(sortRowsOn), toporder=NULL, hmcols=NULL,
                   breaks=.getDef("breaks"), gaps_at=.getDef("gaps_at"),
