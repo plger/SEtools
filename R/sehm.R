@@ -14,7 +14,7 @@ sehm <- function( se, genes, do.scale=FALSE, assayName=.getDef("assayName"),
   ## see sechm.R for a definition of the arguments
   x <- .prepData(se, genes=genes, do.scale=do.scale, assayName=assayName)
 
-  toporder <- .parseToporder(rowData(se)[row.names(x),], toporder)
+  toporder <- .parseToporder(rowData(se)[row.names(x),,drop=FALSE], toporder)
   if(!is.null(sortRowsOn) && length(sortRowsOn)>0){
       x2 <- sortRows(x[,sortRowsOn,drop=FALSE],toporder=toporder,na.rm=TRUE)
       x <- x[row.names(x2),]
@@ -28,7 +28,7 @@ sehm <- function( se, genes, do.scale=FALSE, assayName=.getDef("assayName"),
   breaks <- cscale$breaks
   hmcols <- cscale$hmcols
 
-  anr <- .prepareAnnoDF( rowData(se)[row.names(x),], anno_colors, anno_rows )
+  anr <- .prepareAnnoDF( rowData(se)[row.names(x),,drop=FALSE], anno_colors, anno_rows )
   anno_colors <- anr$anno_colors
   anr <- anr$an
 

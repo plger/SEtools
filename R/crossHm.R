@@ -84,7 +84,7 @@ crossHm <- function(ses, genes, do.scale=TRUE, uniqueScale=FALSE,
         names(toporder) <- genes
     }
 
-    dats <- lapply( ses, .prepData, genes=genes, assayName=assayName,
+    dats <- lapply( ses, FUN=.prepData, genes=genes, assayName=assayName,
                     do.scale=do.scale && !uniqueScale, includeMissing=TRUE )
     if(do.scale && uniqueScale){
         x <- do.call(cbind, dats)
@@ -143,7 +143,7 @@ crossHm <- function(ses, genes, do.scale=TRUE, uniqueScale=FALSE,
     }
 
     htlist <- sapply(seq_along(ses), FUN=function(i){
-        sechm(ses[[i]], do.scale=(do.scale && !uniqueScale),
+        sechm(ses[[i]], genes=row.names(ses[[i]]), do.scale=(do.scale && !uniqueScale),
               assayName="a", name=names(ses)[i], toporder=toporder,
               hmcols=hmcols, breaks=breaks, anno_rows=anno_rows,
               anno_columns=anno_columns, anno_colors=anno_colors,
