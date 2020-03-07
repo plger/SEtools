@@ -98,7 +98,7 @@ It is common to cluster features into groups, and such a clustering can be used 
 ```{r}
 lfcs <- assays(SE)$logcpm-rowMeans(assays(SE)$logcpm[,which(SE$Condition=="Homecage")])
 rowData(SE)$cluster <- as.character(kmeans(lfcs,4)$cluster)
-sehm(SE, do.scale=TRUE, anno_rows="cluster", toporder="cluster", gaps_at="Condition")
+sehm(SE, genes=g, do.scale=TRUE, anno_rows="cluster", toporder="cluster", gaps_at="Condition")
 ```
 
 #### Default arguments
@@ -197,7 +197,7 @@ In this case, one can have one-to-many and many-to-many mappings, in which case 
 rowData(se1)$metafeature <- sample(LETTERS,nrow(se1),replace = TRUE)
 rowData(se2)$metafeature <- sample(LETTERS,nrow(se2),replace = TRUE)
 se3 <- mergeSEs( list(se1=se1, se2=se2), do.scale=FALSE, mergeBy="metafeature", aggFun=median)
-sehm(se3)
+sehm(se3, genes=row.names(se3))
 ```
 
 ### Aggregating a SE
