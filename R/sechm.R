@@ -32,7 +32,7 @@
 #' @param anno_rows Columns of `rowData` to use for annotation.
 #' @param anno_columns Columns of `colData` to use for annotation.
 #' @param anno_colors List of colors to use for annotation.
-#' @param name The name of the heatmap, eventually appearing as title of the 
+#' @param name The name of the heatmap, eventually appearing as title of the
 #' color scale.
 #' @param show_rownames Whether to show row names (default TRUE if 50 rows or
 #' less).
@@ -45,7 +45,7 @@
 #'
 #' @examples
 #' data("SE", package="SEtools")
-#' sehm(SE, do.scale=TRUE)
+#' sehm(SE, row.names(SE)[1:10], do.scale=TRUE)
 
 #' @rdname SE-heatmap
 #' @param isMult Logical; used to silence labels when plotting mulitple heatmaps
