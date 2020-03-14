@@ -300,7 +300,7 @@ log2FC <- function(x, fromAssay=NULL, controls, by=NULL, isLog=NULL,
 #' @param pb a pseudo-bulk SummarizedExperiment as produced by
 #' `muscat::aggregateData`, with different celltypes/clusters are assays.
 #' @param norm Logical; whether to calculate logcpm (TMM normalization).
-#' @param lfc_group; the colData column to use to calculate foldchange. If
+#' @param lfc_group the colData column to use to calculate foldchange. If
 #' NULL (default), no foldchange assay will be computed.
 #'
 #' @return A SummarizedExperiment

@@ -12,7 +12,7 @@ flattenPB(pb, norm = TRUE, lfc_group = NULL)
 
 \item{norm}{Logical; whether to calculate logcpm (TMM normalization).}
 
-\item{lfc_group;}{the colData column to use to calculate foldchange. If
+\item{lfc_group}{the colData column to use to calculate foldchange. If
 NULL (default), no foldchange assay will be computed.}
 }
 \value{
