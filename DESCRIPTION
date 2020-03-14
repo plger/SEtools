@@ -1,7 +1,7 @@
 Package: SEtools
 Type: Package
 Title: SEtools: tools for working with SummarizedExperiment
-Version: 1.1.11
+Version: 1.1.13
 Depends: R (>= 3.6)
 Authors@R: person("Pierre-Luc", "Germain", email="pierre-luc.germain@hest.ethz.ch", role=c("cre","aut"), comment=c(ORCID="0000-0003-3418-4218"))
 Description: This includes a set of tools for working with the SummarizedExperiment class, including merging, melting, aggregation and plotting functions.
