@@ -66,7 +66,7 @@ be set automatically according to toporder.}
 
 \item{anno_columns}{Columns of `colData` to use for annotation.}
 
-\item{name}{The name of the heatmap, eventually appearing as title of the 
+\item{name}{The name of the heatmap, eventually appearing as title of the
 color scale.}
 
 \item{anno_colors}{List of colors to use for annotation.}
@@ -93,5 +93,5 @@ Heatmap wrappers for
 }
 \examples{
 data("SE", package="SEtools")
-sehm(SE, do.scale=TRUE)
+sehm(SE, row.names(SE)[1:10], do.scale=TRUE)
 }
