@@ -454,11 +454,13 @@ se2xls <- function(se, filename, addSheets=NULL){
 
 .prepScale <- function(x, hmcols=NULL, breaks=.getDef("breaks")){
     hmcols <- .getHMcols(cols=hmcols)
-    if(!is.null(breaks) && !is.na(breaks) && length(breaks)==1 &&
+    if(!is.null(breaks) && length(breaks)==1 && !is.na(breaks) &&
        (!is.logical(breaks) || breaks))
         breaks <- getBreaks(x, length(hmcols)+1, split.prop=breaks)
-    if(is.null(breaks) || is.na(breaks) || (is.logical(breaks) && !breaks))
+    if(is.null(breaks) || all(is.na(breaks)) ||
+         (length(breaks)==1 && is.logical(breaks) && !breaks) ){
         breaks <- getBreaks(x, length(hmcols)+1, 1, FALSE)
+    }
     list(breaks=breaks, hmcols=hmcols)
 }
 
@@ -470,4 +472,20 @@ se2xls <- function(se, filename, addSheets=NULL){
         x[,aac,drop=FALSE]
     })
     do.call(rbind, dfs)
+}
+
+#' qualitativeColors
+#'
+#' @param names The names to which the colors are to be assigned, or an integer
+#' indicating the desired number of colors
+#' @param ...
+#'
+#' @importFrom randomcoloR distinctColorPalette
+qualitativeColors <- function(names, ...){
+    names <- unique(names)
+    if(length(names)==1 && is.integer(names))
+        return(distinctColorPalette(names))
+    cols <- distinctColorPalette(length(names), ...)
+    names(cols) <- names
+    cols
 }
