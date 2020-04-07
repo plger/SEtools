@@ -12,7 +12,7 @@ crossHm(ses, genes, do.scale = TRUE, uniqueScale = FALSE,
   gaps_row = NULL, anno_rows = .getDef("anno_rows"),
   anno_columns = .getDef("anno_columns"), name = NULL,
   anno_colors = list(), show_rownames = NULL, show_colnames = FALSE,
-  ...)
+  rel.width = NULL, ...)
 }
 \arguments{
 \item{ses}{A (named) list of
@@ -68,6 +68,8 @@ produce a symmetrical scale without quantile capping.}
 less).}
 
 \item{show_colnames}{Whether to show column names (default FALSE).}
+
+\item{rel.width}{Relative width of the heatmaps}
 
 \item{...}{Any other parameter passed to each call of
 \code{\link[ComplexHeatmap]{Heatmap}}.}

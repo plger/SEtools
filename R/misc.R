@@ -32,7 +32,7 @@ sortRows <- function(x, z=FALSE, toporder=NULL, na.rm=FALSE, method="MDS_angle",
   }
   if(is.factor(toporder)) toporder <- droplevels(toporder)
   y <- x
-  if(z) y <- t(scale(t(x)))
+  if(z) y <- t(.safescale(t(x)))
   if(!is.null(toporder)){
     if(toporder.meth=="before"){
       ag <- aggregate(y, by=list(toporder), na.rm=TRUE, FUN=median)
@@ -418,12 +418,14 @@ se2xls <- function(se, filename, addSheets=NULL){
 
 .prepData <- function( se, genes=NULL, do.scale=FALSE,
                        assayName=.getDef("assayName"), includeMissing=FALSE ){
-    genes <- unique(genes)
     x <- as.matrix(.chooseAssay(se, assayName))
-    if(!is.null(genes)) x <- x[intersect(genes,row.names(x)),]
+    if(!is.null(genes)){
+        genes <- unique(genes)
+        x <- x[intersect(genes,row.names(x)),]
+    }
     if(do.scale){
         x <- x[apply(x,1,FUN=sd)>0,]
-        x <- t(scale(t(x)))
+        x <- t(.safescale(t(x)))
     }
     if(includeMissing && length(missg <- setdiff(genes, row.names(x)))>0){
         x2 <- matrix( NA_real_, ncol=ncol(x), nrow=length(missg),
@@ -488,4 +490,18 @@ qualitativeColors <- function(names, ...){
     cols <- distinctColorPalette(length(names), ...)
     names(cols) <- names
     cols
+}
+
+
+.safescale <- function(x){
+    if(!any(is.na(x))) base::scale(x)
+    if(!is.null(dim(x))){
+        y <- apply(x,2,.safescale)
+        row.names(y) <- row.names(x)
+        return(y)
+    }
+    if(all(is.na(x))) return(x)
+    if(sd(x,na.rm=TRUE)>0) return(base::scale(x))
+    if(sum(!is.na(x))==0) return(base::scale(as.numeric(!is.na(x))))
+    rep(0,length(x))
 }

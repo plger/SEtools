@@ -37,6 +37,8 @@
 #' @param show_rownames Whether to show row names (default TRUE if 50 rows or
 #' less).
 #' @param show_colnames Whether to show column names (default FALSE).
+#' @param includeMissing Logical; whether to include missing genes (default
+#' FALSE)
 #' @param ... Further arguments passed to `pheatmap` (`sehm`) or `Heatmap`
 #' (`sechm`).
 #'
@@ -64,7 +66,7 @@ sechm <- function(se, genes, do.scale=FALSE, assayName=.getDef("assayName"),
                   anno_columns=.getDef("anno_columns"), name=NULL,
                   anno_colors=list(), show_rownames=NULL, show_colnames=FALSE,
                   isMult=FALSE, show_heatmap_legend=!isMult,
-                  ...){
+                  includeMissing=FALSE, ...){
 
   assayName <- .chooseAssay(se, assayName, returnName = TRUE)
   if(is.null(name)){
@@ -75,7 +77,8 @@ sechm <- function(se, genes, do.scale=FALSE, assayName=.getDef("assayName"),
       }
   }
 
-  x <- .prepData(se, genes=genes, do.scale=do.scale, assayName=assayName)
+  x <- .prepData(se, genes=genes, do.scale=do.scale, assayName=assayName,
+                 includeMissing=includeMissing )
 
   toporder <- .parseToporder(rowData(se)[row.names(x),], toporder)
   if(!is.null(sortRowsOn) && length(sortRowsOn)>0){
@@ -93,7 +96,8 @@ sechm <- function(se, genes, do.scale=FALSE, assayName=.getDef("assayName"),
   hmcols <- circlize::colorRamp2(breaks[-length(breaks)], cscale$hmcols)
 
   anno_colors <- .getAnnoCols(se, anno_colors)
-  anr <- .prepareAnnoDF( rowData(se)[row.names(x),], anno_colors,
+
+  anr <- .prepareAnnoDF( rowData(se)[row.names(x),,drop=FALSE], anno_colors,
                          anno_rows, whichComplex="row" )
 
   an <- .prepareAnnoDF( colData(se), anno_colors, anno_columns,

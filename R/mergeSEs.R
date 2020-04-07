@@ -28,6 +28,7 @@
 #' appended to the sample names (default TRUE).
 #' @param defValues An optional named list of default `colData` values when some
 #'  columns are missing from some SEs.
+#' @param keepRowData Logical, whether to keep the rowData (default TRUE).
 #' @param BPPARAM For multithreading the aggregation step.
 #'
 #' @return An object of class
@@ -42,7 +43,7 @@
 #' @export
 mergeSEs <- function(ll, use.assays=NULL, do.scale=TRUE, commonOnly=TRUE,
                      colColumns=NULL, mergeBy=NULL, aggFun=NULL,
-                     addDatasetPrefix=TRUE, defValues=list(),
+                     addDatasetPrefix=TRUE, defValues=list(), keepRowData=TRUE,
                      BPPARAM=SerialParam()){
   ll <- .forceAssayNames(ll)
   if(!is.null(mergeBy)){
@@ -77,7 +78,8 @@ mergeSEs <- function(ll, use.assays=NULL, do.scale=TRUE, commonOnly=TRUE,
       }
       dat <- .prepAssays(ll, use.assays=use.assays, do.scale=do.scale, rn=g)
       cd2 <- .mergeColData(ll, colColumns=colColumns, defValues=defValues)
-      se <- SummarizedExperiment(dat, rowData=.mergeRowData(ll, g), colData=cd2)
+      se <- SummarizedExperiment(dat, colData=cd2)
+      if(keepRowData) rowData(se) <- .mergeRowData(ll, g)
   }
 
   metadata(se) <- .mergeMetadata(ll)
@@ -148,7 +150,7 @@ mergeSEs <- function(ll, use.assays=NULL, do.scale=TRUE, commonOnly=TRUE,
     x <- lapply(ll, FUN=function(x){
       x <- assays(x)[[use.assays[[a]]]]
       if(all(rn %in% row.names(x))) return(x[rn,])
-      as.matrix(as.data.frame(x[rn,,drop=FALSE]))
+      as.matrix(as.data.frame(x)[rn,,drop=FALSE])
     })
     if(do.scale[a]){
       if(any(sapply(x, FUN=function(x) any(is.infinite(x) | is.na(x))))){

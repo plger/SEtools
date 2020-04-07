@@ -14,7 +14,8 @@ sechm(se, genes, do.scale = FALSE, assayName = .getDef("assayName"),
   gaps_row = NULL, anno_rows = .getDef("anno_rows"),
   anno_columns = .getDef("anno_columns"), name = NULL,
   anno_colors = list(), show_rownames = NULL, show_colnames = FALSE,
-  isMult = FALSE, show_heatmap_legend = !isMult, ...)
+  isMult = FALSE, show_heatmap_legend = !isMult,
+  includeMissing = FALSE, ...)
 
 sehm(se, genes, do.scale = FALSE, assayName = .getDef("assayName"),
   sortRowsOn = seq_len(ncol(se)), cluster_cols = FALSE,
@@ -79,6 +80,9 @@ less).}
 \item{isMult}{Logical; used to silence labels when plotting mulitple heatmaps}
 
 \item{show_heatmap_legend}{Logical; whether to show heatmap legend}
+
+\item{includeMissing}{Logical; whether to include missing genes (default
+FALSE)}
 
 \item{...}{Further arguments passed to `pheatmap` (`sehm`) or `Heatmap`
 (`sechm`).}

@@ -37,6 +37,7 @@
 #' @param show_rownames Whether to show row names (default TRUE if 50 rows or
 #' less).
 #' @param show_colnames Whether to show column names (default FALSE).
+#' @param rel.width Relative width of the heatmaps
 #' @param ... Any other parameter passed to each call of
 #' \code{\link[ComplexHeatmap]{Heatmap}}.
 #'
@@ -61,10 +62,13 @@ crossHm <- function(ses, genes, do.scale=TRUE, uniqueScale=FALSE,
                     gaps_row=NULL, anno_rows=.getDef("anno_rows"),
                     anno_columns=.getDef("anno_columns"), name=NULL,
                     anno_colors=list(), show_rownames=NULL,
-                    show_colnames=FALSE, ... ){
+                    show_colnames=FALSE, rel.width=NULL, ... ){
 
     if(is(ses,"SummarizedExperiment")) ses <- list(ses)
     if(is.null(names(ses))) names(ses) <- paste("SE", seq_along(ses))
+    if(!is.null(rel.width) && length(rel.width)!=length(ses))
+        stop("If given, `rel.width` should have the same length as `ses`.")
+    if(is.null(rel.width)) rel.width <- rep(1,length(ses))
 
     tt <- table(unlist(lapply(ses,row.names)))
     if(only.common){
@@ -88,7 +92,7 @@ crossHm <- function(ses, genes, do.scale=TRUE, uniqueScale=FALSE,
                     do.scale=do.scale && !uniqueScale, includeMissing=TRUE )
     if(do.scale && uniqueScale){
         x <- do.call(cbind, dats)
-        x <- t(scale(t(x)))
+        x <- t(.safescale(t(x)))
         dl <- lapply(dats, FUN=function(x) seq_len(ncol(x)))
         dl2 <- c(0,cumsum(sapply(dl,length)[-length(dl)]))
         dats <- lapply( seq_along(dl), FUN=function(i)
@@ -109,7 +113,7 @@ crossHm <- function(ses, genes, do.scale=TRUE, uniqueScale=FALSE,
     if(!is.null(sortBy) && length(sortBy)>0){
         xs <- dats
         if(do.scale && !uniqueScale)
-            xs <- lapply(xs, FUN=function(x){ t(scale(t(x))) })
+            xs <- lapply(xs, FUN=function(x){ t(.safescale(t(x))) })
         xs <- do.call(cbind, xs[sortBy])
         genes <- row.names(sortRows(xs,toporder=toporder))
         dats <- lapply(dats, FUN=function(x) x[genes,,drop=FALSE])
@@ -143,7 +147,7 @@ crossHm <- function(ses, genes, do.scale=TRUE, uniqueScale=FALSE,
     }
 
     htlist <- sapply(seq_along(ses), FUN=function(i){
-        sechm(ses[[i]], genes=row.names(ses[[i]]), do.scale=(do.scale && !uniqueScale),
+        sechm(ses[[i]], genes=genes, do.scale=(do.scale && !uniqueScale),
               assayName="a", name=names(ses)[i], toporder=toporder,
               hmcols=hmcols, breaks=breaks, anno_rows=anno_rows,
               anno_columns=anno_columns, anno_colors=anno_colors,
@@ -151,7 +155,8 @@ crossHm <- function(ses, genes, do.scale=TRUE, uniqueScale=FALSE,
               show_rownames=(show_rownames && i==length(ses)),
               show_colnames=show_colnames, isMult=i!=length(ses),
               show_heatmap_legend=(!uniqueScale || i==length(ses)),
-              heatmap_legend_param=hlp, column_title=names(ses)[i], ...)
+              heatmap_legend_param=hlp, column_title=names(ses)[i],
+              includeMissing=!only.common, width=rel.width[i], ...)
     })
 
     ht <- NULL

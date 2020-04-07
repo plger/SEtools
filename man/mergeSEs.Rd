@@ -6,7 +6,7 @@
 \usage{
 mergeSEs(ll, use.assays = NULL, do.scale = TRUE, commonOnly = TRUE,
   colColumns = NULL, mergeBy = NULL, aggFun = NULL,
-  addDatasetPrefix = TRUE, defValues = list(),
+  addDatasetPrefix = TRUE, defValues = list(), keepRowData = TRUE,
   BPPARAM = SerialParam())
 }
 \arguments{
@@ -39,6 +39,8 @@ appended to the sample names (default TRUE).}
 
 \item{defValues}{An optional named list of default `colData` values when some
 columns are missing from some SEs.}
+
+\item{keepRowData}{Logical, whether to keep the rowData (default TRUE).}
 
 \item{BPPARAM}{For multithreading the aggregation step.}
 }
