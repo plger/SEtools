@@ -10,7 +10,7 @@ qualitativeColors(names, ...)
 \item{names}{The names to which the colors are to be assigned, or an integer
 indicating the desired number of colors}
 
-\item{...}{}
+\item{...}{passed to `randomcoloR::distinctColorPalette`}
 }
 \description{
 qualitativeColors

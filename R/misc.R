@@ -480,7 +480,7 @@ se2xls <- function(se, filename, addSheets=NULL){
 #'
 #' @param names The names to which the colors are to be assigned, or an integer
 #' indicating the desired number of colors
-#' @param ...
+#' @param ... passed to `randomcoloR::distinctColorPalette`
 #'
 #' @importFrom randomcoloR distinctColorPalette
 qualitativeColors <- function(names, ...){
