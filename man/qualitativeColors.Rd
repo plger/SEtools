@@ -12,6 +12,9 @@ indicating the desired number of colors}
 
 \item{...}{passed to `randomcoloR::distinctColorPalette`}
 }
+\value{
+A vector (eventually named) of colors
+}
 \description{
 qualitativeColors
 }

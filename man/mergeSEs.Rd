@@ -4,10 +4,19 @@
 \alias{mergeSEs}
 \title{mergeSEs}
 \usage{
-mergeSEs(ll, use.assays = NULL, do.scale = TRUE, commonOnly = TRUE,
-  colColumns = NULL, mergeBy = NULL, aggFun = NULL,
-  addDatasetPrefix = TRUE, defValues = list(), keepRowData = TRUE,
-  BPPARAM = SerialParam())
+mergeSEs(
+  ll,
+  use.assays = NULL,
+  do.scale = TRUE,
+  commonOnly = TRUE,
+  colColumns = NULL,
+  mergeBy = NULL,
+  aggFun = NULL,
+  addDatasetPrefix = TRUE,
+  defValues = list(),
+  keepRowData = TRUE,
+  BPPARAM = SerialParam()
+)
 }
 \arguments{
 \item{ll}{A (named) list of

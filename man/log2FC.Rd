@@ -4,8 +4,15 @@
 \alias{log2FC}
 \title{log2FC}
 \usage{
-log2FC(x, fromAssay = NULL, controls, by = NULL, isLog = NULL,
-  agFun = rowMeans, toAssay = "log2FC")
+log2FC(
+  x,
+  fromAssay = NULL,
+  controls,
+  by = NULL,
+  isLog = NULL,
+  agFun = rowMeans,
+  toAssay = "log2FC"
+)
 }
 \arguments{
 \item{x}{A numeric matrix, or a `SummarizedExperiment` object}

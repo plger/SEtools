@@ -48,8 +48,7 @@
 #' @examples
 #' data("SE", package="SEtools")
 #' sehm(SE, row.names(SE)[1:10], do.scale=TRUE)
-
-#' @rdname SE-heatmap
+#'
 #' @param isMult Logical; used to silence labels when plotting mulitple heatmaps
 #' @param show_heatmap_legend Logical; whether to show heatmap legend
 #'

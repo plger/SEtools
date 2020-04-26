@@ -7,24 +7,51 @@
 \title{Heatmap wrappers for
 \code{\link[SummarizedExperiment]{SummarizedExperiment-class}}.}
 \usage{
-sechm(se, genes, do.scale = FALSE, assayName = .getDef("assayName"),
-  sortRowsOn = seq_len(ncol(se)), cluster_cols = FALSE,
-  cluster_rows = is.null(sortRowsOn), toporder = NULL, hmcols = NULL,
-  breaks = .getDef("breaks"), gaps_at = .getDef("gaps_at"),
-  gaps_row = NULL, anno_rows = .getDef("anno_rows"),
-  anno_columns = .getDef("anno_columns"), name = NULL,
-  anno_colors = list(), show_rownames = NULL, show_colnames = FALSE,
-  isMult = FALSE, show_heatmap_legend = !isMult,
-  includeMissing = FALSE, ...)
-
-sehm(se, genes, do.scale = FALSE, assayName = .getDef("assayName"),
-  sortRowsOn = seq_len(ncol(se)), cluster_cols = FALSE,
-  cluster_rows = is.null(sortRowsOn), toporder = NULL, hmcols = NULL,
-  breaks = .getDef("breaks"), gaps_at = .getDef("gaps_at"),
-  gaps_row = NULL, anno_rows = .getDef("anno_rows"),
+sechm(
+  se,
+  genes,
+  do.scale = FALSE,
+  assayName = .getDef("assayName"),
+  sortRowsOn = seq_len(ncol(se)),
+  cluster_cols = FALSE,
+  cluster_rows = is.null(sortRowsOn),
+  toporder = NULL,
+  hmcols = NULL,
+  breaks = .getDef("breaks"),
+  gaps_at = .getDef("gaps_at"),
+  gaps_row = NULL,
+  anno_rows = .getDef("anno_rows"),
   anno_columns = .getDef("anno_columns"),
-  anno_colors = .getAnnoCols(se), show_rownames = NULL,
-  show_colnames = FALSE, ...)
+  name = NULL,
+  anno_colors = list(),
+  show_rownames = NULL,
+  show_colnames = FALSE,
+  isMult = FALSE,
+  show_heatmap_legend = !isMult,
+  includeMissing = FALSE,
+  ...
+)
+
+sehm(
+  se,
+  genes,
+  do.scale = FALSE,
+  assayName = .getDef("assayName"),
+  sortRowsOn = seq_len(ncol(se)),
+  cluster_cols = FALSE,
+  cluster_rows = is.null(sortRowsOn),
+  toporder = NULL,
+  hmcols = NULL,
+  breaks = .getDef("breaks"),
+  gaps_at = .getDef("gaps_at"),
+  gaps_row = NULL,
+  anno_rows = .getDef("anno_rows"),
+  anno_columns = .getDef("anno_columns"),
+  anno_colors = .getAnnoCols(se),
+  show_rownames = NULL,
+  show_colnames = FALSE,
+  ...
+)
 }
 \arguments{
 \item{se}{A \code{\link[SummarizedExperiment]{SummarizedExperiment-class}}.}
@@ -98,4 +125,5 @@ Heatmap wrappers for
 \examples{
 data("SE", package="SEtools")
 sehm(SE, row.names(SE)[1:10], do.scale=TRUE)
+
 }

@@ -4,8 +4,14 @@
 \alias{sortRows}
 \title{sortRows}
 \usage{
-sortRows(x, z = FALSE, toporder = NULL, na.rm = FALSE,
-  method = "MDS_angle", toporder.meth = "before")
+sortRows(
+  x,
+  z = FALSE,
+  toporder = NULL,
+  na.rm = FALSE,
+  method = "MDS_angle",
+  toporder.meth = "before"
+)
 }
 \arguments{
 \item{x}{A numeric matrix or data.frame.}

@@ -4,8 +4,7 @@
 \alias{meltSE}
 \title{meltSE}
 \usage{
-meltSE(x, genes, assayName = NULL, colDat.columns = NULL,
-  rowDat.columns = NA)
+meltSE(x, genes, assayName = NULL, colDat.columns = NULL, rowDat.columns = NA)
 }
 \arguments{
 \item{x}{An object of class

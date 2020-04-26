@@ -4,15 +4,30 @@
 \alias{crossHm}
 \title{crossHm}
 \usage{
-crossHm(ses, genes, do.scale = TRUE, uniqueScale = FALSE,
-  assayName = .getDef("assayName"), sortBy = seq_along(ses),
-  only.common = TRUE, cluster_cols = FALSE,
-  cluster_rows = is.null(sortBy), toporder = NULL, hmcols = NULL,
-  breaks = .getDef("breaks"), gaps_at = .getDef("gaps_at"),
-  gaps_row = NULL, anno_rows = .getDef("anno_rows"),
-  anno_columns = .getDef("anno_columns"), name = NULL,
-  anno_colors = list(), show_rownames = NULL, show_colnames = FALSE,
-  rel.width = NULL, ...)
+crossHm(
+  ses,
+  genes,
+  do.scale = TRUE,
+  uniqueScale = FALSE,
+  assayName = .getDef("assayName"),
+  sortBy = seq_along(ses),
+  only.common = TRUE,
+  cluster_cols = FALSE,
+  cluster_rows = is.null(sortBy),
+  toporder = NULL,
+  hmcols = NULL,
+  breaks = .getDef("breaks"),
+  gaps_at = .getDef("gaps_at"),
+  gaps_row = NULL,
+  anno_rows = .getDef("anno_rows"),
+  anno_columns = .getDef("anno_columns"),
+  name = NULL,
+  anno_colors = list(),
+  show_rownames = NULL,
+  show_colnames = FALSE,
+  rel.width = NULL,
+  ...
+)
 }
 \arguments{
 \item{ses}{A (named) list of
