@@ -123,7 +123,23 @@ crossHm <- function(ses, genes, do.scale=TRUE, uniqueScale=FALSE,
         ac <- intersect(colnames(colData(x)),ac)
         as.data.frame(colData(x)[,ac,drop=FALSE])
     })
-    anno_columns <- colnames(CDs[[1]])
+
+    # make sure factors share the levels across datasets
+    facts <- unique(unlist(lapply(CDs, FUN=function(x){
+        x <- vapply(colData(fst), class, character(1))
+        names(x)[x=="factor"]
+    })))
+    for(v in facts){
+        lvls <- unique(unlist(lapply(CDs, FUN=function(x){
+            if(v %in% colnames(x)) return(levels(droplevels(as.factor(x[[v]]))))
+            NULL
+        })))
+        CDs <- lapply(CDs, FUN=function(x){
+            if(!(v %in% colnames(x))) return(x)
+            x[[v]] <- factor(as.character(x[[v]]), levels=lvls)
+            x
+        })
+    }
 
     ses <- lapply(seq_along(ses), FUN=function(i){
         RD <- rowData(ses[[i]])[genes,,drop=FALSE]
