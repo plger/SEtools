@@ -146,31 +146,34 @@ mergeSEs <- function(ll, use.assays=NULL, do.scale=TRUE, commonOnly=TRUE,
     stop( "`do.scale` should have a length either of 1 or equal to the number ",
           "of assays used.")
 
+  do.scale <- .resolveScalingInput(do.scale)
   a <- lapply(seq_len(length(use.assays)), FUN=function(a){
     x <- lapply(ll, FUN=function(x){
       x <- assays(x)[[use.assays[[a]]]]
       if(all(rn %in% row.names(x))) return(x[rn,])
       as.matrix(as.data.frame(x)[rn,,drop=FALSE])
     })
-    if(do.scale[a]){
+    if(!is.null(do.scale[[a]])){
       if(any(sapply(x, FUN=function(x) any(is.infinite(x) | is.na(x))))){
         stop("Cannot scale the data in the presence of missing or infinite
              values.")
       }
-      x <- tryCatch(  lapply(x, FUN=function(x) t(scale(t(x))) ),
-                      error=function(e){
-                        lapply(x, FUN=function(x){
-                          apply(x,1,FUN=function(x){
-                            if(!(sd(x)>0)) return(rep(0,length(x)))
-                            as.numeric(scale(as.numeric(x)))
-                          })
-                        })
-                      })
+      x <- lapply(x, FUN=do.scale[[a]])
     }
     do.call(cbind, x)
   })
   if(!is.numeric(use.assays)) names(a) <- use.assays
   a
+}
+
+.resolveScalingInput <- function(x){
+    if(length(x)>1) return(lapply(x,.resolveScalingInput))
+    if(is.logical(x) && !x) return(NULL)
+    if(is.logical(x) && x) return(.safescale)
+    if(is.function(x)) return(x)
+    if(is.character(x) && exists(x) && (y <- is.function(get(x)))) return(y)
+    warning("Unknown do.scale parameter value will be ignored...")
+    return(NULL)
 }
 
 .mergeMetadata <- function(ll){

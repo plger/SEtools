@@ -126,7 +126,7 @@ crossHm <- function(ses, genes, do.scale=TRUE, uniqueScale=FALSE,
 
     # make sure factors share the levels across datasets
     facts <- unique(unlist(lapply(CDs, FUN=function(x){
-        x <- vapply(colData(fst), class, character(1))
+        x <- vapply(x, class, character(1))
         names(x)[x=="factor"]
     })))
     for(v in facts){

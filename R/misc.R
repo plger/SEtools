@@ -507,3 +507,18 @@ qualitativeColors <- function(names, ...){
     if(sum(!is.na(x))==0) return(base::scale(as.numeric(!is.na(x))))
     rep(0,length(x))
 }
+
+
+#' scale2
+#'
+#' A wrapper for non-centered unit-variance scaling
+#' @param x A matrix whose rows are to be scaled.
+#'
+#' @return A matrix of dimensions like x
+#' @export
+#'
+#' @examples
+#' scale2(matrix(1:9,nrow=3))
+scale2 <- function(x){
+    t(scale(t(x),center=FALSE))
+}
