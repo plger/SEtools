@@ -146,20 +146,14 @@ mergeSEs <- function(ll, use.assays=NULL, do.scale=TRUE, commonOnly=TRUE,
     stop( "`do.scale` should have a length either of 1 or equal to the number ",
           "of assays used.")
 
-  do.scale <- .resolveScalingInput(do.scale)
+  do.scale <- lapply(do.scale, .resolveScalingInput)
   a <- lapply(seq_len(length(use.assays)), FUN=function(a){
     x <- lapply(ll, FUN=function(x){
       x <- assays(x)[[use.assays[[a]]]]
       if(all(rn %in% row.names(x))) return(x[rn,])
       as.matrix(as.data.frame(x)[rn,,drop=FALSE])
     })
-    if(!is.null(do.scale[[a]])){
-      if(any(sapply(x, FUN=function(x) any(is.infinite(x) | is.na(x))))){
-        stop("Cannot scale the data in the presence of missing or infinite
-             values.")
-      }
-      x <- lapply(x, FUN=do.scale[[a]])
-    }
+    if(!is.null(do.scale[[a]])) x <- lapply(x, FUN=do.scale[[a]])
     do.call(cbind, x)
   })
   if(!is.numeric(use.assays)) names(a) <- use.assays
