@@ -78,7 +78,10 @@ crossHm <- function(ses, genes, do.scale=TRUE, uniqueScale=FALSE,
     }
     if(length(genes)==0)
         stop("There appears to be not feature in common across `ses`")
-
+    if(length(genes)<=2){
+      sortBy <- NULL
+      cluster_rows <- FALSE
+    }
     if(!is.null(toporder)){
         if(is.null(names(toporder)))
             stop("`toporder` should be a vector named by feature")

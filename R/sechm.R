@@ -80,7 +80,7 @@ sechm <- function(se, genes, do.scale=FALSE, assayName=.getDef("assayName"),
                  includeMissing=includeMissing )
 
   toporder <- .parseToporder(rowData(se)[row.names(x),], toporder)
-  if(!is.null(sortRowsOn) && length(sortRowsOn)>0){
+  if(!is.null(sortRowsOn) && length(sortRowsOn)>0 && nrow(x)>2){
       x2 <- sortRows(x[,sortRowsOn,drop=FALSE],toporder=toporder,na.rm=TRUE)
       x <- x[row.names(x2),]
   }
@@ -103,17 +103,11 @@ sechm <- function(se, genes, do.scale=FALSE, assayName=.getDef("assayName"),
                         whichComplex="column", show_legend=!isMult,
                         show_annotation_name=!isMult )
 
-  gaps_col <- gaps_row <- NULL
-  if(!is.null(gaps_at) &&
-     length(gaps_at <- intersect(gaps_at, colnames(colData(se))))>0){
-      gaps_col <- as.data.frame(colData(se))[,gaps_at,drop=FALSE]
-  }
-  if(!is.null(gaps_row) &&
-     length(gaps_row <- intersect(gaps_row, colnames(rowData(se))))>0){
-      gaps_row <- as.data.frame(rowData(se))[x,gaps_row,drop=FALSE]
-  }
+  gaps_col <- .getGaps(gaps_at, colData(se), silent=TRUE)
+  gaps_row <- .getGaps(gaps_row, rowData(se)[row.names(x),])
 
   if(is.null(show_rownames)) show_rownames <- nrow(x)<50
+  if(nrow(x)<=2) cluster_rows <- FALSE
   Heatmap(x, col=hmcols, na_col="white", name=name,
           show_row_names=show_rownames, show_column_names=show_colnames,
           top_annotation=an, left_annotation=anr, row_split=gaps_row,

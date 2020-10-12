@@ -286,6 +286,7 @@ log2FC <- function(x, fromAssay=NULL, controls, by=NULL, isLog=NULL,
     lfc <- lfc[,colnames(x)]
     if(is(x, "SummarizedExperiment")){
         assays(x)[[toAssay]] <- lfc
+	if(toAssay=="log2FC") assays(x)$scaledLFC <- scale2(assays(x)$log2FC)
         return(x)
     }
     lfc
@@ -338,7 +339,7 @@ flattenPB <- function(pb, norm=TRUE, lfc_group=NULL){
                 "' as baseline condition")
     }
     log2FC(se, "logcpm", se[[lfc_group]]==levels(se[[lfc_group]])[1],
-                 by=se$cluster_id)
+           by=se$cluster_id)
 }
 
 
@@ -520,5 +521,16 @@ qualitativeColors <- function(names, ...){
 #' @examples
 #' scale2(matrix(1:9,nrow=3))
 scale2 <- function(x){
-    t(scale(t(x),center=FALSE))
+  y <- t(scale(t(x),center=FALSE))
+  y[is.nan(y)] <- 0
+  y
+}
+
+.getGaps <- function(x, CD, silent=TRUE){
+  if(is.null(x)) return(NULL)
+  if(!all(x %in% colnames(CD))){
+    if(!silent) warning("Gap field(s) not found in the object's data.")
+    return(NULL)
+  }
+  as.data.frame(CD)[,x,drop=FALSE]
 }

@@ -71,7 +71,7 @@ The `sehm` function simplifies the generation of heatmaps from `SummarizedExperi
 ```{r}
 g <- c("Egr1", "Nr4a1", "Fos", "Egr2", "Sgk1", "Arc", "Dusp1", "Fosb", "Sik1")
 sehm(SE, genes=g)
-sehm(SE, genes=g, do.scale=TRUE)
+sehm(SE, assayName="logcpm", genes=g, do.scale=TRUE)
 ```
 
 When scaling data, the function will automatically center the colour scale around zero, and handle the extreme values (0.5\% percentile on each side) in a non-linear fashion to retain a useful visualization.
@@ -79,7 +79,7 @@ This behavior can be manually controlled via the `breaks` parameter (either sett
 
 Annotation from the object's `rowData` and `colData` can be plotted simply by specifying the column name (some will be shown by default if found):
 ```{r}
-sehm(SE, genes=g, do.scale=TRUE, anno_rows="meanTPM")
+sehm(SE, assayName="logcpm", genes=g, do.scale=TRUE, anno_rows="meanTPM")
 ```
 
 These can also be used to create gaps:
@@ -225,6 +225,15 @@ ggplot(d, aes(Condition, counts, fill=Condition)) + geom_violin() +
     facet_wrap(~feature, scale="free")
 ```
 
+## Other convenience functions
+
+Calculate an assay of log-foldchanges to the controls:
+
+```{r}
+SE <- log2FC(SE, fromAssay="logcpm", controls=SE$Condition=="Homecage")
+```
+
+<br/><br/>
 
 # Session info {.unnumbered}
 
