@@ -197,6 +197,9 @@ getBreaks <- function(x, n, split.prop=0.98, symmetric=TRUE){
     names(nn) <- nn <- unique(unlist(lapply(ll,names)))
     lapply(nn, FUN=function(x){
         x <- lapply(ll, function(y) y[[x]])
+        x <- x[!sapply(x,is.null)]
+        if(length(x)==0) return(x)
+        if(length(x)==1 || is.function(x[[1]])) return(x[[1]])
         x <- do.call(c,x)
         x[!duplicated(names(x))]
     })
@@ -388,7 +391,8 @@ se2xls <- function(se, filename, addSheets=NULL){
                 if(!(i %in% names(anno_colors))){
                     anno_colors[[i]] <- c("FALSE"="white", "TRUE"="darkblue")
                 }
-            }else{
+            }else if(!is.null(anno_colors[[i]]) &&
+                     !is.function(anno_colors[[i]])){
                 if(i %in% names(anno_colors)){
                     w <- intersect(names(anno_colors[[i]]),unique(an[[i]]))
                     if(length(w)==0){
@@ -402,9 +406,7 @@ se2xls <- function(se, filename, addSheets=NULL){
     }
     if(is.null(whichComplex)) return(list(an=an, anno_colors=anno_colors))
     if(is.null(an)) return(NULL)
-
     anno_colors <- anno_colors[intersect(names(anno_colors),colnames(an))]
-
     if(length(anno_colors)==0){
         an <- HeatmapAnnotation(df=an, show_legend=show_legend, na_col="white",
                                 which=whichComplex,
