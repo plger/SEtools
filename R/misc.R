@@ -154,7 +154,7 @@ getBreaks <- function(x, n, split.prop=0.98, symmetric=TRUE){
                          default=c("logFC", "log2FC", "logcpm", "lognorm")),
          anno_colors=getOption("SEtools_def_anno_colors", default=list()),
          hmcols=getOption("SEtools_def_hmcols",
-                          default=colorspace::diverging_hcl(palette="Berlin", n=101)),
+                          default=c("blue", "black", "yellow")),
          anno_columns=getOption("SEtools_def_anno_columns", default=a),
          anno_rows=getOption("SEtools_def_anno_rows", default=c()),
          gaps_at=getOption("SEtools_def_gaps_at",
