@@ -108,6 +108,8 @@ For some arguments (for instance colors), if they are not specified in the funct
 Storing colors in the object:
 ```{r colors_in_object}
 metadata(SE)$hmcols <- c("purple","white","gold")
+# or something fancier, like:
+# metadata(SE)$hmcols <- colorspace::diverging_hcl(palette="Berlin", n=101)
 ancols <- list( Condition=c( Homecage="#DB918B",
                              Handling="#B86FD3",
                              Restraint="#A9CED5",
