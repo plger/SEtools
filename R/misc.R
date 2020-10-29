@@ -120,27 +120,30 @@ sortRows <- function(x, z=FALSE, toporder=NULL, na.rm=FALSE, method="MDS_angle",
 #' dat <- rnorm(100,sd = 10)
 #' getBreaks(dat, 10)
 getBreaks <- function(x, n, split.prop=0.98, symmetric=TRUE){
-    if(is.logical(split.prop)) split.prop <- ifelse(split.prop,0.98,1)
-    if(symmetric){
-        x <- abs(x)
-        n2 <- floor(n/2)+1
-    }else{
-        n2 <- n
-    }
-    q <- as.numeric(quantile(x,split.prop,na.rm=TRUE))
-    xr <- seq(from=0, to=q, length.out=floor(split.prop*n2))
-    n2 <- n2-length(xr)
-    if(n2>0){
-        q <- quantile(as.numeric(x)[which(x>q)],(1:n2)/n2, na.rm=TRUE)
-        xr <- c(xr,as.numeric(q))
-    }
-    if(symmetric) xr <- c(-rev(xr[-1]), xr)
-    if(any(duplicated(xr))){
-        ## duplicated breaks, probably because we have to few datapoints;
-        ## we fall back onto a linear scale
-        xr <- getBreaks(x, n, 1, symmetric=symmetric)
-    }
-    xr
+  if(is.logical(split.prop)) split.prop <- ifelse(split.prop,0.98,1)
+  if(symmetric){
+    breaks <- getBreaks(as.numeric(c(0,abs(x))), n=ceiling((n+1)/2),
+                        split.prop=split.prop, symmetric=FALSE)
+    return(unique(c(-rev(breaks),breaks)))
+  }
+  minVal <- min(x, na.rm=TRUE)
+  if(split.prop<1) q <- as.numeric(quantile(x,split.prop,na.rm=TRUE))
+  if(split.prop==1 || !(q>minVal)){
+    q <- max(x, na.rm=TRUE)
+    split.prop <- 1
+  }
+  xr <- seq(from=minVal, to=q, length.out=floor(split.prop*n))
+  n <- n-length(xr)
+  if(n>0){
+    q <- quantile(as.numeric(x)[which(x>q)],(1:n)/n, na.rm=TRUE)
+    xr <- c(xr,as.numeric(q))
+  }
+  if(any(duplicated(xr))){
+    ## duplicated breaks, probably because we have too few datapoints;
+    ## we fall back onto a linear scale
+    xr <- getBreaks(x, n, 1, symmetric=FALSE)
+  }
+  xr
 }
 
 .getDef <- function(x, se){
@@ -151,7 +154,7 @@ getBreaks <- function(x, n, split.prop=0.98, symmetric=TRUE){
                          default=c("logFC", "log2FC", "logcpm", "lognorm")),
          anno_colors=getOption("SEtools_def_anno_colors", default=list()),
          hmcols=getOption("SEtools_def_hmcols",
-                          default=c("blue", "black", "yellow")),
+                          default=colorspace::diverging_hcl(palette="Berlin", n=101)),
          anno_columns=getOption("SEtools_def_anno_columns", default=a),
          anno_rows=getOption("SEtools_def_anno_rows", default=c()),
          gaps_at=getOption("SEtools_def_gaps_at",
@@ -460,11 +463,16 @@ se2xls <- function(se, filename, addSheets=NULL){
 .prepScale <- function(x, hmcols=NULL, breaks=.getDef("breaks")){
     hmcols <- .getHMcols(cols=hmcols)
     if(!is.null(breaks) && length(breaks)==1 && !is.na(breaks) &&
-       (!is.logical(breaks) || breaks))
-        breaks <- getBreaks(x, length(hmcols)+1, split.prop=breaks)
-    if(is.null(breaks) || all(is.na(breaks)) ||
+       (!is.logical(breaks) || breaks)){
+      breaks <- getBreaks(x, length(hmcols), split.prop=breaks)
+    }else if(is.null(breaks) || all(is.na(breaks)) ||
          (length(breaks)==1 && is.logical(breaks) && !breaks) ){
-        breaks <- getBreaks(x, length(hmcols)+1, 1, FALSE)
+      breaks <- getBreaks(x, length(hmcols), 1, FALSE)
+    }
+    if(abs(ld <- length(breaks)-length(hmcols))>0){
+      if(ld<0) stop("Too many breaks for the given colors!")
+      if(ld>1) warning("Too few breaks - only part of the colors will be used.")
+      hmcols <- hmcols[seq(from=1+floor(ld/2), to=length(breaks))]
     }
     list(breaks=breaks, hmcols=hmcols)
 }

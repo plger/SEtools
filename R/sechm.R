@@ -91,8 +91,10 @@ sechm <- function(se, genes, do.scale=FALSE, assayName=.getDef("assayName"),
   }
   hmcols <- .getBaseHMcols(se, hmcols)
   cscale <- .prepScale(x, hmcols=hmcols, breaks=breaks)
+  save(hmcols, cscale, file="~/TMP.RData")
   breaks <- cscale$breaks
-  hmcols <- circlize::colorRamp2(breaks[-length(breaks)], cscale$hmcols)
+  hmcols <- circlize::colorRamp2(breaks, cscale$hmcols)
+
 
   anno_colors <- .getAnnoCols(se, anno_colors)
 
