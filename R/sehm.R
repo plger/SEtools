@@ -37,7 +37,7 @@ sehm <- function( se, genes, do.scale=FALSE, assayName=.getDef("assayName"),
 
   gaps_col <- .getGaps(gaps_at, colData(se), silent=TRUE)
   if(!is.null(gaps_row) && !is.logical(gaps_row))
-    gaps_row <- .getGaps(gaps_row, rowData(se)[row.names(x),])
+    gaps_row <- .getGaps(gaps_row, rowData(se)[row.names(x),,drop=FALSE])
 
   if(!is.null(gaps_col)){
     ga <- apply( gaps_col, 1, collapse=" ", FUN=paste)

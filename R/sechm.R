@@ -79,7 +79,7 @@ sechm <- function(se, genes, do.scale=FALSE, assayName=.getDef("assayName"),
   x <- .prepData(se, genes=genes, do.scale=do.scale, assayName=assayName,
                  includeMissing=includeMissing )
 
-  toporder <- .parseToporder(rowData(se)[row.names(x),], toporder)
+  toporder <- .parseToporder(rowData(se)[row.names(x),,drop=FALSE], toporder)
   if(!is.null(sortRowsOn) && length(sortRowsOn)>0 && nrow(x)>2){
       x2 <- sortRows(x[,sortRowsOn,drop=FALSE],toporder=toporder,na.rm=TRUE)
       x <- x[row.names(x2),]
@@ -106,7 +106,7 @@ sechm <- function(se, genes, do.scale=FALSE, assayName=.getDef("assayName"),
                         show_annotation_name=!isMult )
 
   gaps_col <- .getGaps(gaps_at, colData(se), silent=TRUE)
-  gaps_row <- .getGaps(gaps_row, rowData(se)[row.names(x),])
+  gaps_row <- .getGaps(gaps_row, rowData(se)[row.names(x),,drop=FALSE])
 
   if(is.null(show_rownames)) show_rownames <- nrow(x)<50
   if(nrow(x)<=2) cluster_rows <- FALSE
