@@ -86,7 +86,7 @@ sortRows <- function(x, z=FALSE, toporder=NULL, na.rm=FALSE, method="MDS_angle",
   assays(se)[[assayName]]
 }
 
-.getHMcols <- function(cols=NULL, n=100){
+.getHMcols <- function(cols=NULL, n=101){
   if(is.null(cols)) cols <- .getDef("hmcols")
   if(is.function(cols)) return(cols)
   if(length(cols) %in% 2:3)  return(colorRampPalette(cols)(n))
