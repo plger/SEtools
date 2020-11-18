@@ -1,7 +1,6 @@
 #' @rdname SE-heatmap
-#' @importFrom pheatmap pheatmap
+#' @importFrom ComplexHeatmap pheatmap
 #' @import SummarizedExperiment
-#' @importFrom pheatmap pheatmap
 #' @export
 sehm <- function( se, genes, do.scale=FALSE, assayName=.getDef("assayName"),
                   sortRowsOn=seq_len(ncol(se)), cluster_cols=FALSE,

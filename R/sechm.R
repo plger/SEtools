@@ -27,7 +27,7 @@
 #' and quantile capping, while retaining automatic breaks. `breaks=1` will
 #' produce a symmetrical scale without quantile capping.
 #' @param gaps_at Columns of `colData` to use to establish gaps between columns.
-#' @param gaps_row Passed to \code{\link[pheatmap]{pheatmap}}; if missing, will
+#' @param gaps_row Passed to the heatmap function; if missing, will
 #' be set automatically according to toporder.
 #' @param anno_rows Columns of `rowData` to use for annotation.
 #' @param anno_columns Columns of `colData` to use for annotation.
@@ -42,8 +42,7 @@
 #' @param ... Further arguments passed to `pheatmap` (`sehm`) or `Heatmap`
 #' (`sechm`).
 #'
-#' @return A heatmap (see \code{\link[pheatmap]{pheatmap}}), or, for `sechm`,
-#' a \code{\link[ComplexHeatmap]{Heatmap-class}}.
+#' @return A a \code{\link[ComplexHeatmap]{Heatmap-class}}.
 #'
 #' @examples
 #' data("SE", package="SEtools")

@@ -87,7 +87,7 @@ produce a symmetrical scale without quantile capping.}
 
 \item{gaps_at}{Columns of `colData` to use to establish gaps between columns.}
 
-\item{gaps_row}{Passed to \code{\link[pheatmap]{pheatmap}}; if missing, will
+\item{gaps_row}{Passed to the heatmap function; if missing, will
 be set automatically according to toporder.}
 
 \item{anno_rows}{Columns of `rowData` to use for annotation.}
@@ -115,8 +115,7 @@ FALSE)}
 (`sechm`).}
 }
 \value{
-A heatmap (see \code{\link[pheatmap]{pheatmap}}), or, for `sechm`,
-a \code{\link[ComplexHeatmap]{Heatmap-class}}.
+A a \code{\link[ComplexHeatmap]{Heatmap-class}}.
 }
 \description{
 Heatmap wrappers for
