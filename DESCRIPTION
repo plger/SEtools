@@ -8,7 +8,7 @@ Description: This includes a set of tools for working with the SummarizedExperim
 Imports: S4Vectors, SummarizedExperiment, data.table, pheatmap, seriation, ComplexHeatmap, circlize, methods, BiocParallel, randomcoloR, edgeR, openxlsx
 Suggests: BiocStyle, knitr, rmarkdown, ggplot2
 biocViews: GeneExpression, Visualization
-VignetteBuilder: knitr
+VignetteBuilder: knitr 
 License: GPL
 Encoding: UTF-8
 RoxygenNote: 7.1.1
