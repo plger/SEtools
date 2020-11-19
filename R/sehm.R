@@ -1,5 +1,5 @@
 #' @rdname SE-heatmap
-#' @importFrom ComplexHeatmap pheatmap
+#' @importFrom pheatmap pheatmap
 #' @import SummarizedExperiment
 #' @export
 sehm <- function( se, genes, do.scale=FALSE, assayName=.getDef("assayName"),

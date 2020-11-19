@@ -43,7 +43,7 @@ svacor <- function(SE, form=NULL, form0=~1, mm=NULL, mm0=NULL, regressOutNull=TR
   }
   if(is.null(mm0)){
     if(is.null(form0) || !is.null(mm)){
-      mm0 <- mm[,1,drop=F]
+      mm0 <- mm[,1,drop=FALSE]
     }else{
       mm0 <- model.matrix(form0, data=CD)
     }
@@ -80,7 +80,7 @@ svacor <- function(SE, form=NULL, form0=~1, mm=NULL, mm0=NULL, regressOutNull=TR
   }else{
     colnames(sv) <- paste0("SV",1:ncol(sv))
     X <- cbind(mm, sv)
-    mm2 <- cbind(mm[,1,drop=F],sv,mm[,-1,drop=F])
+    mm2 <- cbind(mm[,1,drop=FALSE],sv,mm[,-1,drop=FALSE])
   }
   H <- solve(t(X)%*%X)%*%t(X)
   b <- (H%*%t(en))
@@ -97,6 +97,6 @@ svacor <- function(SE, form=NULL, form0=~1, mm=NULL, mm0=NULL, regressOutNull=TR
     assays(SE)$corrected <- encor
     return(SE)
   }
-  mm2 <- cbind(mm[,1,drop=F],sv,mm[,-1,drop=F])
+  mm2 <- cbind(mm[,1,drop=FALSE],sv,mm[,-1,drop=FALSE])
   return(list(sv=sv, cor=encor, mm=mm2))
 }
