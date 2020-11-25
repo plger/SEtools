@@ -6,50 +6,40 @@
 \usage{
 svacor(
   SE,
-  form = NULL,
+  form,
   form0 = ~1,
-  mm = NULL,
-  mm0 = NULL,
-  regressOutNull = TRUE,
-  trans = c("svaseq", "none", "log"),
   assayName = NULL,
+  regressOutNull = TRUE,
+  useVST = TRUE,
   n.sv = NULL,
   ...
 )
 }
 \arguments{
-\item{SE}{An object of class `SummarizedExperiment`. Alternatively, a matrix can be
-used, but many options will not be supported.}
+\item{SE}{An object of class `SummarizedExperiment`.}
 
 \item{form}{The formula of the differential expression model}
 
 \item{form0}{An optional formula for the null model}
 
-\item{mm}{If `form=NULL`, the model.matrix}
+\item{assayName}{The name (or index) of the assay to use.}
 
-\item{mm0}{An optional null model.matrix.}
+\item{regressOutNull}{Logical; whether to regress out the variables of `form0`.}
 
-\item{regressOutNull}{Logical; whether to regress out the variables of `form0` (default TRUE)}
+\item{useVST}{Logical; whether to use DESeq2's variance-stabilizing transformation;
+(for count data!)}
 
-\item{trans}{Either "svaseq" (default, expects a count assay), "none", or "log".}
+\item{n.sv}{The number of surrogate variables (if omitted, \code{\link{sva}} will
+attempt to estimate it)}
 
-\item{assayName}{Which assay to use (if `SE` is a `SummarizedExperiment`); if missing,
-will use the first one.}
-
-\item{n.sv}{The number of surrogate variables (if omitted, `sva` will attempt to
-estimate it).}
-
-\item{...}{Any other argument passed to the `sva` command.}
+\item{...}{Any other argument passed to the \code{\link{sva}} command.}
 }
 \value{
-Returns a `SummarizedExperiment` (with a `corrected` assay and the surrogate
-variables in `colData`) if `SE` is an object of that class `SummarizedExperiment`;
-otherwise, a list with the slots:
-* `sv`: a table of the surrogate variables
-* `cor`: the corrected data (for plotting)
-* `mm`: the model.matrix containing, in addition to the specified experimental
-variables, all detected surrogate variables.
+Returns the `SummarizedExperiment` with a `corrrected` assay and the surrogate
+variables in `colData`.
 }
 \description{
-A wrapper around SVA-based correction, providing a corrected assay.
+A wrapper around SVA-based correction, providing a corrected assay. If this is RNAseq
+data or similar, use a count assay assay with `useVST=TRUE`; otherwise (e.g.
+proteomics) a log-normalized assay is recommended.
 }
