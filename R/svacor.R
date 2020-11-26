@@ -26,7 +26,6 @@ svacor <- function(SE, form, form0=~1, assayName=NULL, regressOutNull=TRUE, useV
                    n.sv=NULL, ...){
   library(sva)
   library(SummarizedExperiment)
-  trans <- match.arg(trans)
   if(!is(SE,"SummarizedExperiment")) stop("`SE` should be a SummarizedExperiment.")
   CD <- as.data.frame(colData(SE))
   mm <- model.matrix(form, data=CD)
