@@ -187,7 +187,7 @@ getBreaks <- function(x, n, split.prop=0.98, symmetric=TRUE){
     }
     for(f in names(df)){
         if(!(f %in% names(anno_colors))) anno_colors[[f]] <- list()
-        x <- setdiff(df[[f]], anno_colors[[f]])
+        x <- setdiff(df[[f]], names(anno_colors[[f]]))
         if(length(x)>0) anno_colors[[f]][x] <- distinctColorPalette(length(x))
     }
     anno_colors
@@ -377,7 +377,7 @@ se2xls <- function(se, filename, addSheets=NULL){
 
 .prepareAnnoDF <- function(an, anno_colors, fields, whichComplex=NULL,
                            show_legend=TRUE, show_annotation_name=TRUE,
-                           dropEmptyLevels=TRUE){
+                           dropEmptyLevels=TRUE, anno_name_side=NULL){
     if(!is.null(whichComplex))
         whichComplex <- match.arg(whichComplex, c("row","column"))
     an <- as.data.frame(an)
@@ -412,11 +412,12 @@ se2xls <- function(se, filename, addSheets=NULL){
     anno_colors <- anno_colors[intersect(names(anno_colors),colnames(an))]
     if(length(anno_colors)==0){
         an <- HeatmapAnnotation(df=an, show_legend=show_legend, na_col="white",
-                                which=whichComplex,
+                                which=whichComplex, annotation_name_side=anno_name_side,
                                 show_annotation_name=show_annotation_name )
     }else{
         an <- HeatmapAnnotation(df=an, show_legend=show_legend, na_col="white",
                                 which=whichComplex, col=anno_colors,
+                                annotation_name_side=anno_name_side,
                                 show_annotation_name=show_annotation_name )
     }
     an
