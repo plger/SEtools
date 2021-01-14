@@ -32,6 +32,7 @@
 #' @param anno_rows Columns of `rowData` to use for annotation.
 #' @param anno_columns Columns of `colData` to use for annotation.
 #' @param anno_colors List of colors to use for annotation.
+#' @param anno_rows_title_side Side (top or bottom) of row annotation names
 #' @param name The name of the heatmap, eventually appearing as title of the
 #' color scale.
 #' @param show_rownames Whether to show row names (default TRUE if 50 rows or
@@ -63,7 +64,7 @@ sechm <- function(se, genes, do.scale=FALSE, assayName=.getDef("assayName"),
                   gaps_row=NULL, anno_rows=.getDef("anno_rows"),
                   anno_columns=.getDef("anno_columns"), name=NULL,
                   anno_colors=list(), show_rownames=NULL, show_colnames=FALSE,
-                  isMult=FALSE, show_heatmap_legend=!isMult,
+                  isMult=FALSE, show_heatmap_legend=!isMult, annorow_title_side="top",
                   includeMissing=FALSE, ...){
 
   assayName <- .chooseAssay(se, assayName, returnName = TRUE)
@@ -98,11 +99,15 @@ sechm <- function(se, genes, do.scale=FALSE, assayName=.getDef("assayName"),
   anno_colors <- .getAnnoCols(se, anno_colors)
 
   anr <- .prepareAnnoDF( rowData(se)[row.names(x),,drop=FALSE], anno_colors,
-                         anno_rows, whichComplex="row" )
+                         anno_rows, whichComplex="row",
+                         show_annotation_name=!is.na(annorow_title_side),
+                         anno_name_side=ifelse(is.na(annorow_title_side), "top",
+                                               annorow_title_side))
 
   an <- .prepareAnnoDF( colData(se), anno_colors, anno_columns,
                         whichComplex="column", show_legend=!isMult,
-                        show_annotation_name=!isMult )
+                        show_annotation_name=!isMult,
+                        anno_name_side="right" )
 
   gaps_col <- .getGaps(gaps_at, colData(se), silent=TRUE)
   gaps_row <- .getGaps(gaps_row, rowData(se)[row.names(x),,drop=FALSE])
