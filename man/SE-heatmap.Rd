@@ -28,6 +28,7 @@ sechm(
   show_colnames = FALSE,
   isMult = FALSE,
   show_heatmap_legend = !isMult,
+  annorow_title_side = "top",
   includeMissing = FALSE,
   ...
 )
@@ -113,6 +114,8 @@ FALSE)}
 
 \item{...}{Further arguments passed to `pheatmap` (`sehm`) or `Heatmap`
 (`sechm`).}
+
+\item{anno_rows_title_side}{Side (top or bottom) of row annotation names}
 }
 \value{
 A a \code{\link[ComplexHeatmap]{Heatmap-class}}.

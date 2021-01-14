@@ -74,8 +74,9 @@ aggSE <- function(x, by, assayFun=NULL, rowDatFuns=list()){
     if(is.null(rowDatFuns)){
         return(SummarizedExperiment(a, colData=colData(x), metadata=x@metadata))
     }
-    rd <- .aggRowDat(rowData(x), by, agFuns=rowDatFuns)
-    SummarizedExperiment(a, colData=colData(x), rowData=rd, metadata=x@metadata)
+    se <- SummarizedExperiment(assays=a, colData=colData(x), metadata=x@metadata)
+    if(length(rowDatFuns)>0) rowData(se) <- .aggRowDat(rowData(x), by, agFuns=rowDatFuns)
+    se
 }
 
 .aggRowDat <- function(rd, by, agFuns=list()){
