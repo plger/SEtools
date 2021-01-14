@@ -38,6 +38,8 @@
 #' less).
 #' @param show_colnames Whether to show column names (default FALSE).
 #' @param rel.width Relative width of the heatmaps
+#' @param merge_legends Logical; passed to
+#' \code{\link[ComplexHeatmap]{draw-HeatmapList-method}}
 #' @param ... Any other parameter passed to each call of
 #' \code{\link[ComplexHeatmap]{Heatmap}}.
 #'
@@ -61,7 +63,7 @@ crossHm <- function(ses, genes, do.scale=TRUE, uniqueScale=FALSE,
                     breaks=.getDef("breaks"), gaps_at=.getDef("gaps_at"),
                     gaps_row=NULL, anno_rows=.getDef("anno_rows"),
                     anno_columns=.getDef("anno_columns"), name=NULL,
-                    anno_colors=list(), show_rownames=NULL,
+                    anno_colors=list(), show_rownames=NULL, merge_legends=FALSE,
                     show_colnames=FALSE, rel.width=NULL, ... ){
 
     if(is(ses,"SummarizedExperiment")) ses <- list(ses)
@@ -151,7 +153,11 @@ crossHm <- function(ses, genes, do.scale=TRUE, uniqueScale=FALSE,
                               metadata=metadata(ses[[i]]) )
     })
     names(ses) <- names(dats)
+    afields <- intersect(intersect(names(anno_colors), c(anno_columns, anno_rows)),
+                         c(unlist(lapply(ses, FUN=function(x) colnames(rowData(x)))),
+                           colnames(CDs[[1]])))
     anno_colors <- .getAnnoCols(ses[[1]], anno_colors, do.assign=TRUE)
+    anno_colors <- anno_colors[afields]
 
     if(is.null(show_rownames)) show_rownames <- length(genes)<50
 
@@ -175,10 +181,14 @@ crossHm <- function(ses, genes, do.scale=TRUE, uniqueScale=FALSE,
               show_colnames=show_colnames, isMult=i!=length(ses),
               show_heatmap_legend=(!uniqueScale || i==length(ses)),
               heatmap_legend_param=hlp, column_title=names(ses)[i],
-              includeMissing=!only.common, width=rel.width[i], ...)
+              show_annotation_legend=FALSE, includeMissing=!only.common,
+              width=rel.width[i], ...)
     })
 
     ht <- NULL
     for(f in htlist) ht <- ht + f
+    if(length(anno_colors)>0)
+        return(draw(ht, annotation_legend_list=.annoLegend(anno_colors),
+                    merge_legends=merge_legends))
     ht
 }

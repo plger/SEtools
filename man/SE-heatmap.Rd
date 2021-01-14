@@ -28,6 +28,7 @@ sechm(
   show_colnames = FALSE,
   isMult = FALSE,
   show_heatmap_legend = !isMult,
+  show_annotation_legend = TRUE,
   annorow_title_side = "top",
   includeMissing = FALSE,
   ...
@@ -108,6 +109,8 @@ less).}
 \item{isMult}{Logical; used to silence labels when plotting mulitple heatmaps}
 
 \item{show_heatmap_legend}{Logical; whether to show heatmap legend}
+
+\item{show_annotation_legend}{Logical; whether to show the annotation legend.}
 
 \item{includeMissing}{Logical; whether to include missing genes (default
 FALSE)}

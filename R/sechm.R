@@ -38,6 +38,7 @@
 #' @param show_rownames Whether to show row names (default TRUE if 50 rows or
 #' less).
 #' @param show_colnames Whether to show column names (default FALSE).
+#' @param show_annotation_legend Logical; whether to show the annotation legend.
 #' @param includeMissing Logical; whether to include missing genes (default
 #' FALSE)
 #' @param ... Further arguments passed to `pheatmap` (`sehm`) or `Heatmap`
@@ -64,8 +65,8 @@ sechm <- function(se, genes, do.scale=FALSE, assayName=.getDef("assayName"),
                   gaps_row=NULL, anno_rows=.getDef("anno_rows"),
                   anno_columns=.getDef("anno_columns"), name=NULL,
                   anno_colors=list(), show_rownames=NULL, show_colnames=FALSE,
-                  isMult=FALSE, show_heatmap_legend=!isMult, annorow_title_side="top",
-                  includeMissing=FALSE, ...){
+                  isMult=FALSE, show_heatmap_legend=!isMult, show_annotation_legend=TRUE,
+                  annorow_title_side="top", includeMissing=FALSE, ...){
 
   assayName <- .chooseAssay(se, assayName, returnName = TRUE)
   if(is.null(name)){
@@ -100,12 +101,13 @@ sechm <- function(se, genes, do.scale=FALSE, assayName=.getDef("assayName"),
 
   anr <- .prepareAnnoDF( rowData(se)[row.names(x),,drop=FALSE], anno_colors,
                          anno_rows, whichComplex="row",
+                         show_legend=show_annotation_legend,
                          show_annotation_name=!is.na(annorow_title_side),
                          anno_name_side=ifelse(is.na(annorow_title_side), "top",
                                                annorow_title_side))
 
   an <- .prepareAnnoDF( colData(se), anno_colors, anno_columns,
-                        whichComplex="column", show_legend=!isMult,
+                        whichComplex="column", show_legend=(show_annotation_legend && !isMult),
                         show_annotation_name=!isMult,
                         anno_name_side="right" )
 

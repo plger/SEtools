@@ -24,6 +24,7 @@ crossHm(
   name = NULL,
   anno_colors = list(),
   show_rownames = NULL,
+  merge_legends = FALSE,
   show_colnames = FALSE,
   rel.width = NULL,
   ...
@@ -81,6 +82,9 @@ produce a symmetrical scale without quantile capping.}
 
 \item{show_rownames}{Whether to show row names (default TRUE if 50 rows or
 less).}
+
+\item{merge_legends}{Logical; passed to
+\code{\link[ComplexHeatmap]{draw-HeatmapList-method}}}
 
 \item{show_colnames}{Whether to show column names (default FALSE).}
 

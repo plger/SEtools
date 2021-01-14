@@ -423,6 +423,14 @@ se2xls <- function(se, filename, addSheets=NULL){
     an
 }
 
+.annoLegend <- function(anno_colors){
+  leg <- lapply(names(anno_colors), FUN=function(n){
+    x <- anno_colors[[n]]
+    Legend(labels=names(x), title=n, legend_gp=gpar(fill=as.character(x)))
+  })
+  packLegend(list=leg)
+}
+
 .prepData <- function( se, genes=NULL, do.scale=FALSE,
                        assayName=.getDef("assayName"), includeMissing=FALSE ){
     x <- as.matrix(.chooseAssay(se, assayName))
