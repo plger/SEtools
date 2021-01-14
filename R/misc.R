@@ -423,6 +423,8 @@ se2xls <- function(se, filename, addSheets=NULL){
     an
 }
 
+#' @importFrom grid gpar
+#' @importFrom ComplexHeatmap Legend packLegend
 .annoLegend <- function(anno_colors){
   leg <- lapply(names(anno_colors), FUN=function(n){
     x <- anno_colors[[n]]
