@@ -380,8 +380,8 @@ se2xls <- function(se, filename, addSheets=NULL){
                            dropEmptyLevels=TRUE, anno_name_side=NULL){
     if(!is.null(whichComplex))
         whichComplex <- match.arg(whichComplex, c("row","column"))
-    an <- as.data.frame(an)
     an <- an[,intersect(fields, colnames(an)),drop=FALSE]
+    an <- as.data.frame(an)
     if(ncol(an)==0){
         an <- NULL
     }else{
@@ -441,7 +441,7 @@ se2xls <- function(se, filename, addSheets=NULL){
         x <- x[intersect(genes,row.names(x)),]
     }
     if(do.scale){
-        x <- x[apply(x,1,FUN=sd)>0,]
+        #x <- x[apply(x,1,FUN=sd)>0,]
         x <- t(.safescale(t(x)))
     }
     if(includeMissing && length(missg <- setdiff(genes, row.names(x)))>0){

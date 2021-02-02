@@ -148,9 +148,10 @@ crossHm <- function(ses, genes, do.scale=TRUE, uniqueScale=FALSE,
 
     ses <- lapply(seq_along(ses), FUN=function(i){
         RD <- rowData(ses[[i]])[genes,,drop=FALSE]
-        row.names(RD) <- genes
-        SummarizedExperiment( list(a=dats[[i]]), colData=CDs[[i]], rowData=RD,
-                              metadata=metadata(ses[[i]]) )
+        se <- SummarizedExperiment( list(a=dats[[i]]), colData=CDs[[i]], rowData=RD,
+                                    metadata=metadata(ses[[i]]) )
+        row.names(se) <- genes
+        se
     })
     names(ses) <- names(dats)
     afields <- intersect(intersect(names(anno_colors), c(anno_columns, anno_rows)),

@@ -61,12 +61,12 @@
 sechm <- function(se, genes, do.scale=FALSE, assayName=.getDef("assayName"),
                   sortRowsOn=seq_len(ncol(se)), cluster_cols=FALSE,
                   cluster_rows=is.null(sortRowsOn), toporder=NULL, hmcols=NULL,
-                  breaks=.getDef("breaks"), gaps_at=.getDef("gaps_at"),
-                  gaps_row=NULL, anno_rows=.getDef("anno_rows"),
-                  anno_columns=.getDef("anno_columns"), name=NULL,
-                  anno_colors=list(), show_rownames=NULL, show_colnames=FALSE,
+                  breaks=.getDef("breaks"), gaps_at=.getDef("gaps_at"), gaps_row=NULL,
+                  anno_rows=.getDef("anno_rows"), anno_columns=.getDef("anno_columns"),
+                  name=NULL, anno_colors=list(), show_rownames=NULL, show_colnames=FALSE,
                   isMult=FALSE, show_heatmap_legend=!isMult, show_annotation_legend=TRUE,
-                  annorow_title_side="top", includeMissing=FALSE, ...){
+                  annorow_title_side=ifelse(show_colnames,"bottom","top"),
+                  includeMissing=FALSE, ...){
 
   assayName <- .chooseAssay(se, assayName, returnName = TRUE)
   if(is.null(name)){
@@ -92,7 +92,7 @@ sechm <- function(se, genes, do.scale=FALSE, assayName=.getDef("assayName"),
   }
   hmcols <- .getBaseHMcols(se, hmcols)
   cscale <- .prepScale(x, hmcols=hmcols, breaks=breaks)
-  save(hmcols, cscale, file="~/TMP.RData")
+
   breaks <- cscale$breaks
   hmcols <- circlize::colorRamp2(breaks, cscale$hmcols)
 
