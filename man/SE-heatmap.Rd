@@ -29,8 +29,11 @@ sechm(
   isMult = FALSE,
   show_heatmap_legend = !isMult,
   show_annotation_legend = TRUE,
-  annorow_title_side = "top",
+  annorow_title_side = ifelse(show_colnames, "bottom", "top"),
+  mark = NULL,
+  right_annotation = NULL,
   includeMissing = FALSE,
+  sort.method = "MDS_angle",
   ...
 )
 
@@ -111,6 +114,10 @@ less).}
 \item{show_heatmap_legend}{Logical; whether to show heatmap legend}
 
 \item{show_annotation_legend}{Logical; whether to show the annotation legend.}
+
+\item{mark}{An optional vector of gene names to highlight.}
+
+\item{right_annotation}{Passed to `ComplexHeatmap::Heatmap`}
 
 \item{includeMissing}{Logical; whether to include missing genes (default
 FALSE)}

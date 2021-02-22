@@ -41,6 +41,8 @@
 #' @param show_annotation_legend Logical; whether to show the annotation legend.
 #' @param includeMissing Logical; whether to include missing genes (default
 #' FALSE)
+#' @param mark An optional vector of gene names to highlight.
+#' @param right_annotation Passed to `ComplexHeatmap::Heatmap`
 #' @param ... Further arguments passed to `pheatmap` (`sehm`) or `Heatmap`
 #' (`sechm`).
 #'
@@ -65,8 +67,9 @@ sechm <- function(se, genes, do.scale=FALSE, assayName=.getDef("assayName"),
                   anno_rows=.getDef("anno_rows"), anno_columns=.getDef("anno_columns"),
                   name=NULL, anno_colors=list(), show_rownames=NULL, show_colnames=FALSE,
                   isMult=FALSE, show_heatmap_legend=!isMult, show_annotation_legend=TRUE,
-                  annorow_title_side=ifelse(show_colnames,"bottom","top"),
-                  includeMissing=FALSE, ...){
+                  annorow_title_side=ifelse(show_colnames,"bottom","top"), mark=NULL,
+                  right_annotation=NULL, includeMissing=FALSE, sort.method="MDS_angle",
+                  ...){
 
   assayName <- .chooseAssay(se, assayName, returnName = TRUE)
   if(is.null(name)){
@@ -82,7 +85,7 @@ sechm <- function(se, genes, do.scale=FALSE, assayName=.getDef("assayName"),
 
   toporder <- .parseToporder(rowData(se)[row.names(x),,drop=FALSE], toporder)
   if(!is.null(sortRowsOn) && length(sortRowsOn)>0 && nrow(x)>2){
-      x2 <- sortRows(x[,sortRowsOn,drop=FALSE],toporder=toporder,na.rm=TRUE)
+      x2 <- sortRows(x[,sortRowsOn,drop=FALSE],toporder=toporder,na.rm=TRUE,method=sort.method)
       x <- x[row.names(x2),]
   }
 
@@ -114,12 +117,16 @@ sechm <- function(se, genes, do.scale=FALSE, assayName=.getDef("assayName"),
   gaps_col <- .getGaps(gaps_at, colData(se), silent=TRUE)
   gaps_row <- .getGaps(gaps_row, rowData(se)[row.names(x),,drop=FALSE])
 
-  if(is.null(show_rownames)) show_rownames <- nrow(x)<50
+  if(is.null(show_rownames)) show_rownames <- nrow(x)<50 && is.null(mark)
   if(nrow(x)<=2) cluster_rows <- FALSE
+  if(!is.null(mark) && is.null(right_annotation)){
+      mark <- which(row.names(x) %in% mark)
+      right_annotation <- rowAnnotation(mark=anno_mark(mark, row.names(x)[mark]))
+  }
   Heatmap(x, col=hmcols, na_col="white", name=name,
           show_row_names=show_rownames, show_column_names=show_colnames,
           top_annotation=an, left_annotation=anr, row_split=gaps_row,
           column_split=gaps_col, show_heatmap_legend=show_heatmap_legend,
           cluster_rows=cluster_rows, cluster_columns=cluster_cols,
-          ...)
+          right_annotation=right_annotation, ...)
 }
