@@ -272,7 +272,7 @@ log2FC <- function(x, fromAssay=NULL, controls, by=NULL, isLog=NULL,
         a <- x
     }
     if(is.null(isLog)){
-        if(!is.null(fromAssay) && grep("^log",fromAssay, ignore.case=TRUE)){
+        if(!is.null(fromAssay) && grepl("^log",fromAssay, ignore.case=TRUE)){
             isLog <- TRUE
         }else{
             isLog <- any(a<0)
@@ -312,7 +312,8 @@ log2FC <- function(x, fromAssay=NULL, controls, by=NULL, isLog=NULL,
 #'
 #' @return A SummarizedExperiment
 #' @importFrom edgeR cpm calcNormFactors DGEList
-#' @import SummarizedExperiment S4Vectors
+#' @import SummarizedExperiment
+#' @importFrom S4Vectors metadata metadata<- SimpleList
 #' @export
 flattenPB <- function(pb, norm=TRUE, lfc_group=NULL){
     a <- do.call(cbind, as.list(assays(pb)))

@@ -1,5 +1,4 @@
 #' @rdname SE-heatmap
-#' @importFrom pheatmap pheatmap
 #' @import SummarizedExperiment
 #' @export
 sehm <- function( se, genes, do.scale=FALSE, assayName=.getDef("assayName"),
@@ -63,8 +62,8 @@ sehm <- function( se, genes, do.scale=FALSE, assayName=.getDef("assayName"),
 
   if(is.null(show_rownames)) show_rownames <- nrow(x) <= 50
   if(nrow(x)<=2) cluster_rows <- FALSE
-  pheatmap(x, color=hmcols, border_color=NA, gaps_col=gaps_col, gaps_row=gaps_row,
-           breaks=breaks, cluster_cols=cluster_cols, cluster_rows=cluster_rows,
-           annotation_col=an, annotation_row=anr, annotation_colors=anno_colors,
-           show_rownames=show_rownames, show_colnames=show_colnames, ...)
+  pheatmap::pheatmap(x, color=hmcols, border_color=NA, gaps_col=gaps_col, breaks=breaks,
+        gaps_row=gaps_row, cluster_cols=cluster_cols, cluster_rows=cluster_rows,
+        annotation_col=an, annotation_row=anr, annotation_colors=anno_colors,
+        show_rownames=show_rownames, show_colnames=show_colnames, ...)
 }
