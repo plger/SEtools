@@ -19,6 +19,7 @@
 #' sortRows(m)
 #'
 #' @importFrom seriation seriate get_order
+#' @importFrom stats sd aggregate median dist
 #' @export
 sortRows <- function(x, z=FALSE, toporder=NULL, na.rm=FALSE, method="MDS_angle",
                      toporder.meth="before"){
@@ -115,6 +116,7 @@ sortRows <- function(x, z=FALSE, toporder=NULL, na.rm=FALSE, method="MDS_angle",
 #'
 #' @return A vector of breaks of length = `n`
 #' @export
+#' @importFrom stats quantile
 #'
 #' @examples
 #' dat <- rnorm(100,sd = 10)

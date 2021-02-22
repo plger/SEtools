@@ -64,6 +64,7 @@ meltSE <- function(x, genes, assayName=NULL, colDat.columns=NULL,
 #' @return A \code{\link[SummarizedExperiment]{SummarizedExperiment-class}}
 #' @export
 #' @import Matrix
+#' @importFrom stats setNames
 #'
 #' @examples
 #' d <- data.frame(transcript=rep(LETTERS[1:10],each=2), gene=rep(LETTERS[1:5],each=4),
