@@ -97,6 +97,12 @@ less).}
 A Heatmap list.
 }
 \description{
+These functions have been moved and will be deprecated from this package;
+please use the
+[sechm](https://bioconductor.org/packages/release/bioc/html/sechm.html)
+package instead.
+}
+\details{
 Plot a multi-panel heatmap from a list of
 \code{\link[SummarizedExperiment]{SummarizedExperiment-class}}.
 }

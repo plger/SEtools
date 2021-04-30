@@ -21,11 +21,10 @@
 #' @importFrom DESeq2 DESeqDataSetFromMatrix estimateSizeFactors vst varianceStabilizingTransformation
 #' @importFrom sva sva
 #' @importFrom stats model.matrix
+#' @import SummarizedExperiment
 #' @export
 svacor <- function(SE, form, form0=~1, assayName=NULL, regressOutNull=TRUE, useVST=TRUE,
                    n.sv=NULL, ...){
-  library(sva)
-  library(SummarizedExperiment)
   if(!is(SE,"SummarizedExperiment")) stop("`SE` should be a SummarizedExperiment.")
   CD <- as.data.frame(colData(SE))
   mm <- model.matrix(form, data=CD)

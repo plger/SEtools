@@ -9,6 +9,7 @@ sehm <- function( se, genes, do.scale=FALSE, assayName=.getDef("assayName"),
                   anno_columns=.getDef("anno_columns"),
                   anno_colors=.getAnnoCols(se), show_rownames=NULL,
                   show_colnames=FALSE, ...){
+  .Deprecated(msg="'sehm' is deprecated; please use sechm::sechm instead")
   ## see sechm.R for a definition of the arguments
   x <- .prepData(se, genes=genes, do.scale=do.scale, assayName=assayName)
 

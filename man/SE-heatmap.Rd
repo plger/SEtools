@@ -131,8 +131,10 @@ FALSE)}
 A a \code{\link[ComplexHeatmap]{Heatmap-class}}.
 }
 \description{
-Heatmap wrappers for
-\code{\link[SummarizedExperiment]{SummarizedExperiment-class}}.
+These functions have been moved and will be deprecated from this package;
+please use the
+[sechm](https://bioconductor.org/packages/release/bioc/html/sechm.html)
+package instead.
 }
 \examples{
 data("SE", package="SEtools")

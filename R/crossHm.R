@@ -3,6 +3,12 @@
 #' Plot a multi-panel heatmap from a list of
 #' \code{\link[SummarizedExperiment]{SummarizedExperiment-class}}.
 #'
+#' @description
+#' These functions have been moved and will be deprecated from this package;
+#' please use the
+#' [sechm](https://bioconductor.org/packages/release/bioc/html/sechm.html)
+#' package instead.
+#'
 #' @param ses A (named) list of
 #' \code{\link[SummarizedExperiment]{SummarizedExperiment-class}}.
 #' @param genes A vector of genes/row.names to plot.
@@ -65,7 +71,10 @@ crossHm <- function(ses, genes, do.scale=TRUE, uniqueScale=FALSE,
                     anno_columns=.getDef("anno_columns"), name=NULL,
                     anno_colors=list(), show_rownames=NULL, merge_legends=FALSE,
                     show_colnames=FALSE, rel.width=NULL, ... ){
-
+    .Deprecated(msg=paste0(c(
+        "`crossHm` has been moved and will eventually be removed from this ",
+        "package.\n Please use the version from the 'sechm' package ",
+        "(`sechm::crossHm`) instead")))
     if(is(ses,"SummarizedExperiment")) ses <- list(ses)
     if(is.null(names(ses))) names(ses) <- paste("SE", seq_along(ses))
     if(!is.null(rel.width) && length(rel.width)!=length(ses))

@@ -8,6 +8,8 @@
 
 The *SEtools* package is a set of convenience functions for the _Bioconductor_ class *[SummarizedExperiment](https://bioconductor.org/packages/3.10/SummarizedExperiment)*. It facilitates merging, melting, and plotting `SummarizedExperiment` objects.
 
+**NOTE that the heatmap-related functions are being moved to a standalone package, [sechm](https://github.com/plger/sechm). For the time being they will be in both packages to enable the transition, but they will most likely be deprecated from this package in Bioconductor 3.14. Please update your scripts until then!**
+
 
 <br/><br/>
 
@@ -64,10 +66,13 @@ This is taken from [Floriou-Servou et al., Biol Psychiatry 2018](https://doi.org
 
 There are two main wrappers for plotting heatmaps from `SummarizedExperiment` objects: 
 
-* the `sehm` function uses the *[pheatmap](https://CRAN.R-project.org/package=pheatmap)* engine
+* the `sehm` function uses the *[pheatmap](https://CRAN.R-project.org/package=pheatmap)* engine (**will be deprecated**)
 * the `sechm` function uses the *[ComplexHeatmap](https://jokergoo.github.io/ComplexHeatmap-reference/book/)* engine
 
 Both functions were made to function very similarly, but the `sechm` function is especially useful to combine heatmaps (for instance, from different `SummarizedExperiment` objects). We'll showcase `sehm` (the main functionalities being replicable with `sechm`), and will then provide examples of multiple heatmaps.
+
+**Heatmap-related functions will eventually be deprecated from this package; please use [sechm](https://github.com/plger/sechm) instead.**
+
 
 <br/><br/>
 
@@ -349,67 +354,3 @@ ggplot(d, aes(Condition, counts, fill=Condition)) + geom_violin() +
 ```
 
 ![An example ggplot created from a melted SE.](README_files/figure-html/unnamed-chunk-13-1.png)
-
-<br/><br/>
-
-# Session info {.unnumbered}
-
-
-```
-## R version 3.6.1 (2019-07-05)
-## Platform: x86_64-pc-linux-gnu (64-bit)
-## Running under: Ubuntu 18.04.3 LTS
-## 
-## Matrix products: default
-## BLAS:   /usr/lib/x86_64-linux-gnu/openblas/libblas.so.3
-## LAPACK: /usr/lib/x86_64-linux-gnu/libopenblasp-r0.2.20.so
-## 
-## locale:
-##  [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
-##  [3] LC_TIME=de_CH.UTF-8        LC_COLLATE=en_US.UTF-8    
-##  [5] LC_MONETARY=de_CH.UTF-8    LC_MESSAGES=en_US.UTF-8   
-##  [7] LC_PAPER=de_CH.UTF-8       LC_NAME=C                 
-##  [9] LC_ADDRESS=C               LC_TELEPHONE=C            
-## [11] LC_MEASUREMENT=de_CH.UTF-8 LC_IDENTIFICATION=C       
-## 
-## attached base packages:
-## [1] parallel  stats4    stats     graphics  grDevices utils     datasets 
-## [8] methods   base     
-## 
-## other attached packages:
-##  [1] ggplot2_3.2.1               SEtools_1.1.2              
-##  [3] SummarizedExperiment_1.15.8 DelayedArray_0.11.4        
-##  [5] BiocParallel_1.19.2         matrixStats_0.55.0         
-##  [7] Biobase_2.45.1              GenomicRanges_1.38.0       
-##  [9] GenomeInfoDb_1.21.1         IRanges_2.19.14            
-## [11] S4Vectors_0.23.21           BiocGenerics_0.31.5        
-## [13] BiocStyle_2.13.2           
-## 
-## loaded via a namespace (and not attached):
-##  [1] viridis_0.5.1          edgeR_3.27.13          viridisLite_0.3.0     
-##  [4] jsonlite_1.6           foreach_1.4.7          gtools_3.8.1          
-##  [7] assertthat_0.2.1       highr_0.8              BiocManager_1.30.4    
-## [10] GenomeInfoDbData_1.2.1 yaml_2.2.0             pillar_1.4.2          
-## [13] lattice_0.20-38        glue_1.3.1             limma_3.41.15         
-## [16] digest_0.6.20          RColorBrewer_1.1-2     XVector_0.25.0        
-## [19] colorspace_1.4-1       htmltools_0.3.6        Matrix_1.2-17         
-## [22] pkgconfig_2.0.2        pheatmap_1.0.12        GetoptLong_0.1.7      
-## [25] zlibbioc_1.31.0        purrr_0.3.2            scales_1.0.0          
-## [28] gdata_2.18.0           Rtsne_0.15             tibble_2.1.3          
-## [31] withr_2.1.2            randomcoloR_1.1.0      lazyeval_0.2.2        
-## [34] magrittr_1.5           crayon_1.3.4           evaluate_0.14         
-## [37] MASS_7.3-51.4          gplots_3.0.1.1         tools_3.6.1           
-## [40] registry_0.5-1         data.table_1.12.2      GlobalOptions_0.1.0   
-## [43] ComplexHeatmap_2.2.0   stringr_1.4.0          V8_2.3                
-## [46] munsell_0.5.0          locfit_1.5-9.1         cluster_2.1.0         
-## [49] compiler_3.6.1         caTools_1.17.1.2       rlang_0.4.0           
-## [52] grid_3.6.1             RCurl_1.95-4.12        iterators_1.0.12      
-## [55] rjson_0.2.20           circlize_0.4.7         labeling_0.3          
-## [58] bitops_1.0-6           rmarkdown_1.15         gtable_0.3.0          
-## [61] codetools_0.2-16       curl_4.0               TSP_1.1-7             
-## [64] R6_2.4.0               gridExtra_2.3          seriation_1.2-8       
-## [67] knitr_1.24             dplyr_0.8.3            clue_0.3-57           
-## [70] KernSmooth_2.23-15     dendextend_1.12.0      shape_1.4.4           
-## [73] stringi_1.4.3          Rcpp_1.0.2             png_0.1-7             
-## [76] tidyselect_0.2.5       gclus_1.3.2            xfun_0.9
-```

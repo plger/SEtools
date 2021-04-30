@@ -4,6 +4,11 @@
 #' @rdname SE-heatmap
 #' @aliases sehm sechm
 #'
+#' @description
+#' These functions have been moved and will be deprecated from this package;
+#' please use the
+#' [sechm](https://bioconductor.org/packages/release/bioc/html/sechm.html)
+#' package instead.
 #'
 #' @param se A \code{\link[SummarizedExperiment]{SummarizedExperiment-class}}.
 #' @param genes An optional vector of genes (i.e. row names of `se`)
@@ -70,7 +75,10 @@ sechm <- function(se, genes, do.scale=FALSE, assayName=.getDef("assayName"),
                   annorow_title_side=ifelse(show_colnames,"bottom","top"), mark=NULL,
                   right_annotation=NULL, includeMissing=FALSE, sort.method="MDS_angle",
                   ...){
-
+  .Deprecated(msg=paste0(c(
+      "`sechm` has been moved and will eventually be removed from this ",
+      "package.\n Please use the version from the 'sechm' package ",
+      "(`sechm::sechm`) instead")))
   assayName <- .chooseAssay(se, assayName, returnName = TRUE)
   if(is.null(name)){
       if(is.numeric(assayName)){

@@ -23,6 +23,10 @@
 #' @export
 sortRows <- function(x, z=FALSE, toporder=NULL, na.rm=FALSE, method="MDS_angle",
                      toporder.meth="before"){
+  .Deprecated(msg=paste0(c(
+    "`sortRows` has been moved and will eventually be removed from this ",
+    "package.\n Please use the version from the 'sechm' package ",
+    "(`sechm::sortRows`) instead")))
   toporder.meth <- match.arg(toporder.meth, c("before","after"))
   if(is.numeric(toporder)) toporder <- as.character(toporder)
   if(na.rm){
@@ -87,6 +91,7 @@ sortRows <- function(x, z=FALSE, toporder=NULL, na.rm=FALSE, method="MDS_angle",
   assays(se)[[assayName]]
 }
 
+#' @importFrom grDevices colorRampPalette
 .getHMcols <- function(cols=NULL, n=101){
   if(is.null(cols)) cols <- .getDef("hmcols")
   if(is.function(cols)) return(cols)
