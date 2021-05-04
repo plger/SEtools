@@ -37,7 +37,7 @@
 #' @param anno_rows Columns of `rowData` to use for annotation.
 #' @param anno_columns Columns of `colData` to use for annotation.
 #' @param anno_colors List of colors to use for annotation.
-#' @param anno_rows_title_side Side (top or bottom) of row annotation names
+#' @param annorows_title_side Side (top or bottom) of row annotation names
 #' @param name The name of the heatmap, eventually appearing as title of the
 #' color scale.
 #' @param show_rownames Whether to show row names (default TRUE if 50 rows or
@@ -48,6 +48,7 @@
 #' FALSE)
 #' @param mark An optional vector of gene names to highlight.
 #' @param right_annotation Passed to `ComplexHeatmap::Heatmap`
+#' @param sort.method Method to use for row sorting (see \link{sortRows})
 #' @param ... Further arguments passed to `pheatmap` (`sehm`) or `Heatmap`
 #' (`sechm`).
 #'
