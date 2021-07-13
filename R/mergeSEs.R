@@ -151,7 +151,9 @@ mergeSEs <- function(ll, use.assays=NULL, do.scale=TRUE, commonOnly=TRUE,
     x <- lapply(ll, FUN=function(x){
       x <- assays(x)[[use.assays[[a]]]]
       if(all(rn %in% row.names(x))) return(x[rn,])
-      as.matrix(as.data.frame(x)[rn,,drop=FALSE])
+      x <- as.data.frame(x)[rn,,drop=FALSE]
+      row.names(x) <- rn
+      as.matrix(x)
     })
     if(!is.null(do.scale[[a]])) x <- lapply(x, FUN=do.scale[[a]])
     do.call(cbind, x)
