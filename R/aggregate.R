@@ -18,6 +18,7 @@
 #' @export
 #'
 #' @import SummarizedExperiment
+#' @importFrom stats aggregate median
 #' @examples
 #' library(SummarizedExperiment)
 #' data("SE", package="SEtools")

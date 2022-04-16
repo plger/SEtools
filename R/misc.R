@@ -83,7 +83,9 @@ log2FC <- function(x, fromAssay=NULL, controls, by=NULL, isLog=NULL,
     lfc <- lfc[,colnames(x)]
     if(is(x, "SummarizedExperiment")){
         assays(x)[[toAssay]] <- lfc
-	if(toAssay=="log2FC") assays(x)$scaledLFC <- scale2(assays(x)$log2FC)
+	    if(toAssay=="log2FC")
+	        assays(x)$scaledLFC <- sechm::safescale(assays(x)$log2FC,
+	                                                center=FALSE, byRow=TRUE)
         return(x)
     }
     lfc

@@ -39,7 +39,11 @@ Returns the `SummarizedExperiment` with a `corrrected` assay and the surrogate
 variables in `colData`.
 }
 \description{
-A wrapper around SVA-based correction, providing a corrected assay. If this is RNAseq
-data or similar, use a count assay assay with `useVST=TRUE`; otherwise (e.g.
-proteomics) a log-normalized assay is recommended.
+A wrapper around SVA-based correction, providing a corrected assay. If this
+is RNAseq data or similar, use a count assay assay with `useVST=TRUE`;
+otherwise (e.g. proteomics) a log-normalized assay is recommended.
+}
+\examples{
+data("SE", package="SEtools")
+SE <- svacor(SE, ~Condition)
 }

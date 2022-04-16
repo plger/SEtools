@@ -1,8 +1,8 @@
 #' svacor
 #'
-#' A wrapper around SVA-based correction, providing a corrected assay. If this is RNAseq
-#' data or similar, use a count assay assay with `useVST=TRUE`; otherwise (e.g.
-#' proteomics) a log-normalized assay is recommended.
+#' A wrapper around SVA-based correction, providing a corrected assay. If this
+#' is RNAseq data or similar, use a count assay assay with `useVST=TRUE`;
+#' otherwise (e.g. proteomics) a log-normalized assay is recommended.
 #'
 #' @param SE An object of class `SummarizedExperiment`.
 #' @param form The formula of the differential expression model
@@ -18,11 +18,15 @@
 #' @return Returns the `SummarizedExperiment` with a `corrrected` assay and the surrogate
 #' variables in `colData`.
 #'
-#' @importFrom DESeq2 DESeqDataSetFromMatrix estimateSizeFactors vst varianceStabilizingTransformation
+#' @importFrom DESeq2 DESeqDataSetFromMatrix estimateSizeFactors vst
+#' @importFrom DESeq2 varianceStabilizingTransformation
 #' @importFrom sva sva
 #' @importFrom stats model.matrix
 #' @import SummarizedExperiment
 #' @export
+#' @examples
+#' data("SE", package="SEtools")
+#' SE <- svacor(SE, ~Condition)
 svacor <- function(SE, form, form0=~1, assayName=NULL, regressOutNull=TRUE, useVST=TRUE,
                    n.sv=NULL, ...){
   if(!is(SE,"SummarizedExperiment")) stop("`SE` should be a SummarizedExperiment.")

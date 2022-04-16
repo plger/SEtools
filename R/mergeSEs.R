@@ -162,10 +162,11 @@ mergeSEs <- function(ll, use.assays=NULL, do.scale=TRUE, commonOnly=TRUE,
   a
 }
 
+#' @importFrom sechm safescale
 .resolveScalingInput <- function(x){
     if(length(x)>1) return(lapply(x,.resolveScalingInput))
     if(is.logical(x) && !x) return(NULL)
-    if(is.logical(x) && x) return(.safescale)
+    if(is.logical(x) && x) return(sechm::safescale)
     if(is.function(x)) return(x)
     if(is.character(x) && exists(x) && (y <- is.function(get(x)))) return(y)
     warning("Unknown do.scale parameter value will be ignored...")
@@ -177,7 +178,7 @@ mergeSEs <- function(ll, use.assays=NULL, do.scale=TRUE, commonOnly=TRUE,
   out <- lapply(ll, FUN=function(x) x[setdiff(names(x),"anno_colors")])
   x <- lapply(ll, FUN=function(x) x[["anno_colors"]])
   x <- x[!sapply(x,is.null)]
-  out$anno_colors <- .mergelists(x)
+  out$anno_colors <- sechm:::.mergelists(x)
   out
 }
 

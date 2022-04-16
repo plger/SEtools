@@ -1,2 +1,4 @@
+Changes in version 1.9.2 (2022-04-16)
++ removed functions that have been moved to the sechm package
 Changes in version 1.5.3 (2021-04-19)
 + plotting functions moved to the `sechm' package

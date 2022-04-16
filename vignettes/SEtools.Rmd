@@ -89,7 +89,7 @@ In this case, one can have one-to-many and many-to-many mappings, in which case 
 rowData(se1)$metafeature <- sample(LETTERS,nrow(se1),replace = TRUE)
 rowData(se2)$metafeature <- sample(LETTERS,nrow(se2),replace = TRUE)
 se3 <- mergeSEs( list(se1=se1, se2=se2), do.scale=FALSE, mergeBy="metafeature", aggFun=median)
-sehm(se3, genes=row.names(se3))
+sechm::sechm(se3, features=row.names(se3))
 ```
 
 ### Aggregating a SE
@@ -110,7 +110,7 @@ If the aggregation function(s) are not specified, `aggSE` will try to guess dece
 To facilitate plotting features with `r CRANpkg("ggplot2")`, the `meltSE` function combines assay values along with row/column data:
 
 ```{r, fig.cap="An example ggplot created from a melted SE.", fig.height=5}
-d <- meltSE(SE, genes=g[1:4])
+d <- meltSE(SE, genes=row.names(SE)[1:4])
 head(d)
 suppressPackageStartupMessages(library(ggplot2))
 ggplot(d, aes(Condition, counts, fill=Condition)) + geom_violin() + 

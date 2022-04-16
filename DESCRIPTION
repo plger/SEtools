@@ -15,13 +15,13 @@ Imports:
     edgeR,
     openxlsx,
     stats,
-    sva
+    sva,
+    sechm
 Suggests:
     BiocStyle,
     knitr,
     rmarkdown,
-    ggplot2,
-    sechm
+    ggplot2
 biocViews: GeneExpression
 VignetteBuilder: knitr 
 License: GPL
