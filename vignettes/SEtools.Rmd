@@ -10,7 +10,7 @@ output:
   BiocStyle::html_document:
         fig_height: 3.5
 abstract: |
-  Showcases the use of SEtools to merge objects of the SummarizedExperiment class, melt them, and plot annotated heatmaps from them.
+  Showcases the use of SEtools to merge objects of the SummarizedExperiment class.
 vignette: |
   %\VignetteIndexEntry{SEtools}
   %\VignetteEngine{knitr::rmarkdown}
@@ -33,6 +33,7 @@ if (!requireNamespace("BiocManager", quietly = TRUE))
 BiocManager::install("SEtools")
 ```
 
+**NOTE that the heatmap-related functions have been moved to a standalone package, `r Biocpkg("sechm")`.**
 
 Or, to install the latest development version:
 
@@ -54,117 +55,6 @@ SE
 ```
 
 This is taken from [Floriou-Servou et al., Biol Psychiatry 2018](https://doi.org/10.1016/j.biopsych.2018.02.003).
-
-## Heatmaps
-
-There are two main wrappers for plotting heatmaps from `SummarizedExperiment` objects: 
-
-* the `sehm` function uses the *[pheatmap](https://CRAN.R-project.org/package=pheatmap)* engine
-* the `sechm` function uses the *[ComplexHeatmap](https://jokergoo.github.io/ComplexHeatmap-reference/book/)* engine
-
-Both functions were made to function very similarly, but the `sechm` function is especially useful to combine heatmaps (for instance, from different `SummarizedExperiment` objects). We'll showcase `sehm` (the main functionalities being replicable with `sechm`), and will then provide examples of multiple heatmaps.
-
-### sehm
-
-The `sehm` function simplifies the generation of heatmaps from `SummarizedExperiment`. It uses `r CRANpkg("pheatmap")`, so any argument supported by it can in principle be passed:
-
-```{r}
-g <- c("Egr1", "Nr4a1", "Fos", "Egr2", "Sgk1", "Arc", "Dusp1", "Fosb", "Sik1")
-sehm(SE, genes=g)
-sehm(SE, assayName="logcpm", genes=g, do.scale=TRUE)
-```
-
-When scaling data, the function will automatically center the colour scale around zero, and handle the extreme values (0.5\% percentile on each side) in a non-linear fashion to retain a useful visualization.
-This behavior can be manually controlled via the `breaks` parameter (either setting it to FALSE, to a percentile until which the scale should be linear, of manually inputting breaks).
-
-Annotation from the object's `rowData` and `colData` can be plotted simply by specifying the column name (some will be shown by default if found):
-```{r}
-sehm(SE, assayName="logcpm", genes=g, do.scale=TRUE, anno_rows="meanTPM")
-```
-
-These can also be used to create gaps:
-```{r}
-sehm(SE, genes=g, do.scale=TRUE, anno_rows="meanTPM", gaps_at="Condition")
-```
-
-The specific assay to use for plotting can be specified with the `assayName` argument.
-
-#### Row/column ordering
-
-By default, rows are sorted not with hierarchical clustering, but from the angle on a MDS plot, which tends to give nicer results than bottom-up hierarchical clustering. This can be disabled using `sortRowsOn=NULL` or `cluster_rows=TRUE` (to avoid any row reordering and use the order given, use `sortRowsOn=NULL, cluster_rows=FALSE`). Column clustering is disabled by default, but this can be changed with `cluster_cols=TRUE`.
-
-It is common to cluster features into groups, and such a clustering can be used simultaneously with row sorting using the `toporder` argument. For instance:
-
-```{r}
-lfcs <- assays(SE)$logcpm-rowMeans(assays(SE)$logcpm[,which(SE$Condition=="Homecage")])
-rowData(SE)$cluster <- as.character(kmeans(lfcs,4)$cluster)
-sehm(SE, genes=g, do.scale=TRUE, anno_rows="cluster", toporder="cluster", gaps_at="Condition")
-```
-
-#### Default arguments
-
-For some arguments (for instance colors), if they are not specified in the function call, `SEtools` will try to see whether the object itself contains it, or whether the corresponding global options have been set, before using default colors. This means that if, in the context of a given project, the same colors are repeatedly being used, they can be specified a single time, and all subsequent plots will be affected.
-
-Storing colors in the object:
-```{r colors_in_object}
-metadata(SE)$hmcols <- c("purple","white","gold")
-# or something fancier, like:
-# metadata(SE)$hmcols <- colorspace::diverging_hcl(palette="Berlin", n=101)
-ancols <- list( Condition=c( Homecage="#DB918B",
-                             Handling="#B86FD3",
-                             Restraint="#A9CED5",
-                             Swim="#B5DF7C" ) )
-metadata(SE)$anno_colors <- ancols
-sehm(SE, g, do.scale = TRUE)
-```
-
-
-Using the global options:
-```{r colors_in_options}
-options("SEtools_def_hmcols"=c("white","grey","black"))
-options("SEtools_def_anno_colors"=ancols)
-sehm(SE, g, do.scale = TRUE)
-```
-
-At the moment, the following arguments can be set as global options:
-`assayName`, `hmcols`, `anno_columns`, `anno_rows`, `anno_colors`, `gaps_at`, `breaks`.
-Options must be set with the prefix `SEtools_def_`, followed by the name of the argument.
-
-To remove the predefined colors:
-
-```{r}
-resetAllSEtoolsOptions()
-metadata(SE)$hmcols <- NULL
-metadata(SE)$anno_colors <- NULL
-```
-
-In order of priority, the arguments in the function call trump the object's metadata, which trumps the global options.
-
-### sechm and crossHm
-
-The `sechm` function works like the `sehm` function, but the fact that it outputs a `Heatmap` object from [ComplexHeatmap](https://jokergoo.github.io/ComplexHeatmap-reference/book/) means that these can be easily combined:
-
-```{r two_heatmaps}
-sechm(SE, g, do.scale = TRUE) + sechm(SE, g, do.scale = FALSE)
-```
-
-However, doing so involves manual work to ensure that the labels and colors are nice and coherent, and that the rows names match. As a convenience, we provide the `crossHm` function to handle these issues. `crossHm` works with a list of `SummarizedExperiment` objects:
-
-```{r crossHm}
-# we build another SE object:
-SE2 <- SE
-assays(SE2)$logcpm <- jitter(assays(SE2)$logcpm, factor=1000)
-crossHm(list(SE1=SE, SE2=SE2), g, do.scale = TRUE)
-```
-
-A unique color scale can be enforced:
-
-```{r crosshm2}
-crossHm(list(SE1=SE, SE2=SE2), g, do.scale = TRUE, uniqueScale = TRUE)
-```
-
-
-***
 
 ## Merging and aggregating SEs
 

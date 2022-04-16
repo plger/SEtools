@@ -1,15 +1,30 @@
 Package: SEtools
 Type: Package
 Title: SEtools: tools for working with SummarizedExperiment
-Version: 1.9.0
+Version: 1.9.2
 Depends: R (>= 4.0)
 Authors@R: person("Pierre-Luc", "Germain", email="pierre-luc.germain@hest.ethz.ch", role=c("cre","aut"), comment=c(ORCID="0000-0003-3418-4218"))
-Description: This includes a set of tools for working with the SummarizedExperiment class, including merging, melting, aggregation and plotting functions. In particular, SEtools offers a simple interface for plotting complex heatmaps from SE objects.
-Imports: S4Vectors, SummarizedExperiment, data.table, seriation, ComplexHeatmap, circlize, methods, BiocParallel, randomcoloR, edgeR, openxlsx, sva, stats, DESeq2, Matrix, grid
-Suggests: BiocStyle, knitr, rmarkdown, ggplot2, pheatmap
-biocViews: GeneExpression, Visualization
+Description: This includes a set of tools for working with the SummarizedExperiment class, including merging, melting, aggregation functions. Plotting functions historically in this package have been moved to the sechm package.
+Imports: 
+    BiocParallel,
+    Matrix,
+    SummarizedExperiment,
+    DESeq2,
+    S4Vectors,
+    data.table,
+    edgeR,
+    openxlsx,
+    stats,
+    sva
+Suggests:
+    BiocStyle,
+    knitr,
+    rmarkdown,
+    ggplot2,
+    sechm
+biocViews: GeneExpression
 VignetteBuilder: knitr 
 License: GPL
 Encoding: UTF-8
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.2
 BugReports: https://github.com/plger/SEtools
