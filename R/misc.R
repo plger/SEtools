@@ -44,6 +44,7 @@ resetAllSEtoolsOptions <- function(){
 #' log2FC( matrix(rnorm(40), ncol=4), controls=1:2 )
 #'
 #' @import SummarizedExperiment
+#' @importFrom sechm sechm
 #' @export
 log2FC <- function(x, fromAssay=NULL, controls, by=NULL, isLog=NULL,
                    agFun=rowMeans, toAssay="log2FC"){
