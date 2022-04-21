@@ -8,7 +8,7 @@
 
 The *SEtools* package is a set of convenience functions for the _Bioconductor_ class *[SummarizedExperiment](https://bioconductor.org/packages/3.10/SummarizedExperiment)*. It facilitates merging, melting, and plotting `SummarizedExperiment` objects.
 
-**NOTE that the heatmap-related functions habe been moved to a standalone package, [sechm](https://github.com/plger/sechm) and have been deprecated from this package.**
+**NOTE that the heatmap-related functions habe been moved to a standalone package, [sechm](https://github.com/plger/sechm), and have been deprecated from this package.**
 
 
 <br/><br/>

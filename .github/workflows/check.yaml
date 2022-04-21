@@ -36,8 +36,9 @@ jobs:
       - name: Install dependencies
         run: |
           remotes::install_deps(dependencies = TRUE, repos = BiocManager::repositories(), Ncpu = 2L)
-          BiocManager::install('ensembldb')
+          BiocManager::install('devtools')
           BiocManager::install('BiocCheck')
+          BiocManager::install('plger/sechm')
           remotes::install_cran('rcmdcheck', Ncpu = 2L)
         shell: Rscript {0}
 
