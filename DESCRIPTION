@@ -1,8 +1,10 @@
 Package: SEtools
 Type: Package
 Title: SEtools: tools for working with SummarizedExperiment
-Version: 1.9.3
-Depends: R (>= 4.0)
+Version: 1.9.4
+Depends:
+   R (>= 4.0),
+   sechm
 Authors@R: person("Pierre-Luc", "Germain", email="pierre-luc.germain@hest.ethz.ch", role=c("cre","aut"), comment=c(ORCID="0000-0003-3418-4218"))
 Description: This includes a set of tools for working with the SummarizedExperiment class, including merging, melting, aggregation functions. Plotting functions historically in this package have been moved to the sechm package.
 Imports: 
@@ -14,9 +16,9 @@ Imports:
     data.table,
     edgeR,
     openxlsx,
+    pheatmap,
     stats,
-    sva,
-    sechm
+    sva
 Suggests:
     BiocStyle,
     knitr,
@@ -26,5 +28,5 @@ biocViews: GeneExpression
 VignetteBuilder: knitr 
 License: GPL
 Encoding: UTF-8
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.1
 BugReports: https://github.com/plger/SEtools

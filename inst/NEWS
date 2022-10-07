@@ -1,3 +1,6 @@
+Changes in version 1.9.4 (2022-10-07)
++ re-added sehm for backward compatibility
++ meltSE moved to sechm
 Changes in version 1.9.2 (2022-04-16)
 + removed functions that have been moved to the sechm package
 Changes in version 1.5.3 (2021-04-19)
