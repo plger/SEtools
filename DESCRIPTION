@@ -1,13 +1,13 @@
 Package: SEtools
 Type: Package
 Title: SEtools: tools for working with SummarizedExperiment
-Version: 1.13.0
+Version: 1.13.1
 Depends:
    R (>= 4.0),
    SummarizedExperiment,
    sechm
 Authors@R: person("Pierre-Luc", "Germain", email="pierre-luc.germain@hest.ethz.ch", role=c("cre","aut"), comment=c(ORCID="0000-0003-3418-4218"))
-Description: This includes a set of tools for working with the SummarizedExperiment class, including merging, melting, aggregation functions. Note that plotting functions historically in this package have been moved to the sechm package.
+Description: This includes a set of convenience functions for working with the SummarizedExperiment class. Note that plotting functions historically in this package have been moved to the sechm package (see vignette for details).
 Imports: 
     BiocParallel,
     Matrix,

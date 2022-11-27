@@ -25,7 +25,7 @@ library(BiocStyle)
 
 The `r Rpackage("SEtools")` package is a set of convenience functions for the _Bioconductor_ class `r Biocpkg("SummarizedExperiment")`. It facilitates merging, melting, and plotting `SummarizedExperiment` objects.
 
-**NOTE that the heatmap-related functions have been moved to a standalone package, `r Biocpkg("sechm")`.**
+**NOTE that the heatmap-related and melting functions have been moved to a standalone package, `r Biocpkg("sechm")`.**
 The old `sehm` function of `SEtools` should be considered deprecated, and most `SEtools` functions are conserved for legacy/reproducibility reasons (or until they find a better home).
 
 ## Package installation
