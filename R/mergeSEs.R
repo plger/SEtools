@@ -218,7 +218,7 @@ mergeSEs <- function(ll, use.assays=NULL, do.scale=TRUE, commonOnly=TRUE,
     # the column occurs in more than one dataset
     # we first remove identical columns
     w <- which(sapply(seq_along(x), FUN=function(i){
-      any(sapply(seq_len(i-1), FUN=function(j,i){
+      any(sapply(seq_len(i-1L), FUN=function(j){
         all(x[[i]]==x[[j]])
       }))
     }))
