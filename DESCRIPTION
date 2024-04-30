@@ -1,7 +1,7 @@
 Package: SEtools
 Type: Package
 Title: SEtools: tools for working with SummarizedExperiment
-Version: 1.18.0
+Version: 1.19.0
 Depends:
    R (>= 4.0),
    SummarizedExperiment,
