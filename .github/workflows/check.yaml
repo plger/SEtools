@@ -27,7 +27,7 @@ jobs:
         shell: Rscript {0}
 
       - name: Cache R packages
-        uses: actions/cache@v1
+        uses: actions/cache@v3
         with:
           path: r-pkg-cache
           key: ${{ runner.os }}-${{ hashFiles('depends.Rds') }}
