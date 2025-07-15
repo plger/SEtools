@@ -10,7 +10,8 @@ svacor(
   form0 = ~1,
   assayName = NULL,
   regressOutNull = TRUE,
-  useVST = TRUE,
+  method = c("vst", "svaseq", "sva"),
+  useVST = NULL,
   n.sv = NULL,
   ...
 )
@@ -26,22 +27,30 @@ svacor(
 
 \item{regressOutNull}{Logical; whether to regress out the variables of `form0`.}
 
-\item{useVST}{Logical; whether to use DESeq2's variance-stabilizing transformation;
-(for count data!)}
+\item{method}{Either 'vst' (uses DESeq2 variance-stabilization before
+running SVA), 'svaseq' (uses sva::svaseq on normalized counts), or 'sva'
+(uses standard sva, not appropriate for count data).}
 
-\item{n.sv}{The number of surrogate variables (if omitted, \code{\link{sva}} will
-attempt to estimate it)}
+\item{useVST}{Deprecated; use the `method` argument instead.}
+
+\item{n.sv}{The number of surrogate variables (if omitted, \code{\link{sva}}
+will attempt to estimate it). Note that automatic determination of the number
+of SVs will often lead to fairly large number of SVs, use
+`numSVmethod="leek"` for a more conservative estimate.}
 
 \item{...}{Any other argument passed to the \code{\link{sva}} command.}
 }
 \value{
-Returns the `SummarizedExperiment` with a `corrrected` assay and the surrogate
-variables in `colData`.
+Returns the `SummarizedExperiment` with a `corrrected` assay and the
+surrogate variables in `colData`.
 }
 \description{
 A wrapper around SVA-based correction, providing a corrected assay. If this
-is RNAseq data or similar, use a count assay assay with `useVST=TRUE`;
-otherwise (e.g. proteomics) a log-normalized assay is recommended.
+is RNAseq data or similar, use a count assay assay with `method` either 'vst'
+or 'svaseq'; otherwise (e.g. proteomics) a log-normalized assay is
+recommended with `method="sva"`. Note that the corrected assay, while useful
+for visualization, should be interpreted with care, as they omit major
+variation!
 }
 \examples{
 data("SE", package="SEtools")
