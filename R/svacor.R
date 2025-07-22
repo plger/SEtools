@@ -89,6 +89,7 @@ svacor <- function(SE, form, form0=~1, assayName=NULL, regressOutNull=TRUE,
     X <- cbind(mm, sv)
     mm2 <- cbind(mm[,1,drop=FALSE],sv,mm[,-1,drop=FALSE])
   }
+  if(method=="svaseq") en <- log1p(en)
   H <- solve(t(X) %*% X) %*% t(X)
   b <- (H %*% t(en))
   if(regressOutNull){
