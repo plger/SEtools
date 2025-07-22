@@ -70,7 +70,8 @@ svacor <- function(SE, form, form0=~1, assayName=NULL, regressOutNull=TRUE,
   }
   if(is.null(n.sv) || n.sv>0){
     if(method=="svaseq"){
-        sv <- svaseq(en, mm, mm0, n.sv=n.sv, ...)
+        w <- which(rowSums(en>0)>1)
+        sv <- svaseq(en[w,], mm, mm0, n.sv=n.sv, ...)
     }else{
         sv <- sva(en, mm, mm0, n.sv=n.sv, ...)
     }
